@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projeto X</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #1f2937;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 20px;
+    }
+
+    header h1 {
+      font-size: 24px;
+    }
+
+    .container {
+      display: flex;
+      min-height: calc(100vh - 70px);
+    }
+
+    aside {
+      width: 230px;
+      background: #ffffff;
+      padding: 20px;
+      border-right: 1px solid #ddd;
+    }
+
+    aside button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: none;
+      background: #f3f4f6;
+      border-radius: 8px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    aside button:hover {
+      background: #e5e7eb;
+    }
+
+    main {
+      flex: 1;
+      padding: 30px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      margin-top: 25px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      font-size: 15px;
+      color: #6b7280;
+    }
+
+    .card strong {
+      font-size: 28px;
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        flex-direction: column;
+      }
+
+      aside {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+      }
+
+      aside button {
+        width: auto;
+        margin-right: 5px;
+      }
+
+      main {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Projeto X</h1>
+  </header>
+
+  <div class="container">
+
+    <aside>
+      <button>🏠 Dashboard</button>
+      <button>📢 Campanhas</button>
+      <button>👥 Grupos</button>
+      <button>📝 Templates</button>
+      <button>📊 Analytics</button>
+      <button>🔗 Links</button>
+      <button>⚙️ Configurações</button>
+    </aside>
+
+    <main>
+      <h2>Dashboard</h2>
+      <p>Bem-vindo ao painel do Projeto X.</p>
+
+      <div class="cards">
+
+        <div class="card">
+          <h3>Campanhas</h3>
+          <strong>0</strong>
+        </div>
+
+        <div class="card">
+          <h3>Grupos</h3>
+          <strong>0</strong>
+        </div>
+
+        <div class="card">
+          <h3>Publicações</h3>
+          <strong>0</strong>
+        </div>
+
+        <div class="card">
+          <h3>Cliques</h3>
+          <strong>0</strong>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+</body>
+  </html>
