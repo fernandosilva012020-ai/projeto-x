@@ -27,61 +27,96 @@ async function mostrarTeste() {
 
 
 
-    if (profile.plano.toLowerCase() !== "teste") {
+    if(profile.plano.toLowerCase() !== "teste"){
 
         return;
 
     }
+
+
+
+    document.getElementById("teste-container").style.display = "block";
 
 
 
     const inicio = new Date(profile.inicio_teste);
 
 
-    const fim = new Date(inicio);
 
+    const fim = new Date(inicio);
 
     fim.setDate(fim.getDate() + 2);
 
 
 
-    const agora = new Date();
+    function atualizar(){
 
 
 
-    const restante = fim - agora;
+        const agora = new Date();
+
+
+        const total = fim - inicio;
+
+
+        const restante = fim - agora;
 
 
 
-    if (restante <= 0) {
+        if(restante <= 0){
 
 
-        document.getElementById("aviso-teste").innerHTML =
+            document.getElementById("teste-tempo").innerHTML =
 
-        "⚠️ Seu período de teste terminou. Escolha um plano.";
+            "⚠️ Seu teste grátis terminou";
 
 
-        return;
+            document.getElementById("barra-teste").style.width="100%";
+
+
+            return;
+
+
+        }
+
+
+
+        const horas = Math.floor(restante / (1000*60*60));
+
+
+        const dias = Math.floor(horas / 24);
+
+
+        const h = horas % 24;
+
+
+
+        document.getElementById("teste-tempo").innerHTML =
+
+        `⏳ Restam ${dias} dias e ${h} horas`;
+
+
+
+        const usado = total - restante;
+
+
+        const porcentagem = (usado / total) * 100;
+
+
+
+        document.getElementById("barra-teste").style.width =
+
+        porcentagem + "%";
 
 
     }
 
 
 
-    const horas = Math.floor(restante / (1000 * 60 * 60));
+    atualizar();
 
 
-    const dias = Math.floor(horas / 24);
-
-
-    const horasRestantes = horas % 24;
-
-
-
-    document.getElementById("aviso-teste").innerHTML =
-
-    `🚀 Teste grátis ativo - Restam ${dias} dias e ${horasRestantes} horas`;
-
+    setInterval(atualizar,60000);
 
 
 }
