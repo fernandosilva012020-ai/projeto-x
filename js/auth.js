@@ -5,7 +5,7 @@ async function cadastrar() {
     const senha = document.getElementById("senha").value;
 
 
-    const { data, error } = await supabaseClient.auth.signUp({
+    const { data, error } = await window.supabaseClient.auth.signUp({
         email: email,
         password: senha
     });
