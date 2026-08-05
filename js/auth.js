@@ -92,31 +92,19 @@ async function login(email, senha) {
 
 async function logout() {
 
-
     const { error } = await window.supabaseClient.auth.signOut();
 
-
-
-    if (error) {
-
+    if(error){
 
         console.log(error.message);
 
-        alert("Erro ao sair");
-
         return;
-
 
     }
 
-
-
     window.location.href = "login.html";
 
-
 }
-
-
 
 
 
