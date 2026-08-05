@@ -162,7 +162,7 @@ async function logout() {
 
         console.log(error.message);
 
-        alert("Erro ao sair");
+        mostrarMensagem("❌ Não foi possível sair da conta.", "erro");
 
         return;
 
