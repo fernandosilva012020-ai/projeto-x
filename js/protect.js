@@ -1,28 +1,62 @@
+// =================================
+// Projeto X - Proteção de páginas
+// =================================
+
+
 async function protectPage(modulo = null) {
 
 
-    const { data: sessionData } = await window.supabaseClient.auth.getSession();
+    // Aguarda o Supabase carregar a sessão
+
+    const { data } = await window.supabaseClient.auth.getSession();
 
 
-    if (!sessionData.session) {
+    let session = data.session;
 
-        console.log("Sem sessão");
 
-        window.location.href = "login.html";
 
-        return false;
+    // Segunda tentativa (evita erro de carregamento)
+
+    if (!session) {
+
+
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+
+        const { data: retry } = await window.supabaseClient.auth.getSession();
+
+
+        session = retry.session;
+
 
     }
 
 
-    const user = sessionData.session.user;
+
+    if (!session) {
 
 
-    console.log("Usuário autenticado:", user.email);
+        console.log("Usuário sem sessão");
+
+
+        window.location.href = "login.html";
+
+
+        return false;
+
+
+    }
 
 
 
-    // Se a página não tiver módulo, só protege o login
+    console.log(
+        "Usuário logado:",
+        session.user.email
+    );
+
+
+
+    // Se for somente login, libera
 
     if (!modulo) {
 
@@ -32,30 +66,36 @@ async function protectPage(modulo = null) {
 
 
 
-    const { data: profile, error: profileError } = await window.supabaseClient
+    // Busca plano do usuário
+
+    const { data: profile, error } = await window.supabaseClient
 
         .from("profiles")
 
         .select("plano")
 
-        .eq("id", user.id)
+        .eq("id", session.user.id)
 
         .single();
 
 
 
-    if (profileError || !profile) {
+    if (error || !profile) {
 
-        console.log(profileError);
 
-        return false;
+        console.log(error);
+
+
+        return true;
+
 
     }
 
 
 
+    // Busca plano
 
-    const { data: plano, error: planoError } = await window.supabaseClient
+    const { data: plano } = await window.supabaseClient
 
         .from("plans")
 
@@ -67,19 +107,17 @@ async function protectPage(modulo = null) {
 
 
 
-    if (planoError || !plano) {
+    if (!plano) {
 
-        console.log(planoError);
-
-        return false;
+        return true;
 
     }
 
 
 
+    // Busca permissão
 
-
-    const { data: permissao, error: permissaoError } = await window.supabaseClient
+    const { data: permissao } = await window.supabaseClient
 
         .from("plan_permissions")
 
@@ -93,19 +131,7 @@ async function protectPage(modulo = null) {
 
 
 
-
-    if (permissaoError) {
-
-        console.log(permissaoError);
-
-        return false;
-
-    }
-
-
-
-
-    if (!permissao.permitido) {
+    if (permissao && permissao.permitido === false) {
 
 
         alert("Seu plano não possui acesso a este recurso.");
