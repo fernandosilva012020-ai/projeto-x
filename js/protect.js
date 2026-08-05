@@ -1,16 +1,57 @@
 async function protectPage() {
 
-    const { data } = await window.supabaseClient.auth.getSession();
+
+    // espera o Supabase carregar
+
+    const { data: sessionData } = await window.supabaseClient.auth.getSession();
 
 
-    if (!data.session) {
 
-        window.location.href = "login.html";
-        return;
+    let session = sessionData.session;
+
+
+
+    // tenta recuperar novamente se ainda não encontrou
+
+    if (!session) {
+
+
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+
+        const { data: retry } = await window.supabaseClient.auth.getSession();
+
+
+        session = retry.session;
+
 
     }
 
 
-    console.log("Usuário autenticado:", data.session.user.email);
+
+    if (!session) {
+
+
+        console.log("Nenhuma sessão encontrada");
+
+
+        window.location.href = "login.html";
+
+
+        return false;
+
+
+    }
+
+
+
+    console.log(
+        "Usuário autenticado:",
+        session.user.email
+    );
+
+
+    return true;
+
 
 }
