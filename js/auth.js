@@ -54,7 +54,23 @@ async function cadastrarUsuario(nome, email, senha) {
 
 // LOGIN
 
-async function login(email, senha) {
+async function login() {
+
+
+    const email = document.getElementById("email").value;
+
+    const senha = document.getElementById("senha").value;
+
+
+
+    if (!email || !senha) {
+
+        alert("Digite email e senha");
+
+        return;
+
+    }
+
 
 
     const { data, error } = await window.supabaseClient.auth.signInWithPassword({
@@ -73,9 +89,45 @@ async function login(email, senha) {
 
         alert("Erro no login: " + error.message);
 
-        return false;
+        return;
 
     }
+
+
+
+    window.location.href = "dashboard.html";
+
+
+}
+
+
+
+    const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+
+        email: email,
+
+        password: senha
+
+    });
+
+
+
+    if (error) {
+
+        console.log(error.message);
+
+        alert("Erro no login: " + error.message);
+
+        return;
+
+    }
+
+
+
+    window.location.href = "dashboard.html";
+
+
+}
 
 
 
