@@ -1,1 +1,341 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Planos - Projeto X</title>
+
+<link rel="stylesheet" href="css/dashboard.css">
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<aside class="sidebar">
+
+
+<div class="logo">
+🚀 Projeto X
+</div>
+
+
+<nav>
+
+
+<a href="dashboard.html">
+🏠 Dashboard
+</a>
+
+
+<a href="sbcforge.html">
+⚽ SBCForge
+</a>
+
+
+<a href="divulgacao.html">
+📢 Divulgação
+</a>
+
+
+<a href="templates.html">
+📁 Templates
+</a>
+
+
+<a href="grupos.html">
+👥 Grupos
+</a>
+
+
+<a href="estatisticas.html">
+📈 Estatísticas
+</a>
+
+
+<a class="active" href="planos.html">
+💳 Planos
+</a>
+
+
+<a href="perfil.html">
+👤 Meu Perfil
+</a>
+
+
+<a href="configuracoes.html">
+⚙ Configurações
+</a>
+
+
+</nav>
+
+
+<button onclick="logout()" class="logout">
+🚪 Sair
+</button>
+
+
+</aside>
+
+
+
+
+
+<main class="content">
+
+
+<header class="topbar">
+
+
+<div>
+
+<h1>
+💳 Escolha seu plano
+</h1>
+
+
+<p>
+Desbloqueie todos os recursos do Projeto X.
+</p>
+
+
+</div>
+
+
+<div id="usuario" class="user"></div>
+
+
+</header>
+
+
+
+
+
+<section class="area">
+
+
+<div class="actions">
+
+
+
+<a href="#" onclick="escolherPlano('teste')">
+
+🟢
+
+<span>
+Teste grátis
+</span>
+
+<small>
+Acesso inicial
+</small>
+
+</a>
+
+
+
+
+<a href="#" onclick="escolherPlano('basico')">
+
+⭐
+
+<span>
+Básico
+</span>
+
+<small>
+Recursos essenciais
+</small>
+
+</a>
+
+
+
+
+
+<a href="#" onclick="escolherPlano('pro')">
+
+🚀
+
+<span>
+Pro
+</span>
+
+<small>
+Todos os recursos
+</small>
+
+</a>
+
+
+
+
+<a href="#" onclick="escolherPlano('premium')">
+
+👑
+
+<span>
+Premium
+</span>
+
+<small>
+Recursos avançados
+</small>
+
+</a>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+<section class="area">
+
+
+<h2>
+Comparação dos planos
+</h2>
+
+
+<div class="card">
+
+
+<p>
+🟢 Teste - Conheça a plataforma
+</p>
+
+
+<br>
+
+
+<p>
+⭐ Básico - Recursos principais
+</p>
+
+
+<br>
+
+
+<p>
+🚀 Pro - Divulgação + SBCForge completo
+</p>
+
+
+<br>
+
+
+<p>
+👑 Premium - Todos os recursos futuros
+</p>
+
+
+</div>
+
+
+</section>
+
+
+
+
+</main>
+
+
+</div>
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/config.js"></script>
+
+<script src="js/protect.js"></script>
+
+<script src="js/auth.js"></script>
+
+
+<script>
+
+
+async function escolherPlano(plano){
+
+
+const confirmar = confirm(
+"Escolher plano " + plano + "?"
+);
+
+
+if(!confirmar){
+return;
+}
+
+
+
+const {data} = await window.supabaseClient.auth.getSession();
+
+
+
+const user = data.session.user;
+
+
+
+const {error} = await window.supabaseClient
+
+.from("profiles")
+
+.update({
+
+plano: plano
+
+})
+
+.eq("id", user.id);
+
+
+
+if(error){
+
+alert(error.message);
+
+return;
+
+}
+
+
+
+alert(
+"Plano atualizado para: " + plano
+);
+
+
+
+window.location.href="dashboard.html";
+
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
+```
 
