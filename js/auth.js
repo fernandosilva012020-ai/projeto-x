@@ -1,12 +1,36 @@
-// ===============================
-// AUTH - Projeto X
-// Login / Cadastro / Logout
-// ===============================
+// =================================
+// Projeto X - Auth
+// Cadastro / Login / Logout
+// =================================
 
 
+console.log("auth.js carregado");
+
+
+
+// ================================
 // CADASTRO
+// ================================
 
-async function cadastrarUsuario(nome, email, senha) {
+async function cadastrarUsuario() {
+
+
+    const nome = document.getElementById("nome").value;
+
+    const email = document.getElementById("email").value;
+
+    const senha = document.getElementById("senha").value;
+
+
+
+    if (!nome || !email || !senha) {
+
+        alert("Preencha todos os campos");
+
+        return;
+
+    }
+
 
 
     const { data, error } = await window.supabaseClient.auth.signUp({
@@ -35,7 +59,7 @@ async function cadastrarUsuario(nome, email, senha) {
 
         alert(error.message);
 
-        return false;
+        return;
 
     }
 
@@ -43,7 +67,7 @@ async function cadastrarUsuario(nome, email, senha) {
 
     alert("Conta criada com sucesso! Agora faça o login.");
 
-    return true;
+    window.location.href = "login.html";
 
 
 }
@@ -51,8 +75,9 @@ async function cadastrarUsuario(nome, email, senha) {
 
 
 
-
+// ================================
 // LOGIN
+// ================================
 
 async function login() {
 
@@ -85,14 +110,19 @@ async function login() {
 
     if (error) {
 
+
         console.log(error.message);
 
         alert("Erro no login: " + error.message);
 
         return;
 
+
     }
 
+
+
+    console.log("Login realizado:", data.user.email);
 
 
     window.location.href = "dashboard.html";
@@ -102,77 +132,53 @@ async function login() {
 
 
 
-    const { data, error } = await window.supabaseClient.auth.signInWithPassword({
 
-        email: email,
+// ================================
+// SAIR
+// ================================
 
-        password: senha
+async function logout() {
 
-    });
+
+    const { error } = await window.supabaseClient.auth.signOut();
 
 
 
     if (error) {
 
+
         console.log(error.message);
 
-        alert("Erro no login: " + error.message);
+        alert("Erro ao sair");
 
         return;
+
 
     }
 
 
-
-    window.location.href = "dashboard.html";
-
-
-}
-
-
-
-    window.location.href = "dashboard.html";
-
-
-}
-
-
-
-
-
-// LOGOUT
-
-async function logout() {
-
-    const { error } = await window.supabaseClient.auth.signOut();
-
-    if(error){
-
-        console.log(error.message);
-
-        return;
-
-    }
 
     window.location.href = "login.html";
 
+
 }
 
 
 
-// VERIFICAR USUÁRIO LOGADO
 
-async function usuarioAtual(){
+// ================================
+// USUARIO ATUAL
+// ================================
+
+async function usuarioAtual() {
 
 
     const { data } = await window.supabaseClient.auth.getSession();
 
 
-    if(data.session){
-
+    if (data.session) {
 
         return data.session.user;
-
 
     }
 
