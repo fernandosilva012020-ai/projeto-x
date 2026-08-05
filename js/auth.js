@@ -23,26 +23,24 @@ async function cadastrar() {
 
 }
 
+console.log("auth carregado");
+
 async function login() {
 
     const email = document.getElementById("email").value;
     const senha = document.getElementById("senha").value;
-
 
     const { data, error } = await window.supabaseClient.auth.signInWithPassword({
         email: email,
         password: senha
     });
 
-
     if (error) {
         alert(error.message);
         return;
     }
 
-
     alert("Login realizado com sucesso!");
 
     window.location.href = "index.html";
-
 }
