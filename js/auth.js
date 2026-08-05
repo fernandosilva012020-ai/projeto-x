@@ -42,5 +42,5 @@ async function login() {
 
     alert("Login realizado com sucesso!");
 
-    window.location.href = "index.html";
+    window.location.href = "dashboard.html";
 }
