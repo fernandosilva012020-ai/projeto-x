@@ -72,3 +72,33 @@
     transition:.5s;
 
 }
+.upgrade-btn {
+
+    display:inline-block;
+
+    margin-top:20px;
+
+    padding:12px 22px;
+
+    background:white;
+
+    color:#2563eb;
+
+    font-weight:bold;
+
+    text-decoration:none;
+
+    border-radius:12px;
+
+    transition:.3s;
+
+}
+
+
+.upgrade-btn:hover {
+
+    transform:translateY(-3px);
+
+    box-shadow:0 8px 20px rgba(0,0,0,.2);
+
+}
