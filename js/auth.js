@@ -1,130 +1,93 @@
+// =========================
+// CADASTRO
+// =========================
 async function cadastrar() {
 
-    alert("Função cadastro iniciou");
-
-    const nome = document.getElementById("nome").value;
-    const email = document.getElementById("email").value;
+    const nome = document.getElementById("nome").value.trim();
+    const email = document.getElementById("email").value.trim();
     const senha = document.getElementById("senha").value;
 
+    if (!nome || !email || !senha) {
+        alert("Preencha todos os campos.");
+        return;
+    }
 
     const { data, error } = await window.supabaseClient.auth.signUp({
         email: email,
-        password: senha
+        password: senha,
+        options: {
+            data: {
+                nome: nome
+            }
+        }
     });
-
 
     if (error) {
         alert(error.message);
         return;
     }
 
-
-    const user = data.user;
-
-
-    if (!user) {
-        alert("Usuário não foi criado.");
+    if (!data.user) {
+        alert("Não foi possível criar o usuário.");
         return;
     }
 
+    alert("Conta criada com sucesso! Agora faça o login.");
 
-    const { error: profileError } = await window.supabaseClient
-        .from("profiles")
-        .insert({
-            id: user.id,
-            nome: nome,
-            plano: "teste",
-            status: "ativo"
-        });
-
-
-    if (profileError) {
-        console.log(profileError);
-        alert(profileError.message);
-        return;
-    }
-
-
-    alert("Conta criada com sucesso!");
-
-    console.log(data);
-
+    window.location.href = "login.html";
 }
 
 
-
-console.log("auth carregado");
-
-
-
+// =========================
+// LOGIN
+// =========================
 async function login() {
 
-
-    const email = document.getElementById("email").value;
+    const email = document.getElementById("email").value.trim();
     const senha = document.getElementById("senha").value;
 
-
-    const { data, error } = await window.supabaseClient.auth.signInWithPassword({
-
+    const { error } = await window.supabaseClient.auth.signInWithPassword({
         email: email,
         password: senha
-
     });
 
-
     if (error) {
-
         alert(error.message);
         return;
-
     }
 
-
-    alert("Login realizado com sucesso!");
-
     window.location.href = "dashboard.html";
-
 }
 
 
-
+// =========================
+// LOGOUT
+// =========================
 async function logout() {
-
 
     await window.supabaseClient.auth.signOut();
 
     window.location.href = "login.html";
 
-
 }
 
 
-
+// =========================
+// VERIFICAR USUÁRIO
+// =========================
 async function verificarUsuario() {
-
 
     const { data } = await window.supabaseClient.auth.getSession();
 
-
     if (!data.session) {
-
         window.location.href = "login.html";
         return;
-
     }
-
-
-    const email = data.session.user.email;
-
 
     const elemento = document.getElementById("usuario");
 
-
     if (elemento) {
-
-        elemento.innerHTML = "Usuário conectado: " + email;
-
+        elemento.innerHTML = "Usuário conectado: " + data.session.user.email;
     }
-
 
 }
