@@ -16,20 +16,25 @@ if (error) {
 }
 
 
-const user = data.user;
+const user = data.uconst user = data.user;
+
+if (!user) {
+    alert("Usuário não foi criado.");
+    return;
+}ser;
 
 
 const { error: profileError } = await window.supabaseClient
 .from("profiles")
-.insert([
-    {
-        id: user.id,
-        nome: nome
-    }
-]);
-
+.insert({
+    id: user.id,
+    nome: nome,
+    plano: "teste",
+    status: "ativo"
+});
 
 if (profileError) {
+    console.log(profileError);
     alert(profileError.message);
     return;
 }
