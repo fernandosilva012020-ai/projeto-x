@@ -44,3 +44,35 @@ async function login() {
 
     window.location.href = "dashboard.html";
 }
+
+async function logout() {
+
+    await window.supabaseClient.auth.signOut();
+
+    window.location.href = "login.html";
+
+}
+
+async function verificarUsuario() {
+
+    const { data } = await window.supabaseClient.auth.getSession();
+
+    if (!data.session) {
+
+        window.location.href = "login.html";
+        return;
+
+    }
+
+
+    const email = data.session.user.email;
+
+    const elemento = document.getElementById("usuario");
+
+    if (elemento) {
+
+        elemento.innerHTML = "Usuário conectado: " + email;
+
+    }
+
+}
