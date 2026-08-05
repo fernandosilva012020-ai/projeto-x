@@ -5,19 +5,37 @@ async function cadastrar() {
     const senha = document.getElementById("senha").value;
 
 
-    const { data, error } = await window.supabaseClient.auth.signUp({
-        email: email,
-        password: senha
-    });
+const { data, error } = await window.supabaseClient.auth.signUp({
+    email: email,
+    password: senha
+});
+
+if (error) {
+    alert(error.message);
+    return;
+}
 
 
-    if (error) {
-        alert(error.message);
-        return;
+const user = data.user;
+
+
+const { error: profileError } = await window.supabaseClient
+.from("profiles")
+.insert([
+    {
+        id: user.id,
+        nome: nome
     }
+]);
 
 
-    alert("Conta criada com sucesso!");
+if (profileError) {
+    alert(profileError.message);
+    return;
+}
+
+
+alert("Conta criada com sucesso!");
 
     console.log(data);
 
