@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -6,57 +7,222 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dashboard - Projeto X</title>
+<title>Projeto X - Dashboard</title>
 
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/dashboard.css">
 
 </head>
 
 
 <body>
 
-<div class="container">
 
-<h1>🚀 Projeto X</h1>
+<div class="app">
 
-<h2>Dashboard</h2>
 
-<p id="usuario">
-Carregando usuário...
-</p>
+    <!-- MENU LATERAL -->
+    <aside class="sidebar">
 
-<button onclick="logout()">
-Sair
-</button>
+        <div class="logo">
+            🚀 Projeto X
+        </div>
+
+
+        <nav>
+
+            <a class="active" href="dashboard.html">
+                🏠 Dashboard
+            </a>
+
+            <a href="sbcforge.html">
+                ⚽ SBCForge
+            </a>
+
+            <a href="divulgacao.html">
+                📢 Divulgação
+            </a>
+
+            <a href="templates.html">
+                📁 Templates
+            </a>
+
+            <a href="grupos.html">
+                👥 Grupos
+            </a>
+
+            <a href="estatisticas.html">
+                📈 Estatísticas
+            </a>
+
+            <a href="assinatura.html">
+                💳 Assinatura
+            </a>
+
+            <a href="perfil.html">
+                👤 Meu Perfil
+            </a>
+
+            <a href="configuracoes.html">
+                ⚙ Configurações
+            </a>
+
+
+        </nav>
+
+
+        <button onclick="logout()" class="logout">
+            🚪 Sair
+        </button>
+
+
+    </aside>
+
+
+
+
+    <!-- CONTEÚDO -->
+
+    <main class="content">
+
+
+        <header class="topbar">
+
+            <div>
+                <h1>Olá, <span id="nomeUsuario"></span> 👋</h1>
+
+                <p>
+                    Bem-vindo ao seu painel de controle.
+                </p>
+
+            </div>
+
+
+            <div id="usuario" class="user">
+                
+            </div>
+
+
+        </header>
+
+
+
+
+
+        <!-- CARDS -->
+
+
+        <section class="cards">
+
+
+            <div class="card">
+
+                <h3>Plano</h3>
+
+                <strong id="planoUsuario">
+                    
+                </strong>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <h3>Status</h3>
+
+                <strong id="statusUsuario">
+                    
+                </strong>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <h3>Sistema</h3>
+
+                <strong>
+                    Online
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+
+
+
+        <!-- AÇÕES -->
+
+
+        <section class="area">
+
+
+            <h2>
+                Ações rápidas
+            </h2>
+
+
+            <div class="actions">
+
+
+                <a href="sbcforge.html">
+                    ⚽
+                    <span>SBCForge</span>
+                </a>
+
+
+                <a href="divulgacao.html">
+                    📢
+                    <span>Divulgação</span>
+                </a>
+
+
+                <a href="templates.html">
+                    📁
+                    <span>Templates</span>
+                </a>
+
+
+                <a href="perfil.html">
+                    👤
+                    <span>Perfil</span>
+                </a>
+
+
+
+            </div>
+
+
+        </section>
+
+
+
+
+    </main>
+
 
 </div>
+
+
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="js/config.js"></script>
 
-<script src="js/auth.js"></script>
-
 <script src="js/protect.js"></script>
 
 <script src="js/profile.js"></script>
-  
-<script>
-verificarUsuario();
-protectPage();
-</script>
-  
+
+<script src="js/auth.js"></script>
+
+
 </body>
-  <h2>Olá, <span id="nomeUsuario"></span> 👋</h2>
 
-<p>
-Plano:
-<span id="planoUsuario"></span>
-</p>
-
-<p>
-Status:
-<span id="statusUsuario"></span>
-</p>
 </html>
+```
