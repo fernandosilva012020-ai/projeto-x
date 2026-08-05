@@ -1,16 +1,22 @@
-```css
+/* ===============================
+   PROJETO X - DASHBOARD PREMIUM
+   =============================== */
+
+
 * {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 
 body {
 
-    background: #f4f7fb;
-    color: #1f2937;
+    margin: 0;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #f1f5f9;
+
+    color: #1e293b;
 
 }
 
@@ -19,21 +25,30 @@ body {
 .app {
 
     display: flex;
+
     min-height: 100vh;
 
 }
 
 
 
-/* MENU */
+/* ===============================
+   SIDEBAR
+   =============================== */
+
 
 .sidebar {
 
     width: 260px;
-    background: #111827;
+
+    background: #0f172a;
+
     color: white;
-    padding: 25px;
+
+    padding: 25px 15px;
+
     display: flex;
+
     flex-direction: column;
 
 }
@@ -43,8 +58,12 @@ body {
 .logo {
 
     font-size: 22px;
+
     font-weight: bold;
-    margin-bottom: 35px;
+
+    text-align: center;
+
+    margin-bottom: 30px;
 
 }
 
@@ -53,69 +72,103 @@ body {
 .sidebar nav {
 
     display: flex;
+
     flex-direction: column;
+
     gap: 8px;
 
 }
 
 
 
-.sidebar nav a {
+.sidebar a {
 
-    color: #d1d5db;
     text-decoration: none;
-    padding: 12px 15px;
+
+    color: #cbd5e1;
+
+    padding: 14px;
+
     border-radius: 10px;
-    transition: 0.2s;
 
-}
+    transition: .3s;
 
-
-
-.sidebar nav a:hover,
-.sidebar nav .active {
-
-    background: #2563eb;
-    color: white;
-
-}
-
-
-
-
-.logout {
-
-    margin-top: auto;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    background: #dc2626;
-    color: white;
-    cursor: pointer;
     font-size: 15px;
 
 }
 
 
 
-/* CONTEÚDO */
+.sidebar a:hover,
+.sidebar a.active {
 
+    background: #2563eb;
 
-.content {
-
-    flex: 1;
-    padding: 35px;
+    color: white;
 
 }
 
 
 
+.logout {
+
+    margin-top: auto;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #ef4444;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+}
+
+
+
+/* ===============================
+   CONTEÚDO
+   =============================== */
+
+
+.content {
+
+    flex: 1;
+
+    padding: 30px;
+
+}
+
+
+
+/* ===============================
+   HEADER
+   =============================== */
+
+
 .topbar {
 
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 18px;
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
-    margin-bottom: 35px;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,.05);
+
+    margin-bottom: 25px;
 
 }
 
@@ -123,7 +176,9 @@ body {
 
 .topbar h1 {
 
-    font-size: 30px;
+    margin: 0;
+
+    font-size: 28px;
 
 }
 
@@ -131,31 +186,23 @@ body {
 
 .topbar p {
 
-    margin-top: 8px;
-    color: #6b7280;
+    color: #64748b;
 
 }
 
 
 
-.user {
-
-    background: white;
-    padding: 12px 18px;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-
-}
-
-
-
-/* CARDS */
+/* ===============================
+   CARDS
+   =============================== */
 
 
 .cards {
 
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+
     gap: 20px;
 
 }
@@ -165,9 +212,22 @@ body {
 .card {
 
     background: white;
+
     padding: 25px;
+
     border-radius: 18px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+
+    box-shadow: 0 8px 25px rgba(0,0,0,.05);
+
+    transition: .3s;
+
+}
+
+
+
+.card:hover {
+
+    transform: translateY(-5px);
 
 }
 
@@ -175,9 +235,11 @@ body {
 
 .card h3 {
 
-    color: #6b7280;
+    margin-top: 0;
+
+    color: #64748b;
+
     font-size: 15px;
-    margin-bottom: 15px;
 
 }
 
@@ -185,19 +247,30 @@ body {
 
 .card strong {
 
-    font-size: 25px;
+    font-size: 24px;
+
+    color: #2563eb;
 
 }
 
 
 
-
-/* AÇÕES */
+/* ===============================
+   AÇÕES RÁPIDAS
+   =============================== */
 
 
 .area {
 
-    margin-top: 40px;
+    margin-top: 30px;
+
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 18px;
+
+    box-shadow: 0 8px 25px rgba(0,0,0,.05);
 
 }
 
@@ -205,7 +278,7 @@ body {
 
 .area h2 {
 
-    margin-bottom: 20px;
+    margin-top: 0;
 
 }
 
@@ -214,8 +287,10 @@ body {
 .actions {
 
     display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 20px;
+
+    grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
+
+    gap: 15px;
 
 }
 
@@ -223,15 +298,21 @@ body {
 
 .actions a {
 
-    background: white;
     text-decoration: none;
-    color: #111827;
-    padding: 30px;
-    border-radius: 18px;
+
+    color: #0f172a;
+
+    background: #f8fafc;
+
+    padding: 25px;
+
+    border-radius: 15px;
+
     text-align: center;
-    font-size: 35px;
-    transition: 0.2s;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+
+    font-size: 18px;
+
+    transition: .3s;
 
 }
 
@@ -240,8 +321,10 @@ body {
 .actions a span {
 
     display: block;
-    font-size: 16px;
-    margin-top: 15px;
+
+    margin-top: 10px;
+
+    font-size: 15px;
 
 }
 
@@ -249,60 +332,20 @@ body {
 
 .actions a:hover {
 
-    transform: translateY(-5px);
+    background: #dbeafe;
+
+    transform: translateY(-4px);
 
 }
 
 
 
+/* ===============================
+   MOBILE
+   =============================== */
 
 
-/* CELULAR */
-
-
-@media(max-width:900px){
-
-
-    .sidebar {
-
-        width: 80px;
-        padding: 15px;
-
-    }
-
-
-    .logo {
-
-        font-size: 0;
-
-    }
-
-
-    .sidebar nav a {
-
-        font-size: 0;
-
-    }
-
-
-    .cards {
-
-        grid-template-columns: 1fr;
-
-    }
-
-
-    .actions {
-
-        grid-template-columns: 1fr 1fr;
-
-    }
-
-
-}
-
-
-@media(max-width:600px){
+@media(max-width:768px){
 
 
     .app {
@@ -321,7 +364,7 @@ body {
 
     .content {
 
-        padding:20px;
+        padding:15px;
 
     }
 
@@ -329,19 +372,12 @@ body {
     .topbar {
 
         flex-direction:column;
+
         align-items:flex-start;
-        gap:20px;
 
-    }
-
-
-    .actions {
-
-        grid-template-columns:1fr;
+        gap:15px;
 
     }
 
 
 }
-```
-
