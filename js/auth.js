@@ -126,7 +126,7 @@ async function login() {
 
         console.log(error.message);
 
-        alert("Erro no login: " + error.message);
+        mostrarMensagem("❌ E-mail ou senha incorretos.", "erro");
 
         return;
 
