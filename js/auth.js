@@ -103,7 +103,7 @@ async function login() {
 
     if (!email || !senha) {
 
-        alert("Digite email e senha");
+        mostrarMensagem("⚠️ Digite o e-mail e a senha.", "erro");
 
         return;
 
