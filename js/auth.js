@@ -6,7 +6,20 @@
 
 console.log("auth.js carregado");
 
+function mostrarMensagem(texto, tipo) {
 
+    const msg = document.getElementById("mensagem");
+
+    if (!msg) {
+        alert(texto);
+        return;
+    }
+
+    msg.style.display = "block";
+    msg.className = "mensagem " + tipo;
+    msg.innerHTML = texto;
+
+}
 
 // ================================
 // CADASTRO
@@ -25,7 +38,7 @@ async function cadastrarUsuario() {
 
     if (!nome || !email || !senha) {
 
-        alert("Preencha todos os campos");
+        mostrarMensagem("⚠️ Preencha todos os campos.", "erro");
 
         return;
 
