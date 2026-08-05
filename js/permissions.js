@@ -1,10 +1,13 @@
-async function verificarPlano() {
+async function protegerModulo(modulo) {
 
     const { data: sessionData } = await window.supabaseClient.auth.getSession();
 
+
     if (!sessionData.session) {
+
         window.location.href = "login.html";
         return;
+
     }
 
 
@@ -18,16 +21,54 @@ async function verificarPlano() {
         .single();
 
 
+
     if (error) {
+
         console.log(error);
         return;
+
     }
 
 
-    console.log("Plano:", profile.plano);
-    console.log("Status:", profile.status);
+
+    console.log(profile);
 
 
-    return profile;
+
+    if (profile.status !== "ativo") {
+
+        alert("Sua conta não está ativa.");
+
+        window.location.href = "assinatura.html";
+
+        return;
+
+    }
+
+
+
+    // Controle de módulos
+
+    if (modulo === "divulgacao") {
+
+
+        if (
+            profile.plano !== "pro" &&
+            profile.plano !== "premium"
+        ) {
+
+
+            alert("Esse recurso está disponível nos planos Pro e Premium.");
+
+            window.location.href = "assinatura.html";
+
+            return;
+
+
+        }
+
+    }
+
+
 
 }
