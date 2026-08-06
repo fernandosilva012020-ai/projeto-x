@@ -1,3 +1,6 @@
+console.log("dashboard.js carregado");
+
+
 async function carregarDashboard() {
 
     const { data } = await window.supabaseClient.auth.getSession();
@@ -14,6 +17,8 @@ async function carregarDashboard() {
 
     const user = data.session.user;
 
+    console.log("Usuário:", user.id);
+
 
     const { data: profile, error } = await window.supabaseClient
         .from("profiles")
@@ -22,25 +27,23 @@ async function carregarDashboard() {
         .single();
 
 
-    if (error) {
+    console.log("Profile:", profile);
+    console.log("Erro:", error);
 
-        console.log(error.message);
+
+    if (!profile) {
 
         return;
 
     }
 
 
-    document.getElementById("nomeUsuario").innerHTML =
-        profile.nome;
+    document.getElementById("nomeUsuario").textContent = profile.nome;
 
+    document.getElementById("planoUsuario").textContent = profile.plano;
 
-    document.getElementById("planoUsuario").innerHTML =
-        profile.plano;
+    document.getElementById("statusUsuario").textContent = profile.status;
 
-
-    document.getElementById("statusUsuario").innerHTML =
-        profile.status;
 
 }
 
