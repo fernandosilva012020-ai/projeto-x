@@ -1,6 +1,6 @@
 // =================================
 // Projeto X - SBCForge
-// Controle da interface + criação de SBC
+// Supabase + Interface
 // =================================
 
 
@@ -21,23 +21,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    // Abrir modal
+    function abrirModal(){
 
-    if (abrir) {
-
-        abrir.addEventListener("click", () => {
-
-            modal.style.display = "flex";
-
-        });
+        modal.style.display = "flex";
 
     }
 
 
-
-    // Fechar modal
-
-    function fecharModal() {
+    function fecharModal(){
 
         modal.style.display = "none";
 
@@ -45,25 +36,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    if (fechar) {
+    abrir?.addEventListener("click", abrirModal);
 
-        fechar.addEventListener("click", fecharModal);
+    fechar?.addEventListener("click", fecharModal);
 
-    }
-
-
-
-    if (cancelar) {
-
-        cancelar.addEventListener("click", fecharModal);
-
-    }
+    cancelar?.addEventListener("click", fecharModal);
 
 
 
-    window.addEventListener("click", (event) => {
+    window.addEventListener("click", (e)=>{
 
-        if (event.target === modal) {
+        if(e.target === modal){
 
             fecharModal();
 
@@ -73,131 +56,265 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-
-    // Salvar SBC de teste
-
-    if (salvar) {
-
-
-        salvar.addEventListener("click", () => {
+    // ===============================
+    // CARREGAR SBCS
+    // ===============================
 
 
+    async function carregarSbcs(){
 
-            const nome =
-            document.getElementById("nomeSbc").value;
+
+        const { data: sessionData } =
+        await window.supabaseClient.auth.getSession();
 
 
 
-            const categoria =
-            document.getElementById("categoriaSbc").value;
+        if(!sessionData.session){
+
+            return;
+
+        }
 
 
 
-            const overall =
-            document.getElementById("overallSbc").value;
+        const user = sessionData.session.user;
 
 
 
-            const jogadores =
-            document.getElementById("jogadoresSbc").value;
+        const { data, error } =
+        await window.supabaseClient
+
+        .from("sbcs")
+
+        .select("*")
+
+        .eq("user_id", user.id)
+
+        .order("created_at", { ascending:false });
 
 
 
-            const recompensa =
-            document.getElementById("recompensaSbc").value;
+        if(error){
+
+            console.log(error);
+
+            return;
+
+        }
 
 
 
-            const descricao =
-            document.getElementById("descricaoSbc").value;
+        lista.innerHTML = "";
 
 
 
-            if (!nome) {
-
-                alert("Digite o nome do SBC");
-
-                return;
-
-            }
+        if(!data || data.length === 0){
 
 
+            lista.innerHTML = `
 
-            const vazio =
-            document.querySelector(".empty-state");
+            <div class="empty-state">
 
-
-            if (vazio) {
-
-                vazio.remove();
-
-            }
-
-
-
-            const card = document.createElement("div");
-
-
-            card.className = "card sbc-card";
-
-
-
-            card.innerHTML = `
+                <div class="empty-icon">
+                ⚽
+                </div>
 
                 <h3>
-                    ⭐ ${nome}
+                Nenhum SBC criado ainda
                 </h3>
 
                 <p>
-                    Categoria: ${categoria}
+                Clique em Novo SBC para começar.
                 </p>
 
-                <p>
-                    Overall: ${overall}
-                </p>
-
-                <p>
-                    Jogadores: ${jogadores}
-                </p>
-
-                <p>
-                    🎁 ${recompensa}
-                </p>
-
-                <button class="btn-secondary">
-                    ✏ Editar
-                </button>
-
-                <button class="btn-secondary">
-                    🗑 Excluir
-                </button>
+            </div>
 
             `;
 
 
+            return;
 
-            lista.appendChild(card);
-
-
-
-            fecharModal();
+        }
 
 
 
-            // limpa formulário
+        data.forEach(criarCard);
 
-            document.getElementById("nomeSbc").value = "";
-
-            document.getElementById("recompensaSbc").value = "";
-
-            document.getElementById("descricaoSbc").value = "";
-
-
-
-        });
 
 
     }
+
+
+
+
+
+    function criarCard(sbc){
+
+
+
+        const card = document.createElement("div");
+
+
+        card.className = "card sbc-card";
+
+
+
+        card.innerHTML = `
+
+        <h3>
+        ⭐ ${sbc.nome}
+        </h3>
+
+
+        <p>
+        Categoria: ${sbc.categoria || "-"}
+        </p>
+
+
+        <p>
+        Overall: ${sbc.overall || "-"}
+        </p>
+
+
+        <p>
+        Jogadores: ${sbc.jogadores || "-"}
+        </p>
+
+
+        <p>
+        🎁 ${sbc.recompensa || "-"}
+        </p>
+
+
+        `;
+
+
+
+        lista.appendChild(card);
+
+
+    }
+
+
+
+
+
+    // ===============================
+    // SALVAR SBC
+    // ===============================
+
+
+    salvar?.addEventListener("click", async ()=>{
+
+
+        const { data: sessionData } =
+        await window.supabaseClient.auth.getSession();
+
+
+
+        if(!sessionData.session){
+
+            alert("Usuário não conectado");
+
+            return;
+
+        }
+
+
+
+        const user = sessionData.session.user;
+
+
+
+
+        const novoSbc = {
+
+
+            user_id:user.id,
+
+
+            nome:
+            document.getElementById("nomeSbc").value,
+
+
+            categoria:
+            document.getElementById("categoriaSbc").value,
+
+
+            overall:
+            Number(document.getElementById("overallSbc").value),
+
+
+            jogadores:
+            Number(document.getElementById("jogadoresSbc").value),
+
+
+            recompensa:
+            document.getElementById("recompensaSbc").value,
+
+
+            descricao:
+            document.getElementById("descricaoSbc").value
+
+
+        };
+
+
+
+        if(!novoSbc.nome){
+
+
+            alert("Digite o nome do SBC");
+
+            return;
+
+        }
+
+
+
+
+        const { error } =
+        await window.supabaseClient
+
+        .from("sbcs")
+
+        .insert(novoSbc);
+
+
+
+
+        if(error){
+
+
+            console.log(error);
+
+            alert("Erro ao salvar SBC");
+
+            return;
+
+        }
+
+
+
+
+        alert("SBC criado com sucesso!");
+
+
+
+        fecharModal();
+
+
+
+        carregarSbcs();
+
+
+
+    });
+
+
+
+
+    carregarSbcs();
 
 
 
