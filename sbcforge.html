@@ -9,6 +9,7 @@
 <title>SBCForge - Projeto X</title>
 
 <link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/sbcforge.css">
 
 </head>
 
@@ -69,8 +70,6 @@
 
     </aside>
 
-
-
     <!-- CONTEÚDO -->
 
     <main class="content">
@@ -79,91 +78,70 @@
 
             <div>
 
-                <h1>
-                    ⚽ SBCForge
-                </h1>
+                <h1>⚽ SBCForge</h1>
 
                 <p>
-                    Gerencie seus SBCs.
+                    Crie, organize e gerencie todos os seus SBCs.
                 </p>
 
             </div>
 
-            <div id="usuario" class="user"></div>
+            <div class="user" id="usuario"></div>
 
         </header>
 
+        <!-- CABEÇALHO DO MÓDULO -->
 
+        <section class="forge-header">
 
-        <section class="cards">
+            <div>
 
-            <div class="card">
+                <h2>Meus SBCs</h2>
 
-                <h3>SBCs</h3>
-
-                <strong>0</strong>
-
-                <p>Criados</p>
-
-            </div>
-
-            <div class="card">
-
-                <h3>Templates</h3>
-
-                <strong>0</strong>
-
-                <p>Utilizados</p>
+                <span>
+                    Todos os desafios criados aparecerão aqui.
+                </span>
 
             </div>
 
-            <div class="card">
+            <button id="novoSbc" class="btn-primary">
 
-                <h3>Status</h3>
+                ➕ Novo SBC
 
-                <strong>Online</strong>
+            </button>
 
-                <p>Sistema</p>
+        </section>
+
+        <!-- PESQUISA -->
+
+        <section class="search-area">
+
+            <input
+                type="text"
+                id="pesquisarSbc"
+                placeholder="🔍 Pesquisar SBC..."
+            >
+
+        </section>
+
+        <!-- LISTA -->
+
+        <section id="listaSbcs" class="lista-sbcs">
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    ⚽
+                </div>
+
+                <h3>
+                    Nenhum SBC criado ainda
+                </h3>
+
+                <p>
+                    Clique em <strong>➕ Novo SBC</strong> para começar.
+                </p>
 
             </div>
 
         </section>
-
-
-
-        <section class="area">
-
-            <h2>
-                SBCForge
-            </h2>
-
-            <p>
-                O criador de SBCs será implementado nesta área.
-            </p>
-
-        </section>
-
-    </main>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script src="js/config.js"></script>
-
-<script src="js/auth.js"></script>
-
-<script src="js/protect.js"></script>
-
-<script>
-
-setTimeout(() => {
-
-    protectPage("sbcforge");
-
-}, 500);
-
-</script>
-
-</body>
-</html>
