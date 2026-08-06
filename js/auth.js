@@ -98,7 +98,7 @@ async function cadastrarUsuario() {
 
     const { error: profileError } = await window.supabaseClient
     .from("profiles")
-    .insert({
+    .upsert({
 
         id: data.user.id,
 
