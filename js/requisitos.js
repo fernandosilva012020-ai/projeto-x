@@ -121,7 +121,39 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
         modalRequisitos.style.display="none";
 
+// =================================
+// MOSTRAR REQUISITOS DO SBC
+// =================================
 
+
+async function carregarRequisitos(sbcId){
+
+
+    const {data,error}=
+
+    await window.supabaseClient
+
+    .from("sbc_requisitos")
+
+    .select("*")
+
+    .eq("sbc_id",sbcId);
+
+
+
+    if(error){
+
+        console.log(error);
+
+        return [];
+
+    }
+
+
+
+    return data || [];
+
+}
 
     });
 
