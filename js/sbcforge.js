@@ -236,24 +236,33 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="card-actions">
 
 
-            <button 
-            class="btn-secondary editar-btn">
+    <button 
+    class="btn-secondary editar-btn">
 
-                ✏️ Editar
+        ✏️ Editar
 
-            </button>
-
-
-
-            <button 
-            class="btn-danger excluir-btn">
-
-                🗑️ Excluir
-
-            </button>
+    </button>
 
 
-        </div>
+
+    <button 
+    class="btn-secondary requisitos-btn">
+
+        ⚙️ Requisitos
+
+    </button>
+
+
+
+    <button 
+    class="btn-danger excluir-btn">
+
+        🗑️ Excluir
+
+    </button>
+
+
+</div>
 
 
         `;
@@ -272,6 +281,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         });
+
+ const requisitos = card.querySelector(".requisitos-btn");
+
+
+requisitos.addEventListener("click", ()=>{
+
+    abrirRequisitos(sbc.id);
+
+});       
 
 const editar = card.querySelector(".editar-btn");
 
