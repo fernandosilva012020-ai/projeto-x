@@ -9,7 +9,24 @@ async function carregarDashboard() {
 
 
     const user = data.session.user;
-    document.getElementById("usuario").innerHTML = "teste";
+    const { data: perfil } = await window.supabaseClient
+    .from("profiles")
+    .select("nome, plano, status")
+    .eq("id", user.id)
+    .single();
+
+
+if (perfil) {
+
+    document.getElementById("usuario").innerHTML = `
+        👤 ${perfil.nome}
+        <br>
+        💳 Plano: ${perfil.plano}
+        <br>
+        🟢 Status: ${perfil.status}
+    `;
+
+}
 
     const { data: perfil } = await window.supabaseClient
     .from("profiles")
