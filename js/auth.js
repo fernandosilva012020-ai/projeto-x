@@ -6,6 +6,11 @@
 
 console.log("auth.js carregado");
 
+
+// ================================
+// MENSAGEM NA TELA
+// ================================
+
 function mostrarMensagem(texto, tipo) {
 
     const msg = document.getElementById("mensagem");
@@ -17,9 +22,11 @@ function mostrarMensagem(texto, tipo) {
 
     msg.style.display = "block";
     msg.className = "mensagem " + tipo;
-msg.innerHTML = texto;
+    msg.innerHTML = texto;
 
 }
+
+
 
 // ================================
 // CADASTRO
@@ -38,7 +45,10 @@ async function cadastrarUsuario() {
 
     if (!nome || !email || !senha) {
 
-        mostrarMensagem("⚠️ Preencha todos os campos.", "erro");
+        mostrarMensagem(
+            "⚠️ Preencha todos os campos.",
+            "erro"
+        );
 
         return;
 
@@ -70,40 +80,71 @@ async function cadastrarUsuario() {
 
         console.log(error.message);
 
-        mostrarMensagem("❌ " + error.message, "erro");
+        mostrarMensagem(
+            "❌ " + error.message,
+            "erro"
+        );
 
-    return;
+        return;
 
-}
-
-
-// CRIAR PERFIL
-
-const { error: profileError } = await window.supabaseClient
-.from("profiles")
-.insert({
-
-    id: data.user.id,
-    nome: nome,
-    plano: "teste",
-    status: "ativo",
-    inicio_teste: new Date().toISOString()
-
-});
+    }
 
 
-if (profileError) {
 
-    console.log(profileError.message);
+    // ================================
+    // CRIAR PERFIL
+    // ================================
+
+
+    const { error: profileError } = await window.supabaseClient
+    .from("profiles")
+    .insert({
+
+        id: data.user.id,
+
+        nome: nome,
+
+        plano: "teste",
+
+        status: "ativo",
+
+        inicio_teste: new Date().toISOString()
+
+    });
+
+
+
+    if (profileError) {
+
+        console.log(profileError.message);
+
+        mostrarMensagem(
+            "❌ Erro ao criar perfil.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
 
     mostrarMensagem(
-        "❌ Erro ao criar perfil.",
-        "erro"
+        "✅ Conta criada com sucesso! Redirecionando...",
+        "sucesso"
     );
 
-    return;
+
+
+    setTimeout(() => {
+
+        window.location.href = "login.html";
+
+    }, 2000);
+
 
 }
+
 
 
 
@@ -123,7 +164,12 @@ async function login() {
 
     if (!email || !senha) {
 
-        mostrarMensagem("⚠️ Digite o e-mail e a senha.", "erro");
+
+        mostrarMensagem(
+            "⚠️ Digite o e-mail e a senha.",
+            "erro"
+        );
+
 
         return;
 
@@ -146,7 +192,12 @@ async function login() {
 
         console.log(error.message);
 
-        mostrarMensagem("❌ E-mail ou senha incorretos.", "erro");
+
+        mostrarMensagem(
+            "❌ E-mail ou senha incorretos.",
+            "erro"
+        );
+
 
         return;
 
@@ -155,13 +206,17 @@ async function login() {
 
 
 
-    console.log("Login realizado:", data.user.email);
+    console.log(
+        "Login realizado:",
+        data.user.email
+    );
 
 
     window.location.href = "dashboard.html";
 
 
 }
+
 
 
 
@@ -182,7 +237,12 @@ async function logout() {
 
         console.log(error.message);
 
-        mostrarMensagem("❌ Não foi possível sair da conta.", "erro");
+
+        mostrarMensagem(
+            "❌ Não foi possível sair da conta.",
+            "erro"
+        );
+
 
         return;
 
@@ -199,6 +259,7 @@ async function logout() {
 
 
 
+
 // ================================
 // USUARIO ATUAL
 // ================================
@@ -209,11 +270,13 @@ async function usuarioAtual() {
     const { data } = await window.supabaseClient.auth.getSession();
 
 
+
     if (data.session) {
 
         return data.session.user;
 
     }
+
 
 
     return null;
