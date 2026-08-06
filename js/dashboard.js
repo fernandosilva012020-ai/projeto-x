@@ -9,57 +9,8 @@ async function carregarDashboard() {
 
 
     const user = data.session.user;
-    
-// DADOS DO USUÁRIO
-
-const { data: profile, error: profileError } = await window.supabaseClient
-    .from("profiles")
-    .select("nome, plano, status")
-    .eq("id", user.id)
-    .single();
 
 
-if (!profileError && profile) {
-
-    const usuario = document.getElementById("usuario");
-
-    if (usuario) {
-
-        usuario.innerHTML = `
-            👤 ${profile.nome}
-            <br>
-            💳 Plano: ${profile.plano}
-            <br>
-            🟢 Status: ${profile.status}
-        `;
-
-    }
-
-
-    const nome = document.getElementById("nomeUsuario");
-
-    if (nome) {
-
-        nome.innerText = profile.nome;
-
-    }
-
-}
-// PERFIL DO USUÁRIO
-
-const { data: profile, error } = await window.supabaseClient
-    .from("profiles")
-    .select("nome, plano, status")
-    .eq("id", user.id)
-    .single();
-
-
-if (!error && profile) {
-
-    document.getElementById("nomeUsuario").innerText =
-        profile.nome;
-
-}
 
     // GRUPOS
 
