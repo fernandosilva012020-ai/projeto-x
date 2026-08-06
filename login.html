@@ -2,39 +2,101 @@
 <html lang="pt-BR">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Login - Projeto X</title>
+<title>Login - SBCForge</title>
 
 <link rel="stylesheet" href="css/style.css">
 
 </head>
 
+
 <body>
 
-<div class="container">
 
-<h1>Projeto X</h1>
+<div class="login-page">
 
-<h2>Entrar</h2>
 
-<div id="mensagem" class="mensagem" style="display:none;"></div> 
+    <div class="login-card">
 
-<input id="email" type="email" placeholder="Email">
 
-<input id="senha" type="password" placeholder="Senha">
+        <div class="logo">
 
-<button onclick="login()">
-Entrar
-</button>
+            🚀
 
-<p>
-Ainda não tem conta?
-<a href="cadastro.html">Criar conta</a>
-</p>
+        </div>
+
+
+        <h1>
+            SBCForge
+        </h1>
+
+
+        <p class="subtitle">
+            Crie, organize e gerencie seus SBCs do FC 26
+        </p>
+
+
+
+        <h2>
+            Entrar
+        </h2>
+
+
+
+        <div id="mensagem" class="mensagem" style="display:none;"></div>
+
+
+
+        <label>
+            Email
+        </label>
+
+        <input 
+        id="email" 
+        type="email" 
+        placeholder="Digite seu email">
+
+
+
+        <label>
+            Senha
+        </label>
+
+        <input 
+        id="senha" 
+        type="password" 
+        placeholder="Digite sua senha">
+
+
+
+        <button onclick="login()">
+
+            🔐 Entrar
+
+        </button>
+
+
+
+        <p class="cadastro">
+
+            Ainda não tem conta?
+
+            <a href="cadastro.html">
+                Criar conta
+            </a>
+
+        </p>
+
+
+
+    </div>
+
 
 </div>
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -42,6 +104,7 @@ Ainda não tem conta?
 <script src="js/config.js"></script>
 
 <script src="js/auth.js"></script>
+
 
 </body>
 
