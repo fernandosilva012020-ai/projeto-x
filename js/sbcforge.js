@@ -273,7 +273,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         });
 
+const editar = card.querySelector(".editar-btn");
 
+editar.addEventListener("click", ()=>{
+
+    editarSbc(sbc);
+
+});
 
 
         lista.appendChild(card);
@@ -281,6 +287,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+function editarSbc(sbc){
+
+    document.getElementById("nomeSbc").value = sbc.nome || "";
+
+    document.getElementById("categoriaSbc").value = sbc.categoria || "";
+
+    document.getElementById("overallSbc").value = sbc.overall || "";
+
+    document.getElementById("jogadoresSbc").value = sbc.jogadores || "";
+
+    document.getElementById("recompensaSbc").value = sbc.recompensa || "";
+
+    document.getElementById("descricaoSbc").value = sbc.descricao || "";
+
+
+    salvar.dataset.editando = sbc.id;
+
+
+    modal.style.display = "flex";
+
+}
     // ===============================
 // EXCLUIR SBC
 // ===============================
