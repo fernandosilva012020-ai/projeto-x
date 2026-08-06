@@ -8,34 +8,7 @@ async function carregarDashboard() {
     }
 
 
-    const { data: perfil, error } = await window.supabaseClient
-    .from("profiles")
-    .select("nome")
-    .eq("id", user.id)
-    .single();
-
-
-console.log(perfil);
-console.log(error);
-
-
-if (perfil) {
-
-    document.getElementById("usuario").innerHTML =
-        perfil.nome;
-
-}
-
-
-    document.getElementById("usuario").innerHTML = `
-        👤 ${perfil.nome}
-        <br>
-        💳 Plano: ${perfil.plano}
-        <br>
-        🟢 Status: ${perfil.status}
-    `;
-
-}
+    const user = data.session.user;
 
     const { data: perfil } = await window.supabaseClient
     .from("profiles")
