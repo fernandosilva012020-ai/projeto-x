@@ -243,7 +243,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     </button>
 
+    <button class="btn-secondary detalhes-btn">
 
+👁️ Ver detalhes
+
+</button>
 
     <button 
     class="btn-secondary requisitos-btn">
@@ -293,6 +297,20 @@ requisitos.addEventListener("click", ()=>{
 
 const editar = card.querySelector(".editar-btn");
 
+const detalhes =
+card.querySelector(".detalhes-btn");
+
+
+detalhes?.addEventListener("click", ()=>{
+
+
+    window.location.href =
+
+    "sbc-detalhes.html?id=" + sbc.id;
+
+
+});
+        
 editar.addEventListener("click", ()=>{
 
     editarSbc(sbc);
