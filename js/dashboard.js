@@ -14,7 +14,7 @@ async function carregarDashboard() {
 
 const { data: profile, error } = await window.supabaseClient
     .from("profiles")
-    .select("nome")
+    .select("nome, plano, status")
     .eq("id", user.id)
     .single();
 
