@@ -1,6 +1,6 @@
 // =================================
 // Projeto X - SBCForge
-// Controle da interface
+// Controle da interface + criação de SBC
 // =================================
 
 
@@ -15,9 +15,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const cancelar = document.getElementById("cancelarSbc");
 
+    const salvar = document.getElementById("salvarSbc");
+
+    const lista = document.getElementById("listaSbcs");
 
 
-    if (abrir && modal) {
+
+    // Abrir modal
+
+    if (abrir) {
 
         abrir.addEventListener("click", () => {
 
@@ -29,13 +35,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+    // Fechar modal
+
+    function fecharModal() {
+
+        modal.style.display = "none";
+
+    }
+
+
+
     if (fechar) {
 
-        fechar.addEventListener("click", () => {
-
-            modal.style.display = "none";
-
-        });
+        fechar.addEventListener("click", fecharModal);
 
     }
 
@@ -43,11 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (cancelar) {
 
-        cancelar.addEventListener("click", () => {
-
-            modal.style.display = "none";
-
-        });
+        cancelar.addEventListener("click", fecharModal);
 
     }
 
@@ -55,15 +63,141 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.addEventListener("click", (event) => {
 
-
         if (event.target === modal) {
 
-            modal.style.display = "none";
+            fecharModal();
 
         }
 
-
     });
+
+
+
+
+    // Salvar SBC de teste
+
+    if (salvar) {
+
+
+        salvar.addEventListener("click", () => {
+
+
+
+            const nome =
+            document.getElementById("nomeSbc").value;
+
+
+
+            const categoria =
+            document.getElementById("categoriaSbc").value;
+
+
+
+            const overall =
+            document.getElementById("overallSbc").value;
+
+
+
+            const jogadores =
+            document.getElementById("jogadoresSbc").value;
+
+
+
+            const recompensa =
+            document.getElementById("recompensaSbc").value;
+
+
+
+            const descricao =
+            document.getElementById("descricaoSbc").value;
+
+
+
+            if (!nome) {
+
+                alert("Digite o nome do SBC");
+
+                return;
+
+            }
+
+
+
+            const vazio =
+            document.querySelector(".empty-state");
+
+
+            if (vazio) {
+
+                vazio.remove();
+
+            }
+
+
+
+            const card = document.createElement("div");
+
+
+            card.className = "card sbc-card";
+
+
+
+            card.innerHTML = `
+
+                <h3>
+                    ⭐ ${nome}
+                </h3>
+
+                <p>
+                    Categoria: ${categoria}
+                </p>
+
+                <p>
+                    Overall: ${overall}
+                </p>
+
+                <p>
+                    Jogadores: ${jogadores}
+                </p>
+
+                <p>
+                    🎁 ${recompensa}
+                </p>
+
+                <button class="btn-secondary">
+                    ✏ Editar
+                </button>
+
+                <button class="btn-secondary">
+                    🗑 Excluir
+                </button>
+
+            `;
+
+
+
+            lista.appendChild(card);
+
+
+
+            fecharModal();
+
+
+
+            // limpa formulário
+
+            document.getElementById("nomeSbc").value = "";
+
+            document.getElementById("recompensaSbc").value = "";
+
+            document.getElementById("descricaoSbc").value = "";
+
+
+
+        });
+
+
+    }
 
 
 
