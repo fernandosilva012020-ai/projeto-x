@@ -1,7 +1,5 @@
-console.log("SBCFORGE JS OK");
+// =================================
+// Projeto X - SBCForge
+// =================================
 
-function criarSbc() {
-
-    alert("Botão funcionando!");
-
-}
+console.log("SBCForge JS carregado");
