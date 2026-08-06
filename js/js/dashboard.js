@@ -1,3 +1,5 @@
+console.log("dashboard.js carregado");
+
 // =================================
 // Projeto X - Dashboard
 // Carregar dados do usuário
