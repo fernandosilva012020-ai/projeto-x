@@ -326,6 +326,23 @@ function editarSbc(sbc){
     modal.style.display = "flex";
 
 }
+
+function abrirRequisitos(id){
+
+
+    const modal =
+    document.getElementById("modalRequisitos");
+
+
+    modal.dataset.sbc =
+    id;
+
+
+    modal.style.display =
+    "flex";
+
+
+}    
     // ===============================
 // EXCLUIR SBC
 // ===============================
