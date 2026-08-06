@@ -33,19 +33,15 @@ async function criarSbc() {
     const user = data.session.user;
 
 
-
     const { error } = await window.supabaseClient
         .from("sbcs")
         .insert({
 
             user_id: user.id,
-
             nome: nome,
-
             requisitos: requisitos
 
         });
-
 
 
     if (error) {
@@ -59,14 +55,6 @@ async function criarSbc() {
     }
 
 
-
     alert("SBC criado com sucesso!");
-
-
-
-    document.getElementById("nomeSbc").value = "";
-
-    document.getElementById("requisitosSbc").value = "";
-
 
 }
