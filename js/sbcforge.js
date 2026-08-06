@@ -481,13 +481,41 @@ salvar?.addEventListener("click", async ()=>{
 
 
 
-    const { error } =
+    let error;
 
-    await window.supabaseClient
+
+if (salvar.dataset.editando) {
+
+
+    const resultado = await window.supabaseClient
+
+    .from("sbcs")
+
+    .update(novoSbc)
+
+    .eq("id", salvar.dataset.editando);
+
+
+    error = resultado.error;
+
+
+    salvar.dataset.editando = "";
+
+
+} else {
+
+
+    const resultado = await window.supabaseClient
 
     .from("sbcs")
 
     .insert(novoSbc);
+
+
+    error = resultado.error;
+
+
+}
 
 
 
@@ -516,8 +544,8 @@ salvar?.addEventListener("click", async ()=>{
 
 
     alert(
-        "SBC criado com sucesso!"
-    );
+    "SBC salvo com sucesso!"
+);
 
 
 
