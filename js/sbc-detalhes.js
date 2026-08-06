@@ -161,22 +161,74 @@ async function carregarRequisitos(id){
             </p>
 
 
-            <p>
-            ⭐ Overall:
-            ${r.overall_min || "-"}
-            </p>
+            ${r.quantidade_jogadores ? 
+`
+<p>
+👥 Jogadores:
+${r.quantidade_jogadores}
+</p>
+`
+: ""}
 
 
-            <p>
-            🧪 Química:
-            ${r.quimica_min || "-"}
-            </p>
+${r.overall_min ? 
+`
+<p>
+⭐ Overall mínimo:
+${r.overall_min}
+</p>
+`
+: ""}
 
 
-            <p>
-            🌎 Liga:
-            ${r.liga || "-"}
-            </p>
+${r.quimica_min ? 
+`
+<p>
+🧪 Química mínima:
+${r.quimica_min}
+</p>
+`
+: ""}
+
+
+${r.jogadores_especiais ? 
+`
+<p>
+🔥 Jogadores especiais:
+${r.jogadores_especiais}
+</p>
+`
+: ""}
+
+
+${r.liga ? 
+`
+<p>
+🌎 Liga:
+${r.liga}
+</p>
+`
+: ""}
+
+
+${r.nacionalidade ? 
+`
+<p>
+🏳️ Nacionalidade:
+${r.nacionalidade}
+</p>
+`
+: ""}
+
+
+${r.clube ? 
+`
+<p>
+🏟️ Clube:
+${r.clube}
+</p>
+`
+: ""}
 
 
 
