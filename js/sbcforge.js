@@ -1,6 +1,6 @@
 // =================================
 // Projeto X - SBCForge
-// Supabase + Interface
+// Supabase + Cards + Exclusão
 // =================================
 
 
@@ -23,14 +23,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function abrirModal(){
 
-        modal.style.display = "flex";
+        if(modal){
+
+            modal.style.display = "flex";
+
+        }
 
     }
 
 
+
     function fecharModal(){
 
-        modal.style.display = "none";
+        if(modal){
+
+            modal.style.display = "none";
+
+        }
 
     }
 
@@ -38,21 +47,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     abrir?.addEventListener("click", abrirModal);
 
+
     fechar?.addEventListener("click", fecharModal);
+
 
     cancelar?.addEventListener("click", fecharModal);
 
 
 
-    window.addEventListener("click", (e)=>{
+    window.addEventListener("click", (event)=>{
 
-        if(e.target === modal){
+
+        if(event.target === modal){
 
             fecharModal();
 
         }
 
+
     });
+
+
 
 
 
@@ -65,6 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         const { data: sessionData } =
+
         await window.supabaseClient.auth.getSession();
 
 
@@ -81,7 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+
         const { data, error } =
+
         await window.supabaseClient
 
         .from("sbcs")
@@ -90,7 +108,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         .eq("user_id", user.id)
 
-        .order("created_at", { ascending:false });
+        .order("created_at", {
+
+            ascending:false
+
+        });
+
+
 
 
 
@@ -104,7 +128,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+
+
         lista.innerHTML = "";
+
+
 
 
 
@@ -116,15 +144,15 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="empty-state">
 
                 <div class="empty-icon">
-                ⚽
+                    ⚽
                 </div>
 
                 <h3>
-                Nenhum SBC criado ainda
+                    Nenhum SBC criado ainda
                 </h3>
 
                 <p>
-                Clique em Novo SBC para começar.
+                    Clique em Novo SBC para começar.
                 </p>
 
             </div>
@@ -138,7 +166,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-        data.forEach(criarCard);
+
+
+        data.forEach((sbc)=>{
+
+
+            criarCard(sbc);
+
+
+        });
 
 
 
@@ -148,8 +184,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    function criarCard(sbc){
 
+    // ===============================
+    // CRIAR CARD
+    // ===============================
+
+
+    function criarCard(sbc){
 
 
         const card = document.createElement("div");
@@ -161,32 +202,77 @@ document.addEventListener("DOMContentLoaded", () => {
 
         card.innerHTML = `
 
+
         <h3>
-        ⭐ ${sbc.nome}
+            ⭐ ${sbc.nome}
         </h3>
 
 
         <p>
-        Categoria: ${sbc.categoria || "-"}
+            🏷️ Categoria:
+            ${sbc.categoria || "-"}
         </p>
 
 
         <p>
-        Overall: ${sbc.overall || "-"}
+            ⭐ Overall:
+            ${sbc.overall || "-"}
         </p>
 
 
         <p>
-        Jogadores: ${sbc.jogadores || "-"}
+            👥 Jogadores:
+            ${sbc.jogadores || "-"}
         </p>
 
 
         <p>
-        🎁 ${sbc.recompensa || "-"}
+            🎁 Recompensa:
+            ${sbc.recompensa || "-"}
         </p>
+
+
+
+        <div class="card-actions">
+
+
+            <button 
+            class="btn-secondary editar-btn">
+
+                ✏️ Editar
+
+            </button>
+
+
+
+            <button 
+            class="btn-danger excluir-btn">
+
+                🗑️ Excluir
+
+            </button>
+
+
+        </div>
 
 
         `;
+
+
+
+
+        const excluir = card.querySelector(".excluir-btn");
+
+
+
+        excluir.addEventListener("click", ()=>{
+
+
+            excluirSbc(sbc.id);
+
+
+        });
+
 
 
 
@@ -195,121 +281,229 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
-
-
-
     // ===============================
-    // SALVAR SBC
-    // ===============================
+// EXCLUIR SBC
+// ===============================
 
 
-    salvar?.addEventListener("click", async ()=>{
+async function excluirSbc(id){
 
 
-        const { data: sessionData } =
-        await window.supabaseClient.auth.getSession();
+    const confirmar = confirm(
+        "Tem certeza que deseja excluir este SBC?"
+    );
 
 
 
-        if(!sessionData.session){
+    if(!confirmar){
 
-            alert("Usuário não conectado");
+        return;
 
-            return;
+    }
 
-        }
 
 
 
-        const user = sessionData.session.user;
+    const { error } =
 
+    await window.supabaseClient
 
+    .from("sbcs")
 
+    .delete()
 
-        const novoSbc = {
+    .eq("id", id);
 
 
-            user_id:user.id,
 
 
-            nome:
-            document.getElementById("nomeSbc").value,
+    if(error){
 
 
-            categoria:
-            document.getElementById("categoriaSbc").value,
+        console.log(error);
 
 
-            overall:
-            Number(document.getElementById("overallSbc").value),
+        alert(
+            "Erro ao excluir SBC"
+        );
 
 
-            jogadores:
-            Number(document.getElementById("jogadoresSbc").value),
+        return;
 
+    }
 
-            recompensa:
-            document.getElementById("recompensaSbc").value,
 
 
-            descricao:
-            document.getElementById("descricaoSbc").value
+    alert(
+        "SBC excluído com sucesso!"
+    );
 
 
-        };
 
+    carregarSbcs();
 
 
-        if(!novoSbc.nome){
 
+}
 
-            alert("Digite o nome do SBC");
 
-            return;
 
-        }
 
 
 
 
-        const { error } =
-        await window.supabaseClient
+// ===============================
+// SALVAR SBC
+// ===============================
 
-        .from("sbcs")
 
-        .insert(novoSbc);
+salvar?.addEventListener("click", async ()=>{
 
 
 
+    const { data: sessionData } =
 
-        if(error){
+    await window.supabaseClient.auth.getSession();
 
 
-            console.log(error);
 
-            alert("Erro ao salvar SBC");
 
-            return;
+    if(!sessionData.session){
 
-        }
 
+        alert(
+            "Usuário não conectado"
+        );
 
 
+        return;
 
-        alert("SBC criado com sucesso!");
 
+    }
 
 
-        fecharModal();
 
 
+    const user =
+    sessionData.session.user;
 
-        carregarSbcs();
 
 
 
-    });
+
+    const novoSbc = {
+
+
+        user_id:user.id,
+
+
+        nome:
+        document.getElementById("nomeSbc").value,
+
+
+
+        categoria:
+        document.getElementById("categoriaSbc").value,
+
+
+
+        overall:
+        Number(
+            document.getElementById("overallSbc").value
+        ),
+
+
+
+        jogadores:
+        Number(
+            document.getElementById("jogadoresSbc").value
+        ),
+
+
+
+        recompensa:
+        document.getElementById("recompensaSbc").value,
+
+
+
+        descricao:
+        document.getElementById("descricaoSbc").value
+
+
+    };
+
+
+
+
+
+
+    if(!novoSbc.nome){
+
+
+        alert(
+            "Digite o nome do SBC"
+        );
+
+
+        return;
+
+    }
+
+
+
+
+
+
+    const { error } =
+
+    await window.supabaseClient
+
+    .from("sbcs")
+
+    .insert(novoSbc);
+
+
+
+
+
+
+    if(error){
+
+
+        console.log(error);
+
+
+        alert(
+            "Erro ao salvar SBC"
+        );
+
+
+        return;
+
+
+    }
+
+
+
+
+
+
+    alert(
+        "SBC criado com sucesso!"
+    );
+
+
+
+    fecharModal();
+
+
+
+
+    document.getElementById("nomeSbc").value = "";
+
+    document.getElementById("recompensaSbc").value = "";
+
+    document.getElementById("descricaoSbc").value = "";
 
 
 
@@ -319,3 +513,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 });
+
+
+
+
+
+
+
+// ===============================
+// INICIAR
+// ===============================
+
+
+carregarSbcs();
+
+
+
+});                      
