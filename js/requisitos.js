@@ -42,32 +42,57 @@ document.addEventListener("DOMContentLoaded", ()=>{
         const requisito = {
 
 
-            sbc_id:sbcId,
+    sbc_id: sbcId,
 
 
-            titulo:
-            document.getElementById("tituloRequisito").value,
+    titulo:
+    document.getElementById("tituloRequisito").value,
 
 
-            overall_min:
-            Number(
-            document.getElementById("overallRequisito").value
-            ),
+
+    quantidade_jogadores:
+    Number(
+    document.getElementById("quantidadeJogadores").value
+    ),
 
 
-            quimica_min:
-            Number(
-            document.getElementById("quimicaRequisito").value
-            ),
+
+    overall_min:
+    Number(
+    document.getElementById("overallRequisito").value
+    ),
 
 
-            liga:
-            document.getElementById("ligaRequisito").value
+
+    quimica_min:
+    Number(
+    document.getElementById("quimicaRequisito").value
+    ),
 
 
-        };
+
+    jogadores_especiais:
+    Number(
+    document.getElementById("especiaisRequisito").value
+    ),
 
 
+
+    liga:
+    document.getElementById("ligaRequisito").value,
+
+
+
+    nacionalidade:
+    document.getElementById("nacionalidadeRequisito").value,
+
+
+
+    clube:
+    document.getElementById("clubeRequisito").value
+
+
+};
 
 
         const {error}=
