@@ -8,8 +8,8 @@ console.log("dashboard.js carregado");
 
 async function carregarDashboard() {
 
-
     const { data } = await window.supabaseClient.auth.getSession();
+    console.log("usuário atual:", data.session);
 
 
     if (!data.session) {
