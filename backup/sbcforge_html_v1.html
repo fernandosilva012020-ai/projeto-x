@@ -1,1 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SBCForge - Projeto X</title>
+
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/sbcforge.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- MENU -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            🚀 Projeto X
+        </div>
+
+        <nav>
+
+            <a href="dashboard.html">
+                🏠 Dashboard
+            </a>
+
+            <a class="active" href="sbcforge.html">
+                ⚽ SBCForge
+            </a>
+
+            <a href="divulgacao.html">
+                📢 Divulgação
+            </a>
+
+            <a href="templates.html">
+                📁 Templates
+            </a>
+
+            <a href="grupos.html">
+                👥 Grupos
+            </a>
+
+            <a href="estatisticas.html">
+                📈 Estatísticas
+            </a>
+
+            <a href="assinatura.html">
+                💳 Assinatura
+            </a>
+
+            <a href="perfil.html">
+                👤 Meu Perfil
+            </a>
+
+            <a href="configuracoes.html">
+                ⚙ Configurações
+            </a>
+
+        </nav>
+
+        <button onclick="logout()" class="logout">
+            🚪 Sair
+        </button>
+
+    </aside>
+
+    <!-- CONTEÚDO -->
+
+    <main class="content">
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>⚽ SBCForge</h1>
+
+                <p>
+                    Crie, organize e gerencie todos os seus SBCs.
+                </p>
+
+            </div>
+
+            <div class="user" id="usuario"></div>
+
+        </header>
+
+        <!-- CABEÇALHO DO MÓDULO -->
+
+        <section class="forge-header">
+
+            <div>
+
+                <h2>Meus SBCs</h2>
+
+                <span>
+                    Todos os desafios criados aparecerão aqui.
+                </span>
+
+            </div>
+
+            <button id="novoSbc" class="btn-primary">
+
+                ➕ Novo SBC
+
+            </button>
+
+        </section>
+
+        <!-- PESQUISA -->
+
+        <section class="search-area">
+
+            <input
+                type="text"
+                id="pesquisarSbc"
+                placeholder="🔍 Pesquisar SBC..."
+            >
+
+        </section>
+
+        <!-- LISTA -->
+
+        <section id="listaSbcs" class="lista-sbcs">
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    ⚽
+                </div>
+
+                <h3>
+                    Nenhum SBC criado ainda
+                </h3>
+
+                <p>
+                    Clique em <strong>➕ Novo SBC</strong> para começar.
+                </p>
+
+            </div>
+
+        </section>
+
+                <!-- MODAL NOVO SBC -->
+
+        <div id="modalSbc" class="modal">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h2>
+                        ➕ Novo SBC
+                    </h2>
+
+                    <button id="fecharModal" class="close-btn">
+                        ✖
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="form-group">
+
+                        <label>
+                            Nome do SBC
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nomeSbc"
+                            placeholder="Ex.: Upgrade 84+"
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>
+                            Categoria
+                        </label>
+
+                        <select id="categoriaSbc">
+
+                            <option value="Upgrade">
+                                Upgrade
+                            </option>
+
+                            <option value="Ídolo">
+                                Ídolo
+                            </option>
+
+                            <option value="Evento">
+                                Evento
+                            </option>
+
+                            <option value="Objetivo">
+                                Objetivo
+                            </option>
+
+                            <option value="Personalizado">
+                                Personalizado
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+
+                            <label>
+                                Overall
+                            </label>
+
+                            <input
+                                type="number"
+                                id="overallSbc"
+                                value="84"
+                                min="1"
+                                max="99"
+                            >
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>
+                                Jogadores
+                            </label>
+
+                            <input
+                                type="number"
+                                id="jogadoresSbc"
+                                value="11"
+                                min="1"
+                                max="33"
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>
+                            Recompensa
+                        </label>
+
+                        <input
+                            type="text"
+                            id="recompensaSbc"
+                            placeholder="Pack Ouro Raro"
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>
+                            Descrição
+                        </label>
+
+                        <textarea
+                            id="descricaoSbc"
+                            rows="5"
+                            placeholder="Descreva este SBC..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button
+                        id="cancelarSbc"
+                        class="btn-secondary">
+
+                        Cancelar
+
+                    </button>
+
+                    <button
+                        id="salvarSbc"
+                        class="btn-primary">
+
+                        💾 Salvar SBC
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+            </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/protect.js"></script>
+
+<script>
+
+setTimeout(() => {
+
+    protectPage("sbcforge");
+
+}, 500);
+
+
+// Modal (somente interface por enquanto)
+
+const modal = document.getElementById("modalSbc");
+
+const btnNovo = document.getElementById("novoSbc");
+
+const btnFechar = document.getElementById("fecharModal");
+
+const btnCancelar = document.getElementById("cancelarSbc");
+
+
+btnNovo.onclick = () => {
+
+    modal.style.display = "flex";
+
+};
+
+
+btnFechar.onclick = () => {
+
+    modal.style.display = "none";
+
+};
+
+
+btnCancelar.onclick = () => {
+
+    modal.style.display = "none";
+
+};
+
+
+window.onclick = (e) => {
+
+    if (e.target === modal) {
+
+        modal.style.display = "none";
+
+    }
+
+};
+
+</script>
+
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/protect.js"></script>
+<script src="js/sbcforge.js"></script>
+
+<div id="modalRequisitos" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>
+                ⚙️ Requisitos do SBC
+            </h2>
+
+            <button id="fecharRequisitos" class="close-btn">
+                ✖
+            </button>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Nome do desafio
+            </label>
+
+            <input id="tituloRequisito" type="text">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Overall mínimo
+            </label>
+
+            <input id="overallRequisito" type="number">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Química mínima
+            </label>
+
+            <input id="quimicaRequisito" type="number">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Liga
+            </label>
+
+            <input id="ligaRequisito" type="text">
+
+        </div>
+
+
+        <div class="modal-footer">
+
+            <button id="salvarRequisito" class="btn-primary">
+
+                💾 Salvar
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+    
+</body>
+</html>
