@@ -670,49 +670,24 @@ async function carregarRequisitosCard(id, card){
 
     div.innerHTML = `
 
-
     <h4>
         ⚙️ Requisitos
     </h4>
 
 
-    ${requisitos.map(r=>`
+    <p>
+        ⭐ ${requisitos.length} desafio(s) cadastrado(s)
+    </p>
 
 
-        <div class="requisito-item">
+    <button 
+    class="btn-secondary ver-requisitos-btn">
 
+        👁️ Ver detalhes
 
-            ⭐ ${r.titulo || "Desafio"}
+    </button>
 
-
-            <br>
-
-
-            Overall:
-            ${r.overall_min || "-"}
-
-
-            <br>
-
-
-            Química:
-            ${r.quimica_min || "-"}
-
-
-            <br>
-
-
-            Liga:
-            ${r.liga || "-"}
-
-
-        </div>
-
-
-    `).join("")}
-
-
-    `;
+`;
 
 
 
