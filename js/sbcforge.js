@@ -676,7 +676,7 @@ async function carregarRequisitosCard(id, card){
 
 
     <p>
-        ⭐ ${requisitos.length} desafio(s) cadastrado(s)
+        🏆${requisitos.length} desafios criados
     </p>
 
 `;
