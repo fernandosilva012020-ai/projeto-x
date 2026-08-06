@@ -1,1 +1,117 @@
+.teste-card{
 
+    background: linear-gradient(135deg,#0f172a,#1e293b);
+
+    color:white;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    margin:20px 0;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+
+}
+
+
+.teste-titulo{
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    margin-bottom:10px;
+
+}
+
+
+#teste-tempo{
+
+    margin-bottom:15px;
+
+    font-size:16px;
+
+}
+
+
+
+.barra-fundo{
+
+    width:100%;
+
+    height:12px;
+
+    background:#334155;
+
+    border-radius:10px;
+
+    overflow:hidden;
+
+}
+
+
+
+#barra-teste{
+
+    height:100%;
+
+    width:0%;
+
+    background:linear-gradient(90deg,#22c55e,#06b6d4);
+
+    border-radius:10px;
+
+    transition:.5s;
+
+}
+
+/* Mensagens do sistema */
+
+.mensagem {
+
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-align: center;
+    animation: aparecer 0.3s ease;
+
+}
+
+
+.mensagem.erro {
+
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+
+}
+
+
+.mensagem.sucesso {
+
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
+
+}
+
+
+@keyframes aparecer {
+
+    from {
+
+        opacity: 0;
+        transform: translateY(-10px);
+
+    }
+
+    to {
+
+        opacity: 1;
+        transform: translateY(0);
+
+    }
+
+}
