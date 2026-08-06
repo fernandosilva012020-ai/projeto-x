@@ -1,1 +1,183 @@
+/* =================================
+   Projeto X - SBCForge
+================================= */
 
+.forge-header {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+
+}
+
+
+.forge-header h2 {
+
+    margin: 0;
+
+}
+
+
+.search-area {
+
+    margin-bottom: 25px;
+
+}
+
+
+.search-area input {
+
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+
+}
+
+
+.btn-primary {
+
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+
+}
+
+
+.btn-secondary {
+
+    background: #ddd;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+
+}
+
+
+.lista-sbcs {
+
+    margin-top: 20px;
+
+}
+
+
+.empty-state {
+
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+
+}
+
+
+.empty-icon {
+
+    font-size: 50px;
+
+}
+
+
+/* MODAL */
+
+.modal {
+
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+
+}
+
+
+.modal-content {
+
+    background: white;
+    width: 500px;
+    max-width: 90%;
+    border-radius: 15px;
+    padding: 25px;
+
+}
+
+
+.modal-header {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+
+.close-btn {
+
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+
+}
+
+
+.form-group {
+
+    margin-bottom: 15px;
+
+}
+
+
+.form-group label {
+
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+
+}
+
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+
+}
+
+
+.form-row {
+
+    display: flex;
+    gap: 15px;
+
+}
+
+
+.form-row .form-group {
+
+    flex: 1;
+
+}
+
+
+.modal-footer {
+
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+
+}
