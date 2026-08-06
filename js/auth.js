@@ -17,7 +17,7 @@ function mostrarMensagem(texto, tipo) {
 
     msg.style.display = "block";
     msg.className = "mensagem " + tipo;
-    msg.innerHTML = texto;
+msg.innerHTML = texto;
 
 }
 
