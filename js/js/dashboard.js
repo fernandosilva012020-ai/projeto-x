@@ -1,5 +1,4 @@
-console.log("dashboard.js carregado");
-
+alert("dashboard.js funcionando");
 
 async function carregarDashboard() {
 
