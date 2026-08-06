@@ -679,16 +679,7 @@ async function carregarRequisitosCard(id, card){
         ⭐ ${requisitos.length} desafio(s) cadastrado(s)
     </p>
 
-
-    <button 
-    class="btn-secondary ver-requisitos-btn">
-
-        👁️ Ver detalhes
-
-    </button>
-
 `;
-
 
 
     card.appendChild(div);
