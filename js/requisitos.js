@@ -20,13 +20,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 
 
-    fecharRequisitos?.addEventListener("click", ()=>{
 
+    fecharRequisitos?.addEventListener("click", ()=>{
 
         modalRequisitos.style.display = "none";
 
-
     });
+
 
 
 
@@ -36,19 +36,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
         const sbcId =
         modalRequisitos.dataset.sbc;
-
-
-
-        if(!sbcId){
-
-
-            alert("SBC não identificado");
-
-
-            return;
-
-        }
-
 
 
 
@@ -83,8 +70,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 
 
-
-        const {error} =
+        const {error}=
 
         await window.supabaseClient
 
@@ -95,38 +81,42 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 
 
-
-
         if(error){
-
 
             console.log(error);
 
-
             alert("Erro ao salvar requisito");
 
-
             return;
-
 
         }
 
 
 
-
-
         alert("Requisito salvo!");
-
-
 
         modalRequisitos.style.display="none";
 
+
+    });
+
+
+
+
+
+});
+
+
+
+
+
 // =================================
-// MOSTRAR REQUISITOS DO SBC
+// BUSCAR REQUISITOS
 // =================================
 
 
-async function carregarRequisitos(sbcId){
+async function buscarRequisitos(sbcId){
+
 
 
     const {data,error}=
@@ -154,9 +144,3 @@ async function carregarRequisitos(sbcId){
     return data || [];
 
 }
-
-    });
-
-
-
-});
