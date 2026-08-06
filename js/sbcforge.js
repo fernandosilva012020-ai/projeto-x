@@ -693,7 +693,16 @@ async function carregarRequisitosCard(id, card){
 
     card.appendChild(div);
 
+const verRequisitos =
+div.querySelector(".ver-requisitos-btn");
 
+
+verRequisitos?.addEventListener("click", ()=>{
+
+    window.location.href =
+    "sbc-detalhes.html?id=" + id;
+
+});
 
 }
 
