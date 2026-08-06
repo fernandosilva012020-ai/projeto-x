@@ -116,16 +116,16 @@ async function cadastrarUsuario() {
 
     if (profileError) {
 
-        console.log(profileError.message);
+    console.log("ERRO PROFILE:", profileError);
 
-        mostrarMensagem(
-            "❌ Erro ao criar perfil.",
-            "erro"
-        );
+    mostrarMensagem(
+        "❌ " + profileError.message,
+        "erro"
+    );
 
-        return;
+    return;
 
-    }
+}
 
 
 
