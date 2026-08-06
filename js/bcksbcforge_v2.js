@@ -1,1 +1,532 @@
+// =================================
+// Projeto X - SBCForge
+// Supabase + Cards + Exclusão
+// =================================
 
+
+document.addEventListener("DOMContentLoaded", () => {
+
+
+    const modal = document.getElementById("modalSbc");
+
+    const abrir = document.getElementById("novoSbc");
+
+    const fechar = document.getElementById("fecharModal");
+
+    const cancelar = document.getElementById("cancelarSbc");
+
+    const salvar = document.getElementById("salvarSbc");
+
+    const lista = document.getElementById("listaSbcs");
+
+
+
+    function abrirModal(){
+
+        if(modal){
+
+            modal.style.display = "flex";
+
+        }
+
+    }
+
+
+
+    function fecharModal(){
+
+        if(modal){
+
+            modal.style.display = "none";
+
+        }
+
+    }
+
+
+
+    abrir?.addEventListener("click", abrirModal);
+
+
+    fechar?.addEventListener("click", fecharModal);
+
+
+    cancelar?.addEventListener("click", fecharModal);
+
+
+
+    window.addEventListener("click", (event)=>{
+
+
+        if(event.target === modal){
+
+            fecharModal();
+
+        }
+
+
+    });
+
+
+
+
+
+    // ===============================
+    // CARREGAR SBCS
+    // ===============================
+
+
+    async function carregarSbcs(){
+
+
+        const { data: sessionData } =
+
+        await window.supabaseClient.auth.getSession();
+
+
+
+        if(!sessionData.session){
+
+            return;
+
+        }
+
+
+
+        const user = sessionData.session.user;
+
+
+
+
+        const { data, error } =
+
+        await window.supabaseClient
+
+        .from("sbcs")
+
+        .select("*")
+
+        .eq("user_id", user.id)
+
+        .order("created_at", {
+
+            ascending:false
+
+        });
+
+
+
+
+
+        if(error){
+
+            console.log(error);
+
+            return;
+
+        }
+
+
+
+
+
+        lista.innerHTML = "";
+
+
+
+
+
+        if(!data || data.length === 0){
+
+
+            lista.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    ⚽
+                </div>
+
+                <h3>
+                    Nenhum SBC criado ainda
+                </h3>
+
+                <p>
+                    Clique em Novo SBC para começar.
+                </p>
+
+            </div>
+
+            `;
+
+
+            return;
+
+        }
+
+
+
+
+
+        data.forEach((sbc)=>{
+
+
+            criarCard(sbc);
+
+
+        });
+
+
+
+    }
+
+
+
+
+
+
+    // ===============================
+    // CRIAR CARD
+    // ===============================
+
+
+    function criarCard(sbc){
+
+
+        const card = document.createElement("div");
+
+
+        card.className = "card sbc-card";
+
+
+
+        card.innerHTML = `
+
+
+        <h3>
+            ⭐ ${sbc.nome}
+        </h3>
+
+
+        <p>
+            🏷️ Categoria:
+            ${sbc.categoria || "-"}
+        </p>
+
+
+        <p>
+            ⭐ Overall:
+            ${sbc.overall || "-"}
+        </p>
+
+
+        <p>
+            👥 Jogadores:
+            ${sbc.jogadores || "-"}
+        </p>
+
+
+        <p>
+            🎁 Recompensa:
+            ${sbc.recompensa || "-"}
+        </p>
+
+
+
+        <div class="card-actions">
+
+
+            <button 
+            class="btn-secondary editar-btn">
+
+                ✏️ Editar
+
+            </button>
+
+
+
+            <button 
+            class="btn-danger excluir-btn">
+
+                🗑️ Excluir
+
+            </button>
+
+
+        </div>
+
+
+        `;
+
+
+
+
+        const excluir = card.querySelector(".excluir-btn");
+
+
+
+        excluir.addEventListener("click", ()=>{
+
+
+            excluirSbc(sbc.id);
+
+
+        });
+
+
+
+
+        lista.appendChild(card);
+
+
+    }
+
+    // ===============================
+// EXCLUIR SBC
+// ===============================
+
+
+async function excluirSbc(id){
+
+
+    const confirmar = confirm(
+        "Tem certeza que deseja excluir este SBC?"
+    );
+
+
+
+    if(!confirmar){
+
+        return;
+
+    }
+
+
+
+
+    const { error } =
+
+    await window.supabaseClient
+
+    .from("sbcs")
+
+    .delete()
+
+    .eq("id", id);
+
+
+
+
+    if(error){
+
+
+        console.log(error);
+
+
+        alert(
+            "Erro ao excluir SBC"
+        );
+
+
+        return;
+
+    }
+
+
+
+    alert(
+        "SBC excluído com sucesso!"
+    );
+
+
+
+    carregarSbcs();
+
+
+
+}
+
+
+
+
+
+
+
+// ===============================
+// SALVAR SBC
+// ===============================
+
+
+salvar?.addEventListener("click", async ()=>{
+
+
+
+    const { data: sessionData } =
+
+    await window.supabaseClient.auth.getSession();
+
+
+
+
+    if(!sessionData.session){
+
+
+        alert(
+            "Usuário não conectado"
+        );
+
+
+        return;
+
+
+    }
+
+
+
+
+    const user =
+    sessionData.session.user;
+
+
+
+
+
+    const novoSbc = {
+
+
+        user_id:user.id,
+
+
+        nome:
+        document.getElementById("nomeSbc").value,
+
+
+
+        categoria:
+        document.getElementById("categoriaSbc").value,
+
+
+
+        overall:
+        Number(
+            document.getElementById("overallSbc").value
+        ),
+
+
+
+        jogadores:
+        Number(
+            document.getElementById("jogadoresSbc").value
+        ),
+
+
+
+        recompensa:
+        document.getElementById("recompensaSbc").value,
+
+
+
+        descricao:
+        document.getElementById("descricaoSbc").value
+
+
+    };
+
+
+
+
+
+
+    if(!novoSbc.nome){
+
+
+        alert(
+            "Digite o nome do SBC"
+        );
+
+
+        return;
+
+    }
+
+
+
+
+
+
+    const { error } =
+
+    await window.supabaseClient
+
+    .from("sbcs")
+
+    .insert(novoSbc);
+
+
+
+
+
+
+    if(error){
+
+
+        console.log(error);
+
+
+        alert(
+            "Erro ao salvar SBC"
+        );
+
+
+        return;
+
+
+    }
+
+
+
+
+
+
+    alert(
+        "SBC criado com sucesso!"
+    );
+
+
+
+    fecharModal();
+
+
+
+
+    document.getElementById("nomeSbc").value = "";
+
+    document.getElementById("recompensaSbc").value = "";
+
+    document.getElementById("descricaoSbc").value = "";
+
+
+
+
+    carregarSbcs();
+
+
+
+});
+
+
+
+
+
+
+
+// ===============================
+// INICIAR
+// ===============================
+
+
+carregarSbcs();
+
+
+
+});                      
