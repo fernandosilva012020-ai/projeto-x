@@ -53,7 +53,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     cancelar?.addEventListener("click", fecharModal);
 
+fecharRequisitos?.addEventListener("click", ()=>{
 
+    modalRequisitos.style.display = "none";
+
+});
 
     window.addEventListener("click", (event)=>{
 
@@ -617,6 +621,109 @@ if (salvar.dataset.editando) {
 
 carregarSbcs();
 
+// ===============================
+// SALVAR REQUISITO DO SBC
+// ===============================
+
+
+const salvarRequisito =
+document.getElementById("salvarRequisito");
+
+
+const modalRequisitos =
+document.getElementById("modalRequisitos");
+
+
+
+salvarRequisito?.addEventListener("click", async ()=>{
+
+
+    const sbcId =
+    modalRequisitos.dataset.sbc;
+
+
+
+    if(!sbcId){
+
+        alert("SBC não identificado");
+
+        return;
+
+    }
+
+
+
+    const requisito = {
+
+
+        sbc_id: sbcId,
+
+
+        titulo:
+        document.getElementById("tituloRequisito").value,
+
+
+        overall_min:
+        Number(
+            document.getElementById("overallRequisito").value
+        ),
+
+
+        quimica_min:
+        Number(
+            document.getElementById("quimicaRequisito").value
+        ),
+
+
+        liga:
+        document.getElementById("ligaRequisito").value
+
+
+    };
+
+
+
+
+    const { error } =
+
+    await window.supabaseClient
+
+    .from("sbc_requisitos")
+
+    .insert(requisito);
+
+
+
+
+    if(error){
+
+
+        console.log(error);
+
+        alert("Erro ao salvar requisito");
+
+        return;
+
+    }
+
+
+
+
+    alert("Requisito salvo!");
+
+
+
+    modalRequisitos.style.display = "none";
+
+
+
+    document.getElementById("tituloRequisito").value = "";
+
+    document.getElementById("overallRequisito").value = "";
+
+    document.getElementById("quimicaRequisito").value = "";
+
+    document.getElementById("ligaRequisito").value = "";
 
 
 });                      
