@@ -10,7 +10,21 @@ async function carregarDashboard() {
 
     const user = data.session.user;
 
+// PERFIL DO USUÁRIO
 
+const { data: profile, error } = await window.supabaseClient
+    .from("profiles")
+    .select("nome")
+    .eq("id", user.id)
+    .single();
+
+
+if (!error && profile) {
+
+    document.getElementById("nomeUsuario").innerText =
+        profile.nome;
+
+}
 
     // GRUPOS
 
