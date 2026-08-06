@@ -9,6 +9,7 @@ async function carregarDashboard() {
 
 
     const user = data.session.user;
+    document.getElementById("usuario").innerHTML = "teste";
 
     const { data: perfil } = await window.supabaseClient
     .from("profiles")
