@@ -70,18 +70,38 @@ async function cadastrarUsuario() {
 
         console.log(error.message);
 
-        alert(error.message);
+        mostrarMensagem("❌ " + error.message, "erro");
 
-        return;
+    return;
 
-    }
+}
 
 
+// CRIAR PERFIL
 
-    alert("Conta criada com sucesso! Agora faça o login.");
+const { error: profileError } = await window.supabaseClient
+.from("profiles")
+.insert({
 
-    window.location.href = "login.html";
+    id: data.user.id,
+    nome: nome,
+    plano: "teste",
+    status: "ativo",
+    inicio_teste: new Date().toISOString()
 
+});
+
+
+if (profileError) {
+
+    console.log(profileError.message);
+
+    mostrarMensagem(
+        "❌ Erro ao criar perfil.",
+        "erro"
+    );
+
+    return;
 
 }
 
