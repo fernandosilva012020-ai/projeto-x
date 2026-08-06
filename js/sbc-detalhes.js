@@ -188,3 +188,10 @@ async function carregarRequisitos(id){
 
 
 }
+
+function voltarSBCs(){
+
+    window.location.href =
+    "sbcforge.html";
+
+}
