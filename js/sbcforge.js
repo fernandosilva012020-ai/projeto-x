@@ -300,7 +300,9 @@ editar.addEventListener("click", ()=>{
 });
 
 
-        lista.appendChild(card);
+        carregarRequisitosCard(sbc.id, card);
+
+lista.appendChild(card);
 
 
     }
@@ -617,6 +619,89 @@ if (salvar.dataset.editando) {
 
 carregarSbcs();
 
+// =================================
+// MOSTRAR REQUISITOS NO CARD
+// =================================
 
+
+async function carregarRequisitosCard(id, card){
+
+
+    const requisitos =
+    await buscarRequisitos(id);
+
+
+
+    if(!requisitos.length){
+
+        return;
+
+    }
+
+
+
+    const div =
+    document.createElement("div");
+
+
+
+    div.className =
+    "requisitos-box";
+
+
+
+    div.innerHTML = `
+
+
+    <h4>
+        ⚙️ Requisitos
+    </h4>
+
+
+    ${requisitos.map(r=>`
+
+
+        <div class="requisito-item">
+
+
+            ⭐ ${r.titulo || "Desafio"}
+
+
+            <br>
+
+
+            Overall:
+            ${r.overall_min || "-"}
+
+
+            <br>
+
+
+            Química:
+            ${r.quimica_min || "-"}
+
+
+            <br>
+
+
+            Liga:
+            ${r.liga || "-"}
+
+
+        </div>
+
+
+    `).join("")}
+
+
+    `;
+
+
+
+    card.appendChild(div);
+
+
+
+}
 
 });                      
