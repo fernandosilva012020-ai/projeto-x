@@ -3,6 +3,8 @@
 // Painel interno
 // =================================
 
+console.log("SBCForge module carregado");
+
 window.ProjetoX = window.ProjetoX || {};
 
 ProjetoX.SBCForge = {
