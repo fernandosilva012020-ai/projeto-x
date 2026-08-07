@@ -294,6 +294,19 @@ function abrirSBCForge(event) {
 <script src="js/trial.js"></script>
 <script src="js/core/router.js"></script>
 <script src="js/modules/sbcforge/main.js"></script>
+
+<script>
+window.addEventListener("load", function () {
+    const botao = document.getElementById("sbcforge");
+
+    if (botao) {
+        botao.addEventListener("click", function () {
+            window.SBCForge.abrir();
+        });
+    }
+});
+</script>
+    
 <script src="js/dashboard.js"></script>
 
 <script>
