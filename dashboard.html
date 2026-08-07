@@ -39,7 +39,7 @@
                 🏠 Dashboard
             </a>
 
-            <a id="sbcforge" href="javascript:void(0)" onclick="ProjetoX.SBCForge.abrir()">
+            <a id="sbcforge" href="#" onclick="abrirSBCForge(event)">
     ⚽ SBCForge
 </a>
 
@@ -275,7 +275,18 @@
 
 </div>
 
+<script>
+function abrirSBCForge(event) {
+    event.preventDefault();
 
+    if (window.SBCForge && typeof window.SBCForge.abrir === "function") {
+        window.SBCForge.abrir();
+    } else {
+        console.log("SBCForge ainda não carregou");
+    }
+}
+</script>
+    
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
 <script src="js/core/config.js"></script>
