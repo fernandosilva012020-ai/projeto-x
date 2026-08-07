@@ -9,8 +9,7 @@ ProjetoX.SBCForge = {
 
     abrir(){
 
-        const area = document.querySelector("#app-view");
-
+        const area = document.getElementById("app-view");
 
         if(!area){
 
