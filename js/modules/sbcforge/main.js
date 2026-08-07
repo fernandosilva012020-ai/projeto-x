@@ -11,6 +11,8 @@ ProjetoX.SBCForge = {
 
     abrir(){
 
+        alert("SBCForge abriu");
+
         const area = document.getElementById("app-view");
 
         if(!area){
