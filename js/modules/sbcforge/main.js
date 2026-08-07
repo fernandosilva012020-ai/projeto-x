@@ -11,87 +11,40 @@ ProjetoX.SBCForge = {
 
     abrir(){
 
-        alert("SBCForge abriu");
+        window.SBCForge = {
 
-        const area = document.getElementById("app-view");
+    abrir(){
 
-        if(!area){
+        const area = document.querySelector("#app-view");
 
-            console.log(
-                "Área SBCForge não encontrada"
-            );
-
-            return;
-
-        }
-
+        if(!area) return;
 
         area.innerHTML = `
 
-            <div class="sbcforge-panel">
+            <h1>⚽ SBCForge</h1>
 
-                <h1>
-                    ⚽ SBCForge
-                </h1>
+            <p>Criador e gerenciador de SBCs</p>
 
+            <div class="cards">
 
-                <p>
-                    Criador e gerenciador de SBCs
-                </p>
-
-
-
-                <div class="cards">
-
-
-                    <div class="card">
-
-                        <h3>
-                            ➕ Criar SBC
-                        </h3>
-
-                        <p>
-                            Monte um novo desafio
-                        </p>
-
-                    </div>
-
-
-
-                    <div class="card">
-
-                        <h3>
-                            📋 Meus SBCs
-                        </h3>
-
-                        <p>
-                            Seus desafios criados
-                        </p>
-
-                    </div>
-
-
-
-                    <div class="card">
-
-                        <h3>
-                            🧩 Templates
-                        </h3>
-
-                        <p>
-                            Modelos prontos
-                        </p>
-
-                    </div>
-
-
+                <div class="card">
+                    <h3>➕ Criar SBC</h3>
+                    <p>Monte um novo desafio</p>
                 </div>
 
+                <div class="card">
+                    <h3>📋 Meus SBCs</h3>
+                    <p>Veja seus desafios</p>
+                </div>
+
+                <div class="card">
+                    <h3>🧩 Templates</h3>
+                    <p>Modelos prontos</p>
+                </div>
 
             </div>
 
         `;
-
 
     }
 
