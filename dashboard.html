@@ -26,249 +26,213 @@
 
 
     <!-- MENU LATERAL -->
-    <aside class="sidebar">
+    <!-- MENU LATERAL -->
+<aside class="sidebar">
 
-        <div class="logo">
-            🚀 Projeto X
+    <div class="logo">
+        🚀 Projeto X
+    </div>
+
+    <nav>
+
+        <a class="active" href="dashboard.html">
+            🏠 Dashboard
+        </a>
+
+        <a id="sbcforge"
+           href="#"
+           onclick="ProjetoX.router.carregarModulo('SBCForge'); return false;">
+            ⚽ SBCForge
+        </a>
+
+        <a href="divulgacao.html">
+            📢 Divulgação
+        </a>
+
+        <a href="templates.html">
+            📁 Templates
+        </a>
+
+        <a href="grupos.html">
+            👥 Grupos
+        </a>
+
+        <a href="estatisticas.html">
+            📈 Estatísticas
+        </a>
+
+        <a href="assinatura.html">
+            💳 Assinatura
+        </a>
+
+        <a href="perfil.html">
+            👤 Meu Perfil
+        </a>
+
+        <a href="configuracoes.html">
+            ⚙️ Configurações
+        </a>
+
+    </nav>
+
+    <button onclick="logout()" class="logout">
+        🚪 Sair
+    </button>
+
+</aside>
+
+
+<!-- CONTEÚDO -->
+<main class="content">
+
+    <!-- ÁREA DOS MÓDULOS -->
+    <div id="app-view"></div>
+
+    <header class="topbar">
+
+        <div id="trial-banner"
+             class="trial-banner"
+             style="display:none;">
+
+            <h2>
+                🚀 Teste grátis ativo
+            </h2>
+
+            <p id="trial-text">
+                Carregando...
+            </p>
+
+            <div class="trial-progress">
+                <div id="trial-bar"></div>
+            </div>
+
+            <a href="assinatura.html" class="upgrade-btn">
+                🚀 Fazer Upgrade para PRO
+            </a>
+
         </div>
 
 
-        <nav>
+        <div>
+            <h1>
+                Olá, <span id="nomeUsuario"></span> 👋
+            </h1>
 
-    <a class="active" href="dashboard.html">
-        🏠 Dashboard
-    </a>
+            <p>
+                Bem-vindo ao seu painel de controle.
+            </p>
+        </div>
 
-    <a id="sbcforge" href="#" onclick="ProjetoX.router.carregarModulo('SBCForge'); return false;">
-    ⚽ SBCForge
-</a>
 
-    <a href="divulgacao.html">
-        📢 Divulgação
-    </a>
+        <div id="usuario" class="user"></div>
 
-    <a href="templates.html">
-        📁 Templates
-    </a>
+    </header>
 
-    <a href="grupos.html">
-        👥 Grupos
-    </a>
 
-    <a href="estatisticas.html">
-        📈 Estatísticas
-    </a>
+    <!-- CARDS -->
+    <section class="cards">
 
-    <a href="assinatura.html">
-        💳 Assinatura
-    </a>
+        <div class="card">
 
-    <a href="perfil.html">
-        👤 Meu Perfil
-    </a>
+            <h3>👥 Grupos</h3>
 
-    <a href="configuracoes.html">
-        ⚙️ Configurações
-    </a>
+            <strong id="totalGrupos">
+                0
+            </strong>
 
-</nav>
+            <p>
+                cadastrados
+            </p>
 
-        <button onclick="logout()" class="logout">
-            🚪 Sair
-        </button>
+        </div>
 
 
-    </aside>
+        <div class="card">
 
+            <h3>📁 Templates</h3>
 
+            <strong id="totalTemplates">
+                0
+            </strong>
 
+            <p>
+                criados
+            </p>
 
-    <!-- CONTEÚDO -->
+        </div>
 
-    <main class="content">
-        
-<div id="app-view"></div>
-        
-        <header class="topbar">
 
-            <div id="trial-banner" class="trial-banner" style="display:none;">
+        <div class="card">
 
-    <h2>
-        🚀 Teste grátis ativo
-    </h2>
+            <h3>📢 Campanhas</h3>
 
-    <p id="trial-text">
-        Carregando...
-    </p>
+            <strong id="totalCampanhas">
+                0
+            </strong>
 
+            <p>
+                criadas
+            </p>
 
-    <div class="trial-progress">
+        </div>
 
-        <div id="trial-bar"></div>
 
-    </div>
+        <div class="card">
 
+            <h3>⚙️ Sistema</h3>
 
-    <a href="assinatura.html" class="upgrade-btn">
-        🚀 Fazer Upgrade para PRO
-    </a>
+            <strong>
+                Online
+            </strong>
 
+            <p>
+                funcionando
+            </p>
 
-</div>
+        </div>
 
+    </section>
 
-            </div>
 
-            <div>
-                <h1>Olá, <span id="nomeUsuario"></span> 👋</h1>
+    <!-- AÇÕES -->
+    <section class="area">
 
-                <p>
-                    Bem-vindo ao seu painel de controle.
-                </p>
+        <h2>
+            Ações rápidas
+        </h2>
 
-            </div>
 
+        <div class="actions">
 
-            <div id="usuario" class="user">
-                
-            </div>
+            <a href="#"
+               onclick="ProjetoX.router.carregarModulo('SBCForge'); return false;">
+                ⚽
+                <span>SBCForge</span>
+            </a>
 
 
-        </header>
+            <a href="divulgacao.html">
+                📢
+                <span>Divulgação</span>
+            </a>
 
 
+            <a href="templates.html">
+                📁
+                <span>Templates</span>
+            </a>
 
 
+            <a href="perfil.html">
+                👤
+                <span>Perfil</span>
+            </a>
 
-        <!-- CARDS -->
+        </div>
 
+    </section>
 
-        <section class="cards">
-
-
-            <section class="cards">
-
-
-<div class="card">
-
-    <h3>👥 Grupos</h3>
-
-    <strong id="totalGrupos">
-        0
-    </strong>
-
-    <p>
-        cadastrados
-    </p>
-
-</div>
-
-
-
-<div class="card">
-
-    <h3>📁 Templates</h3>
-
-    <strong id="totalTemplates">
-        0
-    </strong>
-
-    <p>
-        criados
-    </p>
-
-</div>
-
-
-
-<div class="card">
-
-    <h3>📢 Campanhas</h3>
-
-    <strong id="totalCampanhas">
-        0
-    </strong>
-
-    <p>
-        criadas
-    </p>
-
-</div>
-
-
-
-<div class="card">
-
-    <h3>⚙️ Sistema</h3>
-
-    <strong>
-        Online
-    </strong>
-
-    <p>
-        funcionando
-    </p>
-
-</div>
-
-
-</section>
-
-
-        </section>
-
-
-
-
-
-        <!-- AÇÕES -->
-
-
-        <section class="area">
-
-
-            <h2>
-                Ações rápidas
-            </h2>
-
-
-            <div class="actions">
-
-
-                <a href="#" onclick="ProjetoX.SBCForge.abrir(); return false;">
-    ⚽
-    <span>SBCForge</span>
-</a>
-
-
-                <a href="divulgacao.html">
-                    📢
-                    <span>Divulgação</span>
-                </a>
-
-
-                <a href="templates.html">
-                    📁
-                    <span>Templates</span>
-                </a>
-
-
-                <a href="perfil.html">
-                    👤
-                    <span>Perfil</span>
-                </a>
-
-
-
-            </div>
-
-
-        </section>
-
-
-
-
-    </main>
+</main>
 
 
 </div>
