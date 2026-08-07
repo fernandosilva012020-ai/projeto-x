@@ -9,15 +9,14 @@ window.ProjetoX = window.ProjetoX || {};
 
 ProjetoX.SBCForge = {
 
-    abrir(){
-
-        window.SBCForge = {
-
-    abrir(){
+    abrir() {
 
         const area = document.querySelector("#app-view");
 
-        if(!area) return;
+        if (!area) {
+            console.error("Área #app-view não encontrada");
+            return;
+        }
 
         area.innerHTML = `
 
@@ -45,7 +44,6 @@ ProjetoX.SBCForge = {
             </div>
 
         `;
-
     }
 
 };
