@@ -1,49 +1,68 @@
 // =================================
 // Projeto X - SBCForge Module
-// Painel interno
+// Carrega o SBCForge verdadeiro
 // =================================
-
-console.log("SBCForge module carregado");
 
 window.ProjetoX = window.ProjetoX || {};
 
 ProjetoX.SBCForge = {
 
-    abrir() {
+    async abrir() {
 
-        const area = document.querySelector("#app-view");
+        const area = document.getElementById("app-view");
 
-        if (!area) {
-            console.error("Área #app-view não encontrada");
+        if (!area) return;
+
+        // Esconde o conteúdo normal do Dashboard
+        [...area.parentElement.children].forEach((elemento) => {
+            if (elemento !== area) {
+                elemento.style.display = "none";
+            }
+        });
+
+        area.style.display = "block";
+        area.innerHTML = "<p>Carregando SBCForge...</p>";
+
+        // Carrega o CSS verdadeiro do SBCForge
+        if (!document.getElementById("css-sbcforge")) {
+
+            const css = document.createElement("link");
+
+            css.id = "css-sbcforge";
+            css.rel = "stylesheet";
+            css.href = "css/sbcforge.css";
+
+            document.head.appendChild(css);
+        }
+
+        // Busca a página SBCForge verdadeira
+        const resposta = await fetch("sbcforge.html");
+
+        const html = await resposta.text();
+
+        const documento = new DOMParser()
+            .parseFromString(html, "text/html");
+
+        const conteudo = documento.querySelector("main.content");
+
+        if (!conteudo) {
+            area.innerHTML = "<h2>Erro ao carregar SBCForge</h2>";
             return;
         }
 
-        area.innerHTML = `
+        area.innerHTML = conteudo.innerHTML;
 
-            <h1>⚽ SBCForge</h1>
+        if (typeof iniciarSBCForge === "function") {
+    iniciarSBCForge();
+}
 
-            <p>Criador e gerenciador de SBCs</p>
+        // Marcar SBCForge como menu ativo
+document.querySelectorAll(".sidebar nav a").forEach(link => {
+    link.classList.remove("active");
+});
 
-            <div class="cards">
+document.getElementById("sbcforge")?.classList.add("active");
 
-                <div class="card">
-                    <h3>➕ Criar SBC</h3>
-                    <p>Monte um novo desafio</p>
-                </div>
-
-                <div class="card">
-                    <h3>📋 Meus SBCs</h3>
-                    <p>Veja seus desafios</p>
-                </div>
-
-                <div class="card">
-                    <h3>🧩 Templates</h3>
-                    <p>Modelos prontos</p>
-                </div>
-
-            </div>
-
-        `;
     }
 
 };

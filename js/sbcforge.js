@@ -4,7 +4,7 @@
 // =================================
 
 
-document.addEventListener("DOMContentLoaded", () => {
+function iniciarSBCForge() {
 
 
     const modal = document.getElementById("modalSbc");
@@ -687,8 +687,7 @@ async function carregarRequisitosCard(id, card){
 const verRequisitos =
 div.querySelector(".ver-requisitos-btn");
 
-
-verRequisitos?.addEventListener("click", ()=>{
+verRequisitos?.addEventListener("click", () => {
 
     window.location.href =
     "sbc-detalhes.html?id=" + id;
@@ -697,4 +696,5 @@ verRequisitos?.addEventListener("click", ()=>{
 
 }
 
-});                      
+// FINAL iniciarSBCForge
+}
