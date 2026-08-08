@@ -301,13 +301,15 @@ const detalhes =
 card.querySelector(".detalhes-btn");
 
 
-detalhes?.addEventListener("click", ()=>{
+detalhes?.addEventListener("click", () => {
 
-
-    window.location.href =
-
-    "sbc-detalhes.html?id=" + sbc.id;
-
+    if (
+        window.ProjetoX &&
+        ProjetoX.SBCForge &&
+        typeof ProjetoX.SBCForge.abrirDetalhes === "function"
+    ) {
+        ProjetoX.SBCForge.abrirDetalhes(sbc.id);
+    }
 
 });
         
