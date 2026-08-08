@@ -75,6 +75,10 @@ ProjetoX.SBCForge = {
 
         }
 
+        if (typeof iniciarRequisitos === "function") {
+    iniciarRequisitos();
+}
+
         // Marca SBCForge no menu lateral
         document
             .querySelectorAll(".sidebar nav a")
