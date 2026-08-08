@@ -1,1 +1,19 @@
-{}
+{
+  "manifest_version": 3,
+  "name": "SBCForge",
+  "version": "0.1.0",
+  "description": "SBCForge para EA SPORTS FC Web App",
+  "permissions": [
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.ea.com/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ]
+}
