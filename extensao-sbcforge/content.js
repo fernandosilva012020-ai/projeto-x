@@ -261,6 +261,19 @@ document
     overflow:auto;
 "></div>
 
+<button id="sbcforge-selecionar-elemento" style="
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    color:white;
+    background:#1e293b;
+">
+    🎯 Selecionar jogador/slot
+</button>
                 </div>
 
             </div>
@@ -691,3 +704,102 @@ document.addEventListener("click", event => {
     }
 
 });
+// ======================================
+// SELETOR DE ELEMENTO DO FC
+// ======================================
+
+let sbcforgeModoSelecao = false;
+
+document.addEventListener("click", event => {
+
+    if (event.target.closest("#sbcforge-selecionar-elemento")) {
+
+        sbcforgeModoSelecao = true;
+
+        const resultado =
+            document.getElementById("sbcforge-mapeamento");
+
+        if (resultado) {
+            resultado.style.display = "block";
+            resultado.innerHTML = `
+                🎯 <strong>Modo seleção ativado</strong><br><br>
+                Clique em um jogador ou slot do elenco.
+            `;
+        }
+
+        return;
+    }
+
+}, true);
+
+
+document.addEventListener("click", event => {
+
+    if (!sbcforgeModoSelecao) return;
+
+    if (
+        event.target.closest("#sbcforge-extension") ||
+        event.target.closest("#sbcforge-sidebar")
+    ) {
+        return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    sbcforgeModoSelecao = false;
+
+    const alvo = event.target;
+
+    const resultado =
+        document.getElementById("sbcforge-mapeamento");
+
+    if (!resultado) return;
+
+    let elemento = alvo;
+    const caminho = [];
+
+    for (let i = 0; i < 6 && elemento; i++) {
+
+        caminho.push({
+            tag: elemento.tagName,
+            classe:
+                typeof elemento.className === "string"
+                    ? elemento.className
+                    : "",
+            id: elemento.id || "",
+            texto:
+                (elemento.innerText || "")
+                .trim()
+                .replace(/\s+/g, " ")
+                .substring(0, 100)
+        });
+
+        elemento = elemento.parentElement;
+    }
+
+    resultado.style.display = "block";
+
+    resultado.innerHTML = `
+        <strong>🎯 Elemento capturado</strong>
+
+        ${caminho.map((item, indice) => `
+            <div style="
+                padding:8px 0;
+                border-bottom:1px solid #334155;
+            ">
+                <strong>Nível ${indice}</strong><br>
+                TAG: ${item.tag}<br>
+                ID: ${item.id || "(sem id)"}<br>
+                CLASSE: ${item.classe || "(sem classe)"}<br>
+                TEXTO: ${item.texto || "(sem texto)"}
+            </div>
+        `).join("")}
+    `;
+
+    console.log(
+        "⚽ SBCForge - elemento selecionado:",
+        caminho
+    );
+
+}, true);
