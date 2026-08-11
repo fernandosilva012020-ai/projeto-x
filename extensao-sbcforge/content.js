@@ -428,70 +428,130 @@ function analisarRequisitosSBC() {
         .map(linha => linha.trim())
         .filter(Boolean);
 
-    const palavrasChave = [
-        "overall",
-        "classificação",
-        "rating",
-        "química",
-        "chemistry",
-        "jogadores",
-        "players",
-        "liga",
-        "league",
-        "clube",
-        "club",
-        "nacionalidade",
-        "nation",
-        "country",
-        "raridade",
-        "rare"
-    ];
+    const requisitos = {
+        overall: [],
+        quimica: [],
+        jogadores: [],
+        liga: [],
+        clube: [],
+        nacionalidade: [],
+        raridade: [],
+        outros: []
+    };
 
-    const encontrados = [];
-
-    for (const linha of linhas) {
+    linhas.forEach(linha => {
 
         const texto = linha.toLowerCase();
 
         if (
-            palavrasChave.some(
-                palavra => texto.includes(palavra)
-            )
+            texto.includes("overall") ||
+            texto.includes("classificação") ||
+            texto.includes("rating")
         ) {
-
-            if (!encontrados.includes(linha)) {
-                encontrados.push(linha);
-            }
+            requisitos.overall.push(linha);
         }
+
+        else if (
+            texto.includes("química") ||
+            texto.includes("chemistry")
+        ) {
+            requisitos.quimica.push(linha);
+        }
+
+        else if (
+            texto.includes("jogadores") ||
+            texto.includes("players")
+        ) {
+            requisitos.jogadores.push(linha);
+        }
+
+        else if (
+            texto.includes("liga") ||
+            texto.includes("league")
+        ) {
+            requisitos.liga.push(linha);
+        }
+
+        else if (
+            texto.includes("clube") ||
+            texto.includes("club")
+        ) {
+            requisitos.clube.push(linha);
+        }
+
+        else if (
+            texto.includes("nacionalidade") ||
+            texto.includes("nation") ||
+            texto.includes("country")
+        ) {
+            requisitos.nacionalidade.push(linha);
+        }
+
+        else if (
+            texto.includes("raridade") ||
+            texto.includes("rare")
+        ) {
+            requisitos.raridade.push(linha);
+        }
+    });
+
+    function mostrar(lista) {
+
+        if (!lista.length) {
+            return `<span style="color:#64748b;">Não identificado</span>`;
+        }
+
+        return lista
+            .slice(0, 4)
+            .map(item => `• ${item}`)
+            .join("<br>");
     }
 
     areaResultado.style.display = "block";
 
-    if (encontrados.length === 0) {
-
-        areaResultado.innerHTML = `
-            ⚠️ Nenhum requisito identificado.
-        `;
-
-        return;
-    }
-
-    const resultado =
-        encontrados
-        .slice(0, 15)
-        .map(item => `• ${item}`)
-        .join("<br>");
-
     areaResultado.innerHTML = `
-        <strong>🔎 Requisitos encontrados</strong>
-        <div style="margin-top:8px;">
-            ${resultado}
+
+        <strong>🔎 Análise do SBC</strong>
+
+        <div style="margin-top:12px;">
+            <strong>⭐ Overall</strong><br>
+            ${mostrar(requisitos.overall)}
+        </div>
+
+        <div style="margin-top:10px;">
+            <strong>🧪 Química</strong><br>
+            ${mostrar(requisitos.quimica)}
+        </div>
+
+        <div style="margin-top:10px;">
+            <strong>👥 Jogadores</strong><br>
+            ${mostrar(requisitos.jogadores)}
+        </div>
+
+        <div style="margin-top:10px;">
+            <strong>🏆 Liga</strong><br>
+            ${mostrar(requisitos.liga)}
+        </div>
+
+        <div style="margin-top:10px;">
+            <strong>🛡️ Clube</strong><br>
+            ${mostrar(requisitos.clube)}
+        </div>
+
+        <div style="margin-top:10px;">
+            <strong>🌎 Nacionalidade</strong><br>
+            ${mostrar(requisitos.nacionalidade)}
+        </div>
+
+        <div style="margin-top:10px;">
+            <strong>✨ Raridade</strong><br>
+            ${mostrar(requisitos.raridade)}
         </div>
     `;
 
     console.log(
-        "⚽ SBCForge - requisitos:",
-        encontrados
+        "⚽ SBCForge - requisitos organizados:",
+        requisitos
     );
 }
 
