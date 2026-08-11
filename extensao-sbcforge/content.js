@@ -194,33 +194,33 @@ document
     color:white;
 "></div>
 
-                    <button style="
-                        width:100%;
-                        padding:12px;
-                        margin-bottom:10px;
-                        border:none;
-                        border-radius:8px;
-                        cursor:pointer;
-                        font-weight:bold;
-                        color:white;
-                        background:#1e293b;
-                    ">
-                        👥 Meu Clube
-                    </button>
-
                     <button id="sbcforge-ler-elenco" style="
-                        width:100%;
-                        padding:12px;
-                        margin-bottom:10px;
-                        border:none;
-                        border-radius:8px;
-                        cursor:pointer;
-                        font-weight:bold;
-                        color:white;
-                        background:#1e293b;
-                    ">
-                        🧩 SBCs
-                    </button>
+    width:100%;
+    padding:12px;
+    margin-bottom:10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    color:white;
+    background:#1e293b;
+">
+    👥 Meu Clube
+</button>
+
+<button style="
+    width:100%;
+    padding:12px;
+    margin-bottom:10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    color:white;
+    background:#1e293b;
+">
+    🧩 SBCs
+</button>
 
                     <button style="
                         width:100%;
