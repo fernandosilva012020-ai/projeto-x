@@ -22,3 +22,32 @@ painel.innerHTML = `
 `;
 
 document.body.appendChild(painel);
+// ======================================
+// DETECTAR ÁREA DE SBC
+// ======================================
+
+function detectarAreaSBC() {
+
+    const url = window.location.href.toLowerCase();
+
+    const textoPagina =
+        document.body.innerText.toLowerCase();
+
+    const estaNoSBC =
+        url.includes("sbc") ||
+        textoPagina.includes("squad building challenges") ||
+        textoPagina.includes("desafios de montagem de elenco");
+
+    if (estaNoSBC) {
+
+        console.log("✅ SBCForge: área de SBC detectada");
+
+    } else {
+
+        console.log("ℹ️ SBCForge: fora da área de SBC");
+
+    }
+
+}
+
+setInterval(detectarAreaSBC, 3000);
