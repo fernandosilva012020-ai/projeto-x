@@ -821,7 +821,9 @@ document.addEventListener("click", event => {
 function lerElencoSBC() {
 
     const slots =
-        document.querySelectorAll(".ut-squad-slot-view");
+    document.querySelectorAll(
+        ".ut-squad-pitch-view .ut-squad-slot-view"
+    );
 
     const dados = [];
 
