@@ -169,19 +169,30 @@ document
                         🟢 FC Web App conectado
                     </div>
 
-                    <button style="
-                        width:100%;
-                        padding:12px;
-                        margin-bottom:10px;
-                        border:none;
-                        border-radius:8px;
-                        cursor:pointer;
-                        font-weight:bold;
-                        color:white;
-                        background:#1e293b;
-                    ">
-                        ⚡ Auto SBC
-                    </button>
+                    <button id="sbcforge-auto-sbc" style="
+    width:100%;
+    padding:12px;
+    margin-bottom:10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    color:white;
+    background:#1e293b;
+">
+    ⚡ Analisar SBC
+</button>
+
+<div id="sbcforge-analise" style="
+    display:none;
+    background:#111827;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:12px;
+    font-size:13px;
+    line-height:1.5;
+    color:white;
+"></div>
 
                     <button style="
                         width:100%;
