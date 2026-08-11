@@ -313,3 +313,89 @@ function detectarAreaSBC() {
 setInterval(detectarAreaSBC, 1500);
 
 detectarAreaSBC();
+
+// ======================================
+// IDENTIFICAR SBC ABERTO
+// ======================================
+
+function identificarSBCAberto() {
+
+    const elementos = document.querySelectorAll(
+        "h1, h2, h3, [role='heading']"
+    );
+
+    let nomeSBC = "";
+
+    for (const elemento of elementos) {
+
+        const texto =
+            (elemento.innerText || "")
+            .trim();
+
+        if (
+            texto.length >= 4 &&
+            texto.length <= 100
+        ) {
+            nomeSBC = texto;
+            break;
+        }
+    }
+
+    if (!nomeSBC) {
+        return;
+    }
+
+    const status =
+        document.getElementById("sbcforge-status");
+
+    if (status) {
+
+        status.innerHTML = `
+            🧩 <strong>SBC detectado</strong>
+
+            <div style="
+                margin-top:7px;
+                color:white;
+            ">
+                ${nomeSBC}
+            </div>
+
+            <div style="
+                font-size:12px;
+                color:#94a3b8;
+                margin-top:5px;
+            ">
+                Preparando análise do desafio...
+            </div>
+        `;
+    }
+
+    console.log(
+        "⚽ SBCForge - possível SBC aberto:",
+        nomeSBC
+    );
+}
+
+
+// Verifica o SBC aberto
+setInterval(() => {
+
+    const status =
+        document.getElementById("sbcforge-status");
+
+    if (
+        status &&
+        (
+            document.body.innerText
+                .toLowerCase()
+                .includes("squad building") ||
+
+            document.body.innerText
+                .toLowerCase()
+                .includes("desafios de montagem")
+        )
+    ) {
+        identificarSBCAberto();
+    }
+
+}, 2000);
