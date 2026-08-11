@@ -821,6 +821,98 @@ document.addEventListener("click", event => {
 function lerElencoSBC() {
 
     const slots =
+        document.querySelectorAll(
+            ".ut-squad-pitch-view .ut-squad-slot-view"
+        );
+
+    const dados = [];
+
+    slots.forEach((slot, indice) => {
+
+        const jogador =
+            slot.querySelector(".player.item");
+
+        const vazio =
+            !jogador ||
+            jogador.classList.contains("empty");
+
+        const textoSlot =
+            (slot.innerText || "")
+            .trim()
+            .replace(/\s+/g, " ");
+
+        const imagem =
+            slot.querySelector("img");
+
+        dados.push({
+            slot: indice + 1,
+            vazio,
+            texto: textoSlot || "Sem texto",
+            imagemAlt:
+                imagem?.getAttribute("alt") || "",
+            imagemTitle:
+                imagem?.getAttribute("title") || "",
+            classeJogador:
+                jogador?.className || ""
+        });
+
+    });
+
+    const resultado =
+        document.getElementById("sbcforge-mapeamento");
+
+    if (!resultado) return;
+
+    resultado.style.display = "block";
+
+    resultado.innerHTML = `
+        <strong>👥 Elenco detectado</strong>
+
+        <div style="margin-top:8px;">
+            Slots encontrados: ${dados.length}
+        </div>
+
+        <div style="margin-top:10px;">
+
+            ${dados.map(item => `
+
+                <div style="
+                    padding:8px 0;
+                    border-bottom:1px solid #334155;
+                ">
+
+                    <strong>
+                        Slot ${item.slot}
+                        ${item.vazio ? "⬜ Vazio" : "✅ Jogador"}
+                    </strong>
+
+                    ${
+                        !item.vazio
+                        ? `
+                            <div style="margin-top:5px;">
+                                TEXTO: ${item.texto}<br>
+                                ALT: ${item.imagemAlt || "(vazio)"}<br>
+                                TITLE: ${item.imagemTitle || "(vazio)"}<br>
+                                CLASSE: ${item.classeJogador || "(vazio)"}
+                            </div>
+                        `
+                        : ""
+                    }
+
+                </div>
+
+            `).join("")}
+
+        </div>
+    `;
+
+    console.log(
+        "⚽ SBCForge - jogadores do elenco:",
+        dados
+    );
+}
+
+    const slots =
     document.querySelectorAll(
         ".ut-squad-pitch-view .ut-squad-slot-view"
     );
