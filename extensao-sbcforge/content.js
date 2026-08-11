@@ -962,4 +962,3 @@ function lerElencoSBC() {
         "⚽ SBCForge - elenco:",
         dados
     );
-}
