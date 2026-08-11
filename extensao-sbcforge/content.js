@@ -818,10 +818,6 @@ document.addEventListener("click", event => {
 // LER SLOTS DO ELENCO
 // ======================================
 
-// ======================================
-// LER SLOTS DO ELENCO
-// ======================================
-
 function lerElencoSBC() {
 
     const slots = document.querySelectorAll(
@@ -898,6 +894,7 @@ function lerElencoSBC() {
         "⚽ SBCForge - jogadores do elenco:",
         dados
     );
+    inspecionarJogadorCarregado();
 }
 
     const slots =
@@ -962,3 +959,84 @@ function lerElencoSBC() {
         "⚽ SBCForge - elenco:",
         dados
     );
+
+// ======================================
+// INSPECIONAR JOGADOR CARREGADO
+// ======================================
+
+function inspecionarJogadorCarregado() {
+
+    const jogador =
+        document.querySelector(
+            ".ut-squad-pitch-view .ut-squad-slot-view .ut-item-loaded"
+        );
+
+    const resultado =
+        document.getElementById("sbcforge-mapeamento");
+
+    if (!jogador || !resultado) return;
+
+    const elementos = [
+        jogador,
+        ...jogador.querySelectorAll("*")
+    ];
+
+    const dados = [];
+
+    elementos.forEach(el => {
+
+        const texto =
+            (el.innerText || "")
+            .trim()
+            .replace(/\s+/g, " ");
+
+        const classe =
+            typeof el.className === "string"
+                ? el.className
+                : "";
+
+        const alt = el.getAttribute("alt") || "";
+        const title = el.getAttribute("title") || "";
+
+        if (
+            texto ||
+            classe ||
+            alt ||
+            title
+        ) {
+
+            dados.push({
+                tag: el.tagName,
+                texto: texto.substring(0, 100),
+                classe: classe.substring(0, 150),
+                alt,
+                title
+            });
+        }
+
+    });
+
+    resultado.style.display = "block";
+
+    resultado.innerHTML = `
+        <strong>🔎 Dados internos do jogador</strong>
+
+        ${dados.map(item => `
+            <div style="
+                padding:8px 0;
+                border-bottom:1px solid #334155;
+            ">
+                <strong>${item.tag}</strong><br>
+                TEXTO: ${item.texto || "(vazio)"}<br>
+                ALT: ${item.alt || "(vazio)"}<br>
+                TITLE: ${item.title || "(vazio)"}<br>
+                CLASSE: ${item.classe || "(vazio)"}
+            </div>
+        `).join("")}
+    `;
+
+    console.log(
+        "⚽ SBCForge - detalhes jogador:",
+        dados
+    );
+}
