@@ -208,7 +208,7 @@ document
                         👥 Meu Clube
                     </button>
 
-                    <button style="
+                    <button id="sbcforge-ler-elenco" style="
                         width:100%;
                         padding:12px;
                         margin-bottom:10px;
@@ -803,3 +803,79 @@ document.addEventListener("click", event => {
     );
 
 }, true);
+// ======================================
+// LER SLOTS DO ELENCO
+// ======================================
+
+function lerElencoSBC() {
+
+    const slots =
+        document.querySelectorAll(".ut-squad-slot-view");
+
+    const dados = [];
+
+    slots.forEach((slot, indice) => {
+
+        const jogador =
+            slot.querySelector(".player.item");
+
+        const vazio =
+            !jogador ||
+            jogador.classList.contains("empty");
+
+        const posicao =
+            (slot.innerText || "")
+            .trim()
+            .split("\n")[0];
+
+        dados.push({
+            slot: indice + 1,
+            posicao: posicao || "Não identificada",
+            vazio: vazio
+        });
+    });
+
+    const resultado =
+        document.getElementById("sbcforge-mapeamento");
+
+    if (resultado) {
+
+        resultado.style.display = "block";
+
+        resultado.innerHTML = `
+            <strong>👥 Elenco detectado</strong>
+
+            <div style="margin-top:10px;">
+                Slots encontrados: ${dados.length}
+            </div>
+
+            <div style="margin-top:10px;">
+                ${
+                    dados.map(item => `
+                        <div style="
+                            padding:6px 0;
+                            border-bottom:1px solid #334155;
+                        ">
+                            ${item.slot}. ${item.posicao}
+                            — ${item.vazio ? "⬜ Vazio" : "✅ Jogador"}
+                        </div>
+                    `).join("")
+                }
+            </div>
+        `;
+    }
+
+    console.log(
+        "⚽ SBCForge - elenco:",
+        dados
+    );
+}
+
+
+document.addEventListener("click", event => {
+
+    if (event.target.closest("#sbcforge-ler-elenco")) {
+        lerElencoSBC();
+    }
+
+});
