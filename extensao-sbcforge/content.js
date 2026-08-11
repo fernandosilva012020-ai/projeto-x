@@ -594,3 +594,93 @@ document.addEventListener("click", event => {
     }
 
 });
+
+// ======================================
+// MAPEAR ELEMENTOS DO FC WEB APP
+// ======================================
+
+function mapearTelaFC() {
+
+    const resultado =
+        document.getElementById("sbcforge-mapeamento");
+
+    if (!resultado) return;
+
+    const elementos = document.querySelectorAll(
+        "h1, h2, h3, button, [role='button'], img, [class*='player'], [class*='card'], [class*='item']"
+    );
+
+    const encontrados = [];
+
+    elementos.forEach(elemento => {
+
+        const texto =
+            (elemento.innerText ||
+             elemento.getAttribute("alt") ||
+             elemento.getAttribute("title") ||
+             "")
+            .trim()
+            .replace(/\s+/g, " ");
+
+        const classe =
+            typeof elemento.className === "string"
+                ? elemento.className
+                : "";
+
+        if (!texto && !classe) return;
+
+        encontrados.push({
+            tag: elemento.tagName,
+            texto: texto.substring(0, 80),
+            classe: classe.substring(0, 120)
+        });
+
+    });
+
+    const unicos =
+        encontrados
+        .filter((item, indice, lista) =>
+            indice === lista.findIndex(outro =>
+                outro.tag === item.tag &&
+                outro.texto === item.texto &&
+                outro.classe === item.classe
+            )
+        )
+        .slice(0, 50);
+
+    resultado.style.display = "block";
+
+    resultado.innerHTML = `
+        <strong>🔍 Elementos encontrados: ${unicos.length}</strong>
+        <div style="margin-top:10px;">
+            ${
+                unicos.map(item => `
+                    <div style="
+                        border-bottom:1px solid #334155;
+                        padding:7px 0;
+                    ">
+                        <strong>${item.tag}</strong><br>
+                        ${item.texto || "(sem texto)"}<br>
+                        <span style="color:#94a3b8;">
+                            ${item.classe || "(sem classe)"}
+                        </span>
+                    </div>
+                `).join("")
+            }
+        </div>
+    `;
+
+    console.log(
+        "⚽ SBCForge - mapeamento:",
+        unicos
+    );
+}
+
+
+document.addEventListener("click", event => {
+
+    if (event.target.closest("#sbcforge-mapear")) {
+        mapearTelaFC();
+    }
+
+});
