@@ -1005,13 +1005,18 @@ function inspecionarJogadorCarregado() {
             title
         ) {
 
-            dados.push({
-                tag: el.tagName,
-                texto: texto.substring(0, 100),
-                classe: classe.substring(0, 150),
-                alt,
-                title
-            });
+            const atributos = Array.from(el.attributes || [])
+    .map(attr => `${attr.name}="${attr.value}"`)
+    .join(" | ");
+
+dados.push({
+    tag: el.tagName,
+    texto: texto.substring(0, 100),
+    classe: classe.substring(0, 150),
+    alt,
+    title,
+    atributos: atributos.substring(0, 500)
+});
         }
 
     });
