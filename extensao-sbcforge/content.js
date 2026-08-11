@@ -281,6 +281,17 @@ document
 
         document.body.appendChild(sidebar);
 
+        const botaoMeuClube =
+    sidebar.querySelector("#sbcforge-ler-elenco");
+
+botaoMeuClube?.addEventListener("click", event => {
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    lerElencoSBC();
+
+});
         document
             .getElementById("sbcforge-sidebar-fechar")
             ?.addEventListener("click", () => {
