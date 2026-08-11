@@ -235,6 +235,32 @@ document
                         ⚙️ Configurações
                     </button>
 
+                    <button id="sbcforge-mapear" style="
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    color:white;
+    background:#1e293b;
+">
+    🔍 Mapear tela
+</button>
+
+<div id="sbcforge-mapeamento" style="
+    display:none;
+    background:#111827;
+    padding:12px;
+    border-radius:8px;
+    margin-top:10px;
+    font-size:12px;
+    color:white;
+    max-height:300px;
+    overflow:auto;
+"></div>
+
                 </div>
 
             </div>
