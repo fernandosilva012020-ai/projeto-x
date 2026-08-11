@@ -606,9 +606,16 @@ function mapearTelaFC() {
 
     if (!resultado) return;
 
-    const elementos = document.querySelectorAll(
+    const elementos = Array.from(
+    document.querySelectorAll(
         "h1, h2, h3, button, [role='button'], img, [class*='player'], [class*='card'], [class*='item']"
-    );
+    )
+).filter(elemento => {
+
+    return !elemento.closest("#sbcforge-extension") &&
+           !elemento.closest("#sbcforge-sidebar");
+
+});
 
     const encontrados = [];
 
