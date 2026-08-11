@@ -828,6 +828,216 @@ function lerElencoSBC() {
 
     slots.forEach((slot, indice) => {
 
+        const jogador =
+            slot.querySelector(".player.item");
+
+        const vazio =
+            !jogador ||
+            jogador.classList.contains("empty");
+
+        const textoSlot =
+            (slot.innerText || "")
+            .trim()
+            .replace(/\s+/g, " ");
+
+        dados.push({
+            slot: indice + 1,
+            vazio,
+            texto: textoSlot || "Sem texto",
+            classeJogador: jogador?.className || ""
+        });
+
+    });
+
+    const resultado =
+        document.getElementById("sbcforge-mapeamento");
+
+    if (!resultado) return;
+
+    resultado.style.display = "block";
+
+    resultado.innerHTML = `
+        <strong>👥 Elenco detectado</strong>
+
+        <div style="margin-top:8px;">
+            Slots encontrados: ${dados.length}
+        </div>
+
+        <div style="margin-top:10px;">
+
+            ${dados.map(item => `
+
+                <div style="
+                    padding:8px 0;
+                    border-bottom:1px solid #334155;
+                ">
+
+                    <strong>
+                        Slot ${item.slot}
+                        ${item.vazio ? "⬜ Vazio" : "✅ Jogador"}
+                    </strong>
+
+                    ${
+                        !item.vazio
+                        ? `
+                            <div style="margin-top:5px;">
+                                TEXTO: ${item.texto}<br>
+                                CLASSE: ${item.classeJogador}
+                            </div>
+                        `
+                        : ""
+                    }
+
+                </div>
+
+            `).join("")}
+
+        </div>
+    `;
+
+    console.log(
+        "⚽ SBCForge - jogadores do elenco:",
+        dados
+    );
+
+    inspecionarJogadorCarregado();
+}
+
+
+// ======================================
+// INSPECIONAR JOGADOR CARREGADO
+// ======================================
+
+function inspecionarJogadorCarregado() {
+
+    const jogador = document.querySelector(
+        ".ut-squad-pitch-view .ut-squad-slot-view .ut-item-loaded"
+    );
+
+    const resultado =
+        document.getElementById("sbcforge-mapeamento");
+
+    if (!jogador || !resultado) return;
+
+    const elementos = [
+        jogador,
+        ...jogador.querySelectorAll("*")
+    ];
+
+    const dados = [];
+
+    elementos.forEach(el => {
+
+        const src =
+            el.getAttribute?.("src") || "";
+
+        const href =
+            el.getAttribute?.("href") || "";
+
+        const style =
+            el.getAttribute?.("style") || "";
+
+        const background =
+            window.getComputedStyle(el).backgroundImage || "";
+
+        const atributosData =
+            Array.from(el.attributes || [])
+            .filter(attr =>
+                attr.name.startsWith("data-")
+            )
+            .map(attr =>
+                `${attr.name}="${attr.value}"`
+            )
+            .join(" | ");
+
+        if (
+            src ||
+            href ||
+            style ||
+            atributosData ||
+            (
+                background &&
+                background !== "none"
+            )
+        ) {
+
+            dados.push({
+                tag: el.tagName,
+                classe:
+                    typeof el.className === "string"
+                        ? el.className
+                        : "",
+                src,
+                href,
+                style,
+                background,
+                data: atributosData
+            });
+
+        }
+
+    });
+
+    resultado.style.display = "block";
+
+    resultado.innerHTML = `
+        <strong>🧬 Recursos do jogador</strong>
+
+        <div style="margin-top:10px;">
+
+            ${
+                dados.length
+                ? dados.map(item => `
+
+                    <div style="
+                        padding:8px 0;
+                        border-bottom:1px solid #334155;
+                        word-break:break-all;
+                    ">
+
+                        <strong>${item.tag}</strong><br>
+
+                        CLASSE:
+                        ${item.classe || "(vazio)"}
+                        <br>
+
+                        SRC:
+                        ${item.src || "(vazio)"}
+                        <br>
+
+                        DATA:
+                        ${item.data || "(vazio)"}
+                        <br>
+
+                        BACKGROUND:
+                        ${item.background || "(vazio)"}
+
+                    </div>
+
+                `).join("")
+
+                : "Nenhum recurso encontrado."
+            }
+
+        </div>
+    `;
+
+    console.log(
+        "⚽ SBCForge - recursos jogador:",
+        dados
+    );
+}
+
+function lerElencoSBC() {
+
+    const slots = document.querySelectorAll(
+        ".ut-squad-pitch-view .ut-squad-slot-view"
+    );
+
+    const dados = [];
+
+    slots.forEach((slot, indice) => {
+
         const jogador = slot.querySelector(".player.item");
 
         const vazio =
