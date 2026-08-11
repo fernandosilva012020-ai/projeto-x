@@ -1036,6 +1036,8 @@ dados.push({
                 ALT: ${item.alt || "(vazio)"}<br>
                 TITLE: ${item.title || "(vazio)"}<br>
                 CLASSE: ${item.classe || "(vazio)"}
+                <br>
+ATRIBUTOS: ${item.atributos || "(vazio)"}
             </div>
         `).join("")}
     `;
