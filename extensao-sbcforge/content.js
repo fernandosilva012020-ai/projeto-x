@@ -410,3 +410,101 @@ setInterval(() => {
     }
 
 }, 2000);
+
+// ======================================
+// ANALISAR REQUISITOS VISÍVEIS DO SBC
+// ======================================
+
+function analisarRequisitosSBC() {
+
+    const areaResultado =
+        document.getElementById("sbcforge-analise");
+
+    if (!areaResultado) return;
+
+    const linhas =
+        (document.body?.innerText || "")
+        .split(/\n+/)
+        .map(linha => linha.trim())
+        .filter(Boolean);
+
+    const palavrasChave = [
+        "overall",
+        "classificação",
+        "rating",
+        "química",
+        "chemistry",
+        "jogadores",
+        "players",
+        "liga",
+        "league",
+        "clube",
+        "club",
+        "nacionalidade",
+        "nation",
+        "country",
+        "raridade",
+        "rare"
+    ];
+
+    const encontrados = [];
+
+    for (const linha of linhas) {
+
+        const texto = linha.toLowerCase();
+
+        if (
+            palavrasChave.some(
+                palavra => texto.includes(palavra)
+            )
+        ) {
+
+            if (!encontrados.includes(linha)) {
+                encontrados.push(linha);
+            }
+        }
+    }
+
+    areaResultado.style.display = "block";
+
+    if (encontrados.length === 0) {
+
+        areaResultado.innerHTML = `
+            ⚠️ Nenhum requisito identificado.
+        `;
+
+        return;
+    }
+
+    const resultado =
+        encontrados
+        .slice(0, 15)
+        .map(item => `• ${item}`)
+        .join("<br>");
+
+    areaResultado.innerHTML = `
+        <strong>🔎 Requisitos encontrados</strong>
+        <div style="margin-top:8px;">
+            ${resultado}
+        </div>
+    `;
+
+    console.log(
+        "⚽ SBCForge - requisitos:",
+        encontrados
+    );
+}
+
+
+// Botão funciona mesmo sendo criado depois
+document.addEventListener("click", event => {
+
+    if (
+        event.target.closest("#sbcforge-auto-sbc")
+    ) {
+
+        analisarRequisitosSBC();
+
+    }
+
+});
