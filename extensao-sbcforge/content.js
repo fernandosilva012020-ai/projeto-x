@@ -966,6 +966,90 @@ function lerElencoSBC() {
 
 function inspecionarJogadorCarregado() {
 
+    const jogador = document.querySelector(
+        ".ut-squad-pitch-view .ut-squad-slot-view .ut-item-loaded"
+    );
+
+    const resultado =
+        document.getElementById("sbcforge-mapeamento");
+
+    if (!jogador || !resultado) return;
+
+    const elementos = [
+        jogador,
+        ...jogador.querySelectorAll("*")
+    ];
+
+    const dados = [];
+
+    elementos.forEach(el => {
+
+        const src =
+            el.getAttribute?.("src") || "";
+
+        const href =
+            el.getAttribute?.("href") || "";
+
+        const style =
+            el.getAttribute?.("style") || "";
+
+        const background =
+            window.getComputedStyle(el).backgroundImage || "";
+
+        const atributosData = Array.from(el.attributes || [])
+            .filter(attr => attr.name.startsWith("data-"))
+            .map(attr => `${attr.name}="${attr.value}"`)
+            .join(" | ");
+
+        if (
+            src ||
+            href ||
+            style ||
+            atributosData ||
+            (background && background !== "none")
+        ) {
+
+            dados.push({
+                tag: el.tagName,
+                classe:
+                    typeof el.className === "string"
+                        ? el.className
+                        : "",
+                src,
+                href,
+                style,
+                background,
+                data: atributosData
+            });
+        }
+
+    });
+
+    resultado.style.display = "block";
+
+    resultado.innerHTML = `
+        <strong>🧬 Recursos do jogador</strong>
+
+        ${
+            dados.length
+            ? dados.map(item => `
+                <div style="
+                    padding:8px 0;
+                    border-bottom:1px solid #334155;
+                    word-break:break-all;
+                ">
+                    <strong>${item.tag}</strong><br>
+                    CLASSE: ${item.classe || "(vazio)"}<br>
+                    SRC: ${item.src || "(vazio)"}<br>
+                    DATA: ${item.data || "(vazio)"}<br>
+                    BACKGROUND: ${item.background || "(vazio)"}
+                </div>
+            `).join("")
+            : "Nenhum recurso encontrado."
+        }
+    `;
+}
+
     const jogador =
         document.querySelector(
             ".ut-squad-pitch-view .ut-squad-slot-view .ut-item-loaded"
