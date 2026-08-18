@@ -1,4 +1,6 @@
-const botoesMenu = document.querySelectorAll(".divulgacao-menu button");
+const botoesMenu =
+    document.querySelectorAll(".divulgacao-menu button");
+
 const conteudoDinamico =
     document.getElementById("divulgacao-conteudo-dinamico");
 
@@ -8,6 +10,10 @@ const cardsVisaoGeral =
 const areasVisaoGeral =
     document.querySelectorAll(".area");
 
+
+// ======================================
+// VISÃO GERAL
+// ======================================
 
 function esconderVisaoGeral() {
 
@@ -31,14 +37,22 @@ function mostrarVisaoGeral() {
         area.style.display = "";
     });
 
-    conteudoDinamico.style.display = "none";
-    conteudoDinamico.innerHTML = "";
+    if (conteudoDinamico) {
+        conteudoDinamico.style.display = "none";
+        conteudoDinamico.innerHTML = "";
+    }
 }
 
+
+// ======================================
+// POSTAR EM GRUPOS
+// ======================================
 
 function abrirPostarGrupos() {
 
     esconderVisaoGeral();
+
+    if (!conteudoDinamico) return;
 
     conteudoDinamico.style.display = "block";
 
@@ -54,6 +68,7 @@ function abrirPostarGrupos() {
             ">
 
                 <div>
+
                     <h2 style="margin:0 0 5px;">
                         📢 Postar em Grupos
                     </h2>
@@ -61,10 +76,13 @@ function abrirPostarGrupos() {
                     <p style="margin:0;color:#64748b;">
                         Configure sua publicação e escolha os grupos.
                     </p>
+
                 </div>
 
-                <button id="selecionarGrupos"
-                    class="btn-divulgacao-primary">
+                <button
+                    id="selecionarGrupos"
+                    class="btn-divulgacao-primary"
+                >
                     👥 Selecionar grupos
                 </button>
 
@@ -72,8 +90,6 @@ function abrirPostarGrupos() {
 
 
             <div class="publicacao-grid">
-
-                <!-- CONTEÚDO -->
 
                 <div class="publicacao-box">
 
@@ -107,26 +123,45 @@ function abrirPostarGrupos() {
                 </div>
 
 
-                <!-- CONFIGURAÇÕES -->
-
                 <div class="publicacao-box">
 
                     <h3>⚙️ Configurações</h3>
 
-                    <label>Intervalo entre publicações</label>
+                    <label>
+                        Intervalo entre publicações
+                    </label>
 
                     <select id="intervaloPublicacao">
-                        <option value="5">5 minutos</option>
-                        <option value="10">10 minutos</option>
-                        <option value="15" selected>15 minutos</option>
-                        <option value="30">30 minutos</option>
-                        <option value="60">1 hora</option>
+
+                        <option value="5">
+                            5 minutos
+                        </option>
+
+                        <option value="10">
+                            10 minutos
+                        </option>
+
+                        <option value="15" selected>
+                            15 minutos
+                        </option>
+
+                        <option value="30">
+                            30 minutos
+                        </option>
+
+                        <option value="60">
+                            1 hora
+                        </option>
+
                     </select>
 
 
-                    <label>Quando publicar?</label>
+                    <label>
+                        Quando publicar?
+                    </label>
 
                     <select id="tipoPublicacao">
+
                         <option value="agora">
                             Publicar agora
                         </option>
@@ -134,11 +169,14 @@ function abrirPostarGrupos() {
                         <option value="agendar">
                             Agendar
                         </option>
+
                     </select>
 
 
-                    <div id="areaAgendamento"
-                        style="display:none;">
+                    <div
+                        id="areaAgendamento"
+                        style="display:none;"
+                    >
 
                         <label>Data</label>
 
@@ -146,6 +184,7 @@ function abrirPostarGrupos() {
                             id="dataAgendamento"
                             type="date"
                         >
+
 
                         <label>Horário</label>
 
@@ -161,22 +200,24 @@ function abrirPostarGrupos() {
             </div>
 
 
-            <!-- GRUPOS -->
+            <div
+                class="publicacao-box"
+                style="margin-top:18px;"
+            >
 
-            <div class="publicacao-box"
-                style="margin-top:18px;">
+                <h3>
+                    👥 Grupos selecionados
+                </h3>
 
-                <h3>👥 Grupos selecionados</h3>
-
-                <div id="listaGruposSelecionados"
+                <div
+                    id="listaGruposSelecionados"
                     style="
                         padding:25px;
                         text-align:center;
                         color:#64748b;
-                    ">
-
+                    "
+                >
                     Nenhum grupo selecionado.
-
                 </div>
 
             </div>
@@ -191,13 +232,15 @@ function abrirPostarGrupos() {
 
                 <button
                     id="salvarCampanha"
-                    class="btn-divulgacao-secondary">
+                    class="btn-divulgacao-secondary"
+                >
                     💾 Salvar campanha
                 </button>
 
                 <button
                     id="iniciarPublicacao"
-                    class="btn-divulgacao-primary">
+                    class="btn-divulgacao-primary"
+                >
                     🚀 Iniciar divulgação
                 </button>
 
@@ -214,48 +257,22 @@ function abrirPostarGrupos() {
         document.getElementById("areaAgendamento");
 
 
-    tipoPublicacao?.addEventListener("change", () => {
+    tipoPublicacao?.addEventListener(
+        "change",
+        () => {
 
-        areaAgendamento.style.display =
-            tipoPublicacao.value === "agendar"
-                ? "block"
-                : "none";
-
-    });
-
+            areaAgendamento.style.display =
+                tipoPublicacao.value === "agendar"
+                    ? "block"
+                    : "none";
+        }
+    );
 }
 
-    esconderVisaoGeral();
 
-    conteudoDinamico.style.display = "block";
-
-    conteudoDinamico.innerHTML = `
-        <section class="area">
-
-            <h2>📢 Postar em Grupos</h2>
-
-            <p>
-                Crie uma publicação e escolha os grupos onde deseja divulgar.
-            </p>
-
-            <textarea
-                style="
-                    width:100%;
-                    min-height:160px;
-                    padding:14px;
-                    margin-top:15px;
-                    border:1px solid #cbd5e1;
-                    border-radius:10px;
-                    box-sizing:border-box;
-                    resize:vertical;
-                "
-                placeholder="Digite o texto da publicação..."
-            ></textarea>
-
-        </section>
-    `;
-}
-
+// ======================================
+// MENU
+// ======================================
 
 botoesMenu.forEach(botao => {
 
@@ -267,14 +284,17 @@ botoesMenu.forEach(botao => {
 
         botao.classList.add("active");
 
-        const view = botao.dataset.view;
+        const view =
+            botao.dataset.view;
 
         if (view === "visao-geral") {
             mostrarVisaoGeral();
+            return;
         }
 
         if (view === "postar-grupos") {
             abrirPostarGrupos();
+            return;
         }
 
     });
