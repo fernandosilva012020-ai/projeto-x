@@ -859,6 +859,116 @@ function abrirEncontrarGrupos() {
 }
 
 // ======================================
+// RECEBER GRUPOS CAPTURADOS
+// ======================================
+
+window.addEventListener("message", event => {
+
+    if (event.source !== window) return;
+
+    if (
+        event.data?.source !== "PROJETOX_EXTENSION" ||
+        event.data?.type !== "GRUPOS_CAPTURADOS"
+    ) {
+        return;
+    }
+
+    const grupos = event.data.grupos || [];
+    const termo = event.data.termo || "";
+
+    const resultado =
+        document.getElementById("resultadoBuscaGrupos");
+
+    const quantidade =
+        document.getElementById(
+            "quantidadeGruposEncontrados"
+        );
+
+    if (!resultado) return;
+
+    if (quantidade) {
+        quantidade.textContent =
+            `${grupos.length} encontrados`;
+    }
+
+    if (!grupos.length) {
+
+        resultado.innerHTML =
+            "Nenhum grupo capturado.";
+
+        return;
+    }
+
+    resultado.style.textAlign = "left";
+    resultado.style.padding = "10px";
+
+    resultado.innerHTML = `
+
+        <div style="
+            padding:12px;
+            margin-bottom:15px;
+            background:#f8fafc;
+            border-radius:9px;
+        ">
+
+            <strong>
+                🔎 ${escaparHTML(termo)}
+            </strong>
+
+            <div style="
+                margin-top:5px;
+                font-size:12px;
+                color:#64748b;
+            ">
+                ${grupos.length} grupos encontrados
+            </div>
+
+        </div>
+
+        ${grupos.map((grupo, indice) => `
+
+            <label style="
+                display:flex;
+                gap:12px;
+                padding:12px;
+                margin-bottom:8px;
+                border:1px solid #e2e8f0;
+                border-radius:9px;
+                cursor:pointer;
+            ">
+
+                <input
+                    type="checkbox"
+                    class="grupoEncontradoCheckbox"
+                    data-indice="${indice}"
+                >
+
+                <div>
+
+                    <strong>
+                        👥 ${escaparHTML(grupo.nome)}
+                    </strong>
+
+                    <div style="
+                        margin-top:4px;
+                        font-size:11px;
+                        color:#64748b;
+                        word-break:break-all;
+                    ">
+                        ${escaparHTML(grupo.url)}
+                    </div>
+
+                </div>
+
+            </label>
+
+        `).join("")}
+
+    `;
+
+});
+
+// ======================================
 // MENU
 // ======================================
 
