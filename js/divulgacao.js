@@ -768,39 +768,46 @@ function abrirEncontrarGrupos() {
 
 
     document
-        .getElementById("buscarGruposFacebook")
-        ?.addEventListener("click", () => {
+    .getElementById("buscarGruposFacebook")
+    ?.addEventListener("click", () => {
 
-            const termo =
-                document
-                    .getElementById("termoBuscaGrupos")
-                    ?.value
-                    .trim();
+        const termo =
+            document
+                .getElementById("termoBuscaGrupos")
+                ?.value
+                .trim();
 
-            if (!termo) {
+        if (!termo) {
 
-                alert(
-                    "Digite uma palavra-chave para buscar grupos."
-                );
+            alert(
+                "Digite uma palavra-chave para buscar grupos."
+            );
 
-                return;
-            }
+            return;
+        }
 
+        window.postMessage(
+            {
+                source: "PROJETOX_APP",
+                type: "PESQUISAR_GRUPOS_FACEBOOK",
+                termo: termo
+            },
+            "*"
+        );
 
-            const resultado =
-                document.getElementById(
-                    "resultadoBuscaGrupos"
-                );
+        const resultado =
+            document.getElementById(
+                "resultadoBuscaGrupos"
+            );
 
-            resultado.innerHTML = `
-                🔄 Preparando busca por
-                <strong>${escaparHTML(termo)}</strong>...
-                <br><br>
-                A extensão do Projeto X será responsável
-                por localizar os grupos no Facebook.
-            `;
+        resultado.innerHTML = `
+            🔎 Buscando grupos relacionados a
+            <strong>${escaparHTML(termo)}</strong>...
+            <br><br>
+            A busca será aberta no Facebook.
+        `;
 
-        });
+    });
 }
 
 // ======================================
