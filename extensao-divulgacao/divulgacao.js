@@ -1,12 +1,11 @@
 // ======================================
-// ELEMENTOS PRINCIPAIS
+// DIVULGAÇÃO - PROJETO X
 // ======================================
 
-const botoesMenu =
-    document.querySelectorAll(".divulgacao-menu button");
-
 const conteudoDinamico =
-    document.getElementById("divulgacao-conteudo-dinamico");
+    document.getElementById(
+        "divulgacao-conteudo-dinamico"
+    );
 
 const cardsVisaoGeral =
     document.querySelector(".cards");
@@ -15,7 +14,6 @@ const areasVisaoGeral =
     document.querySelectorAll(".area");
 
 let gruposSelecionados = [];
-
 let gruposEncontradosAtuais = [];
 
 
@@ -41,10 +39,8 @@ function escaparHTML(texto = "") {
 function esconderVisaoGeral() {
 
     if (cardsVisaoGeral) {
-
         cardsVisaoGeral.style.display =
             "none";
-
     }
 
     areasVisaoGeral.forEach(area => {
@@ -111,9 +107,7 @@ function abrirPostarGrupos() {
 
                 <div>
 
-                    <h2 style="
-                        margin:0 0 5px;
-                    ">
+                    <h2 style="margin:0 0 5px;">
                         📢 Postar em Grupos
                     </h2>
 
@@ -145,7 +139,6 @@ function abrirPostarGrupos() {
                     <h3>
                         ✍️ Publicação
                     </h3>
-
 
                     <label>
                         Nome da campanha
@@ -367,13 +360,14 @@ function abrirPostarGrupos() {
 
 
 // ======================================
-// ABRIR SELETOR DE GRUPOS SALVOS
+// SELETOR DE GRUPOS SALVOS
 // ======================================
 
 async function abrirSeletorGrupos() {
 
     const cliente =
         window.supabaseClient;
+
 
     if (!cliente) {
 
@@ -388,7 +382,8 @@ async function abrirSeletorGrupos() {
     const {
         data: sessao
     } =
-        await cliente.auth.getSession();
+        await cliente.auth
+            .getSession();
 
 
     const usuario =
@@ -445,12 +440,11 @@ async function abrirSeletorGrupos() {
     }
 
 
-    const modalAntigo =
-        document.getElementById(
+    document
+        .getElementById(
             "modalSelecionarGrupos"
-        );
-
-    modalAntigo?.remove();
+        )
+        ?.remove();
 
 
     const modal =
@@ -464,35 +458,59 @@ async function abrirSeletorGrupos() {
 
 
     modal.style.cssText = `
+
         position:fixed;
         inset:0;
-        background:rgba(15,23,42,.60);
+
+        background:
+        rgba(15,23,42,.60);
+
         display:flex;
         align-items:center;
         justify-content:center;
+
         z-index:99999;
+
     `;
 
 
     modal.innerHTML = `
 
         <div style="
+
             background:white;
+
             width:600px;
             max-width:92%;
             max-height:80vh;
+
             border-radius:14px;
+
             overflow:hidden;
-            box-shadow:0 20px 60px rgba(0,0,0,.30);
+
+            box-shadow:
+            0 20px 60px
+            rgba(0,0,0,.30);
+
         ">
 
+
             <div style="
+
                 padding:20px;
-                border-bottom:1px solid #e5e7eb;
+
+                border-bottom:
+                1px solid #e5e7eb;
+
                 display:flex;
-                justify-content:space-between;
+
+                justify-content:
+                space-between;
+
                 align-items:center;
+
             ">
+
 
                 <div>
 
@@ -502,12 +520,19 @@ async function abrirSeletorGrupos() {
                         👥 Selecionar grupos
                     </h2>
 
+
                     <p style="
+
                         margin:0;
+
                         color:#64748b;
+
                         font-size:13px;
+
                     ">
+
                         Escolha os grupos desta divulgação.
+
                     </p>
 
                 </div>
@@ -516,11 +541,18 @@ async function abrirSeletorGrupos() {
                 <button
                     type="button"
                     id="fecharGrupos"
+
                     style="
+
                         border:none;
-                        background:transparent;
+
+                        background:
+                        transparent;
+
                         font-size:20px;
+
                         cursor:pointer;
+
                     "
                 >
                     ✕
@@ -530,16 +562,27 @@ async function abrirSeletorGrupos() {
 
 
             <div style="
-                padding:18px 20px;
-                max-height:430px;
-                overflow-y:auto;
+
+                padding:
+                18px 20px;
+
+                max-height:
+                430px;
+
+                overflow-y:
+                auto;
+
             ">
 
+
                 ${
+
                     grupos?.length
 
-                    ? grupos
-                        .map(grupo => {
+                    ?
+
+                    grupos.map(
+                        grupo => {
 
                             const selecionado =
                                 gruposSelecionados
@@ -553,44 +596,84 @@ async function abrirSeletorGrupos() {
                             return `
 
                                 <label style="
+
                                     display:flex;
-                                    align-items:center;
+
+                                    align-items:
+                                    center;
+
                                     gap:12px;
-                                    padding:13px;
-                                    border:1px solid #e2e8f0;
-                                    border-radius:9px;
-                                    margin-bottom:8px;
+
+                                    padding:
+                                    13px;
+
+                                    border:
+                                    1px solid #e2e8f0;
+
+                                    border-radius:
+                                    9px;
+
+                                    margin-bottom:
+                                    8px;
+
                                     cursor:pointer;
+
                                 ">
 
+
                                     <input
+
                                         type="checkbox"
-                                        class="grupoCheckbox"
-                                        value="${grupo.id}"
+
+                                        class="
+                                        grupoCheckbox
+                                        "
+
+                                        value="
+                                        ${grupo.id}
+                                        "
+
                                         ${
                                             selecionado
                                                 ? "checked"
                                                 : ""
                                         }
+
                                     >
+
 
                                     <div>
 
                                         <strong>
+
                                             ${escaparHTML(
                                                 grupo.name
                                             )}
+
                                         </strong>
 
+
                                         <div style="
-                                            font-size:11px;
-                                            color:#64748b;
-                                            margin-top:4px;
-                                            word-break:break-all;
+
+                                            font-size:
+                                            11px;
+
+                                            color:
+                                            #64748b;
+
+                                            margin-top:
+                                            4px;
+
+                                            word-break:
+                                            break-all;
+
                                         ">
+
                                             ${escaparHTML(
-                                                grupo.url || ""
+                                                grupo.url ||
+                                                ""
                                             )}
+
                                         </div>
 
                                     </div>
@@ -599,48 +682,87 @@ async function abrirSeletorGrupos() {
 
                             `;
 
-                        })
-                        .join("")
+                        }
+                    )
+                    .join("")
 
-                    : `
+                    :
+
+                    `
 
                         <div style="
-                            text-align:center;
-                            padding:35px;
-                            color:#64748b;
+
+                            text-align:
+                            center;
+
+                            padding:
+                            35px;
+
+                            color:
+                            #64748b;
+
                         ">
+
                             👥 Nenhum grupo cadastrado.
+
                         </div>
 
                     `
+
                 }
 
             </div>
 
 
             <div style="
-                padding:15px 20px;
-                border-top:1px solid #e5e7eb;
+
+                padding:
+                15px 20px;
+
+                border-top:
+                1px solid #e5e7eb;
+
                 display:flex;
-                justify-content:flex-end;
+
+                justify-content:
+                flex-end;
+
                 gap:10px;
+
             ">
 
+
                 <button
+
                     type="button"
+
                     id="cancelarGrupos"
-                    class="btn-divulgacao-secondary"
+
+                    class="
+                    btn-divulgacao-secondary
+                    "
+
                 >
+
                     Cancelar
+
                 </button>
 
 
                 <button
+
                     type="button"
+
                     id="confirmarGrupos"
-                    class="btn-divulgacao-primary"
+
+                    class="
+                    btn-divulgacao-primary
+                    "
+
                 >
+
                     ✅ Confirmar seleção
+
                 </button>
 
             </div>
@@ -655,11 +777,12 @@ async function abrirSeletorGrupos() {
     );
 
 
-    function fecharModal() {
+    const fecharModal =
+        () => {
 
-        modal.remove();
+            modal.remove();
 
-    }
+        };
 
 
     document
@@ -687,8 +810,7 @@ async function abrirSeletorGrupos() {
         event => {
 
             if (
-                event.target ===
-                modal
+                event.target === modal
             ) {
 
                 fecharModal();
@@ -708,9 +830,10 @@ async function abrirSeletorGrupos() {
             () => {
 
                 const marcados =
-                    modal.querySelectorAll(
-                        ".grupoCheckbox:checked"
-                    );
+                    modal
+                        .querySelectorAll(
+                            ".grupoCheckbox:checked"
+                        );
 
 
                 gruposSelecionados =
@@ -766,7 +889,9 @@ function renderizarGruposSelecionados() {
         );
 
 
-    if (!area) return;
+    if (!area) {
+        return;
+    }
 
 
     if (
@@ -791,32 +916,46 @@ function renderizarGruposSelecionados() {
         ">
 
             <strong>
-                ✅ ${gruposSelecionados.length}
+
+                ✅
+                ${gruposSelecionados.length}
+
                 grupo(s) selecionado(s)
+
             </strong>
 
         </div>
 
 
         ${
+
             gruposSelecionados
                 .map(
                     grupo => `
 
                         <div style="
-                            display:flex;
-                            align-items:center;
-                            justify-content:space-between;
-                            padding:11px;
-                            border:1px solid #e2e8f0;
-                            border-radius:8px;
-                            margin-bottom:7px;
+
+                            padding:
+                            11px;
+
+                            border:
+                            1px solid #e2e8f0;
+
+                            border-radius:
+                            8px;
+
+                            margin-bottom:
+                            7px;
+
                         ">
 
                             <strong>
-                                👥 ${escaparHTML(
+
+                                👥
+                                ${escaparHTML(
                                     grupo.name
                                 )}
+
                             </strong>
 
                         </div>
@@ -824,6 +963,7 @@ function renderizarGruposSelecionados() {
                     `
                 )
                 .join("")
+
         }
 
     `;
@@ -838,6 +978,7 @@ function abrirEncontrarGrupos() {
 
     esconderVisaoGeral();
 
+
     if (!conteudoDinamico) {
         return;
     }
@@ -851,6 +992,7 @@ function abrirEncontrarGrupos() {
 
         <section class="area">
 
+
             <div style="
                 margin-bottom:20px;
             ">
@@ -858,45 +1000,78 @@ function abrirEncontrarGrupos() {
                 <h2 style="
                     margin:0 0 6px;
                 ">
+
                     🔎 Encontrar grupos
+
                 </h2>
+
 
                 <p style="
                     margin:0;
                     color:#64748b;
                 ">
+
                     Pesquise grupos do Facebook por palavra-chave.
+
                 </p>
 
             </div>
 
 
-            <div class="publicacao-box">
+            <div class="
+                publicacao-box
+            ">
+
 
                 <label>
+
                     Palavra-chave ou nicho
+
                 </label>
 
 
                 <div style="
+
                     display:flex;
+
                     gap:10px;
+
                     margin-top:8px;
+
                 ">
 
+
                     <input
-                        id="termoBuscaGrupos"
+
+                        id="
+                        termoBuscaGrupos
+                        "
+
                         type="text"
-                        placeholder="Ex: imóveis Campinas, renda extra, carros..."
+
+                        placeholder="
+                        Ex: imóveis Campinas, renda extra, carros...
+                        "
+
                     >
 
 
                     <button
+
                         type="button"
-                        id="buscarGruposFacebook"
-                        class="btn-divulgacao-primary"
+
+                        id="
+                        buscarGruposFacebook
+                        "
+
+                        class="
+                        btn-divulgacao-primary
+                        "
+
                     >
+
                         🔎 Buscar
+
                     </button>
 
                 </div>
@@ -905,62 +1080,115 @@ function abrirEncontrarGrupos() {
 
 
             <div
-                class="publicacao-box"
+
+                class="
+                publicacao-box
+                "
+
                 style="
                     margin-top:18px;
                 "
+
             >
 
+
                 <div style="
+
                     display:flex;
-                    justify-content:space-between;
-                    align-items:center;
+
+                    justify-content:
+                    space-between;
+
+                    align-items:
+                    center;
+
                     gap:10px;
+
                 ">
+
 
                     <h3 style="
                         margin:0;
                     ">
+
                         👥 Grupos encontrados
+
                     </h3>
 
 
                     <span
-                        id="quantidadeGruposEncontrados"
+                        id="
+                        quantidadeGruposEncontrados
+                        "
                     >
+
                         0 encontrados
+
                     </span>
 
                 </div>
 
 
                 <div style="
+
                     display:flex;
-                    justify-content:flex-end;
-                    margin-top:15px;
+
+                    justify-content:
+                    flex-end;
+
+                    margin-top:
+                    15px;
+
                 ">
 
+
                     <button
+
                         type="button"
-                        id="carregarResultadosGrupos"
-                        class="btn-divulgacao-secondary"
+
+                        id="
+                        carregarResultadosGrupos
+                        "
+
+                        class="
+                        btn-divulgacao-secondary
+                        "
+
                     >
+
                         📥 Carregar resultados
+
                     </button>
 
                 </div>
 
 
                 <div
-                    id="resultadoBuscaGrupos"
-                    style="
-                        margin-top:20px;
-                        padding:35px;
-                        text-align:center;
-                        color:#64748b;
+
+                    id="
+                    resultadoBuscaGrupos
                     "
+
+                    style="
+
+                        margin-top:
+                        20px;
+
+                        padding:
+                        35px;
+
+                        text-align:
+                        center;
+
+                        color:
+                        #64748b;
+
+                    "
+
                 >
+
                     Faça uma busca para encontrar grupos.
+
                 </div>
 
             </div>
@@ -971,7 +1199,7 @@ function abrirEncontrarGrupos() {
 
 
 // ======================================
-// BOTÃO BUSCAR
+// BUSCAR NO FACEBOOK
 // ======================================
 
     document
@@ -1003,6 +1231,7 @@ function abrirEncontrarGrupos() {
 
                 window.postMessage(
                     {
+
                         source:
                             "PROJETOX_APP",
 
@@ -1011,6 +1240,7 @@ function abrirEncontrarGrupos() {
 
                         termo:
                             termo
+
                     },
                     "*"
                 );
@@ -1027,8 +1257,13 @@ function abrirEncontrarGrupos() {
                     resultado.innerHTML = `
 
                         🔎 Buscando grupos relacionados a
+
                         <strong>
-                            ${escaparHTML(termo)}
+
+                            ${escaparHTML(
+                                termo
+                            )}
+
                         </strong>...
 
                         <br><br>
@@ -1044,7 +1279,7 @@ function abrirEncontrarGrupos() {
 
 
 // ======================================
-// BOTÃO CARREGAR RESULTADOS
+// CARREGAR RESULTADOS
 // ======================================
 
     document
@@ -1056,9 +1291,10 @@ function abrirEncontrarGrupos() {
             () => {
 
                 const resultado =
-                    document.getElementById(
-                        "resultadoBuscaGrupos"
-                    );
+                    document
+                        .getElementById(
+                            "resultadoBuscaGrupos"
+                        );
 
 
                 if (resultado) {
@@ -1071,11 +1307,13 @@ function abrirEncontrarGrupos() {
 
                 window.postMessage(
                     {
+
                         source:
                             "PROJETOX_APP",
 
                         type:
                             "CARREGAR_GRUPOS_CAPTURADOS"
+
                     },
                     "*"
                 );
@@ -1097,19 +1335,26 @@ window.addEventListener(
             event.source !==
             window
         ) {
+
             return;
+
         }
 
 
         if (
+
             event.data?.source !==
-                "PROJETOX_EXTENSION" ||
+            "PROJETOX_EXTENSION"
+
+            ||
 
             event.data?.type !==
-                "GRUPOS_CAPTURADOS"
+            "GRUPOS_CAPTURADOS"
+
         ) {
 
             return;
+
         }
 
 
@@ -1122,7 +1367,8 @@ window.addEventListener(
 
 
         const termo =
-            event.data.termo || "";
+            event.data.termo ||
+            "";
 
 
         gruposEncontradosAtuais =
@@ -1130,15 +1376,17 @@ window.addEventListener(
 
 
         const resultado =
-            document.getElementById(
-                "resultadoBuscaGrupos"
-            );
+            document
+                .getElementById(
+                    "resultadoBuscaGrupos"
+                );
 
 
         const quantidade =
-            document.getElementById(
-                "quantidadeGruposEncontrados"
-            );
+            document
+                .getElementById(
+                    "quantidadeGruposEncontrados"
+                );
 
 
         if (!resultado) {
@@ -1172,68 +1420,131 @@ window.addEventListener(
 
         resultado.innerHTML = `
 
+
             <div style="
-                padding:12px;
-                margin-bottom:15px;
-                background:#f8fafc;
-                border-radius:9px;
+
+                padding:
+                12px;
+
+                margin-bottom:
+                15px;
+
+                background:
+                #f8fafc;
+
+                border-radius:
+                9px;
+
             ">
 
+
                 <strong>
-                    🔎 ${escaparHTML(
+
+                    🔎
+                    ${escaparHTML(
                         termo
                     )}
+
                 </strong>
 
+
                 <div style="
-                    margin-top:5px;
-                    font-size:12px;
-                    color:#64748b;
+
+                    margin-top:
+                    5px;
+
+                    font-size:
+                    12px;
+
+                    color:
+                    #64748b;
+
                 ">
+
                     ${grupos.length}
                     grupos encontrados
+
                 </div>
 
             </div>
 
 
             <div style="
+
                 display:flex;
+
                 gap:10px;
-                flex-wrap:wrap;
-                margin-bottom:15px;
+
+                flex-wrap:
+                wrap;
+
+                margin-bottom:
+                15px;
+
             ">
 
+
                 <button
+
                     type="button"
-                    id="selecionarTodosEncontrados"
-                    class="btn-divulgacao-secondary"
+
+                    id="
+                    selecionarTodosEncontrados
+                    "
+
+                    class="
+                    btn-divulgacao-secondary
+                    "
+
                 >
+
                     ☑ Selecionar todos
+
                 </button>
 
 
                 <button
+
                     type="button"
-                    id="desmarcarTodosEncontrados"
-                    class="btn-divulgacao-secondary"
+
+                    id="
+                    desmarcarTodosEncontrados
+                    "
+
+                    class="
+                    btn-divulgacao-secondary
+                    "
+
                 >
+
                     ☐ Desmarcar todos
+
                 </button>
 
 
                 <button
+
                     type="button"
-                    id="salvarGruposEncontrados"
-                    class="btn-divulgacao-primary"
+
+                    id="
+                    salvarGruposEncontrados
+                    "
+
+                    class="
+                    btn-divulgacao-primary
+                    "
+
                 >
+
                     💾 Salvar selecionados
+
                 </button>
 
             </div>
 
 
             ${
+
                 grupos
                     .map(
                         (
@@ -1241,41 +1552,82 @@ window.addEventListener(
                             indice
                         ) => `
 
+
                             <label style="
+
                                 display:flex;
+
                                 gap:12px;
-                                align-items:flex-start;
-                                padding:12px;
-                                margin-bottom:8px;
-                                border:1px solid #e2e8f0;
-                                border-radius:9px;
-                                cursor:pointer;
+
+                                align-items:
+                                flex-start;
+
+                                padding:
+                                12px;
+
+                                margin-bottom:
+                                8px;
+
+                                border:
+                                1px solid #e2e8f0;
+
+                                border-radius:
+                                9px;
+
+                                cursor:
+                                pointer;
+
                             ">
 
+
                                 <input
+
                                     type="checkbox"
-                                    class="grupoEncontradoCheckbox"
-                                    data-indice="${indice}"
+
+                                    class="
+                                    grupoEncontradoCheckbox
+                                    "
+
+                                    data-indice="
+                                    ${indice}
+                                    "
+
                                 >
+
 
                                 <div>
 
+
                                     <strong>
-                                        👥 ${escaparHTML(
+
+                                        👥
+                                        ${escaparHTML(
                                             grupo.nome
                                         )}
+
                                     </strong>
 
 
                                     <div style="
-                                        margin-top:4px;
-                                        font-size:11px;
-                                        color:#64748b;
-                                        word-break:break-all;
+
+                                        margin-top:
+                                        4px;
+
+                                        font-size:
+                                        11px;
+
+                                        color:
+                                        #64748b;
+
+                                        word-break:
+                                        break-all;
+
                                     ">
+
                                         ${escaparHTML(
                                             grupo.url
                                         )}
+
                                     </div>
 
                                 </div>
@@ -1285,6 +1637,7 @@ window.addEventListener(
                         `
                     )
                     .join("")
+
             }
 
         `;
@@ -1306,10 +1659,15 @@ document.addEventListener(
 
 
         if (
-            !(elemento instanceof Element)
+            !(
+                elemento
+                instanceof
+                Element
+            )
         ) {
 
             return;
+
         }
 
 
@@ -1335,25 +1693,19 @@ document.addEventListener(
 
             event.preventDefault();
 
-            const checkboxes =
-                document.querySelectorAll(
+
+            document
+                .querySelectorAll(
                     ".grupoEncontradoCheckbox"
+                )
+                .forEach(
+                    input => {
+
+                        input.checked =
+                            true;
+
+                    }
                 );
-
-
-            checkboxes.forEach(
-                checkbox => {
-
-                    checkbox.checked =
-                        true;
-
-                }
-            );
-
-
-            console.log(
-                `✅ ${checkboxes.length} grupos marcados.`
-            );
 
 
             return;
@@ -1372,25 +1724,18 @@ document.addEventListener(
             event.preventDefault();
 
 
-            const checkboxes =
-                document.querySelectorAll(
+            document
+                .querySelectorAll(
                     ".grupoEncontradoCheckbox"
+                )
+                .forEach(
+                    input => {
+
+                        input.checked =
+                            false;
+
+                    }
                 );
-
-
-            checkboxes.forEach(
-                checkbox => {
-
-                    checkbox.checked =
-                        false;
-
-                }
-            );
-
-
-            console.log(
-                "✅ Todos os grupos foram desmarcados."
-            );
 
 
             return;
@@ -1407,6 +1752,7 @@ document.addEventListener(
         ) {
 
             return;
+
         }
 
 
@@ -1414,9 +1760,10 @@ document.addEventListener(
 
 
         const marcados =
-            document.querySelectorAll(
-                ".grupoEncontradoCheckbox:checked"
-            );
+            document
+                .querySelectorAll(
+                    ".grupoEncontradoCheckbox:checked"
+                );
 
 
         if (!marcados.length) {
@@ -1442,10 +1789,6 @@ document.addEventListener(
             return;
         }
 
-
-// ======================================
-// USUÁRIO LOGADO
-// ======================================
 
         let usuario;
 
@@ -1486,9 +1829,11 @@ document.addEventListener(
                 erro
             );
 
+
             alert(
                 "Não foi possível verificar sua sessão."
             );
+
 
             return;
         }
@@ -1504,21 +1849,16 @@ document.addEventListener(
         }
 
 
-// ======================================
-// PEGAR GRUPOS MARCADOS
-// ======================================
-
         const selecionados =
             [];
 
 
         marcados.forEach(
-            checkbox => {
+            input => {
 
                 const indice =
                     Number(
-                        checkbox.dataset
-                            .indice
+                        input.dataset.indice
                     );
 
 
@@ -1529,14 +1869,14 @@ document.addEventListener(
 
 
                 if (
-                    grupo &&
-                    grupo.url &&
-                    grupo.nome
+                    grupo?.url &&
+                    grupo?.nome
                 ) {
 
-                    selecionados.push(
-                        grupo
-                    );
+                    selecionados
+                        .push(
+                            grupo
+                        );
 
                 }
 
@@ -1544,121 +1884,81 @@ document.addEventListener(
         );
 
 
-        if (!selecionados.length) {
-
-            alert(
-                "Não foi possível identificar os grupos selecionados."
-            );
-
-            return;
-        }
-
-
-// ======================================
-// REMOVER DUPLICADOS DA SELEÇÃO
-// ======================================
-
-        const mapaGrupos =
-            new Map();
-
-
-        selecionados.forEach(
-            grupo => {
-
-                mapaGrupos.set(
-                    grupo.url,
-                    grupo
-                );
-
-            }
-        );
-
-
         const gruposUnicos =
             Array.from(
-                mapaGrupos.values()
+                new Map(
+
+                    selecionados
+                        .map(
+                            grupo => [
+
+                                grupo.url,
+
+                                grupo
+
+                            ]
+                        )
+
+                ).values()
             );
 
 
-// ======================================
-// BUSCAR GRUPOS JÁ SALVOS
-// ======================================
-
-        let gruposExistentes =
-            [];
-
-
-        try {
-
-            const {
-                data,
-                error
-            } =
-                await cliente
-                    .from("grupos")
-                    .select("url")
-                    .eq(
-                        "user_id",
-                        usuario.id
-                    );
-
-
-            if (error) {
-
-                console.error(
-                    "Erro ao verificar grupos:",
-                    error
+        const {
+            data: gruposExistentes,
+            error: erroExistentes
+        } =
+            await cliente
+                .from("grupos")
+                .select("url")
+                .eq(
+                    "user_id",
+                    usuario.id
                 );
 
-                alert(
-                    "Erro ao verificar grupos já cadastrados."
-                );
 
-                return;
-            }
-
-
-            gruposExistentes =
-                data || [];
-
-
-        } catch (erro) {
+        if (erroExistentes) {
 
             console.error(
-                "Erro Supabase:",
-                erro
+                "Erro ao verificar grupos:",
+                erroExistentes
             );
 
+
             alert(
-                "Erro ao acessar os grupos cadastrados."
+                "Erro ao verificar grupos já cadastrados."
             );
+
 
             return;
         }
 
-
-// ======================================
-// FILTRAR GRUPOS NOVOS
-// ======================================
 
         const urlsExistentes =
             new Set(
-                gruposExistentes
+
+                (
+                    gruposExistentes ||
+                    []
+                )
                     .map(
                         grupo =>
                             grupo.url
                     )
+
             );
 
 
         const novosGrupos =
             gruposUnicos
+
                 .filter(
                     grupo =>
-                        !urlsExistentes.has(
-                            grupo.url
-                        )
+                        !urlsExistentes
+                            .has(
+                                grupo.url
+                            )
                 )
+
                 .map(
                     grupo => ({
 
@@ -1678,10 +1978,6 @@ document.addEventListener(
                 );
 
 
-// ======================================
-// TODOS JÁ EXISTEM
-// ======================================
-
         if (
             !novosGrupos.length
         ) {
@@ -1694,16 +1990,13 @@ document.addEventListener(
         }
 
 
-// ======================================
-// SALVAR
-// ======================================
-
         const textoOriginal =
             botao.innerHTML;
 
 
         botao.disabled =
             true;
+
 
         botao.innerHTML =
             "⏳ Salvando...";
@@ -1728,6 +2021,7 @@ document.addEventListener(
                     error
                 );
 
+
                 alert(
                     "Erro ao salvar grupos: " +
                     (
@@ -1735,6 +2029,7 @@ document.addEventListener(
                         "erro desconhecido"
                     )
                 );
+
 
                 return;
             }
@@ -1749,7 +2044,9 @@ document.addEventListener(
                 `✅ ${novosGrupos.length} grupo(s) salvo(s) com sucesso!`;
 
 
-            if (repetidos > 0) {
+            if (
+                repetidos > 0
+            ) {
 
                 mensagem +=
                     `\n${repetidos} grupo(s) já estavam cadastrados.`;
@@ -1769,6 +2066,7 @@ document.addEventListener(
                 erro
             );
 
+
             alert(
                 "Erro inesperado ao salvar grupos."
             );
@@ -1778,6 +2076,7 @@ document.addEventListener(
 
             botao.disabled =
                 false;
+
 
             botao.innerHTML =
                 textoOriginal;
@@ -1789,83 +2088,244 @@ document.addEventListener(
 
 
 // ======================================
+// OUTRAS ÁREAS DO MENU
+// ======================================
+
+function abrirAreaEmBreve(view) {
+
+    esconderVisaoGeral();
+
+
+    if (!conteudoDinamico) {
+        return;
+    }
+
+
+    const areas = {
+
+        marketplace: [
+            "🛒",
+            "Marketplace"
+        ],
+
+        agendamentos: [
+            "📅",
+            "Agendamentos"
+        ],
+
+        metricas: [
+            "📈",
+            "Métricas"
+        ],
+
+        contas: [
+            "👤",
+            "Contas"
+        ],
+
+        logs: [
+            "📋",
+            "Logs"
+        ]
+
+    };
+
+
+    const [
+        icone,
+        titulo
+    ] =
+        areas[view] ||
+        [
+            "⚙️",
+            "Área"
+        ];
+
+
+    conteudoDinamico.style.display =
+        "block";
+
+
+    conteudoDinamico.innerHTML = `
+
+        <section class="area">
+
+            <div style="
+                padding:25px;
+            ">
+
+                <h2 style="
+                    margin:0 0 8px;
+                ">
+
+                    ${icone}
+                    ${titulo}
+
+                </h2>
+
+
+                <p style="
+                    margin:0;
+                    color:#64748b;
+                ">
+
+                    Esta área será configurada nas próximas etapas.
+
+                </p>
+
+            </div>
+
+        </section>
+
+    `;
+}
+
+
+// ======================================
 // MENU DA DIVULGAÇÃO
 // ======================================
 
-botoesMenu.forEach(
-    botao => {
+// O menu agora usa delegação de evento.
+// Assim ele continua funcionando mesmo
+// com a troca de conteúdo da página.
 
-        botao.addEventListener(
-            "click",
-            () => {
+document.addEventListener(
+    "click",
+    event => {
 
-                botoesMenu.forEach(
-                    item => {
-
-                        item.classList
-                            .remove(
-                                "active"
-                            );
-
-                    }
-                );
+        const elemento =
+            event.target;
 
 
-                botao.classList.add(
-                    "active"
-                );
+        if (
+            !(
+                elemento
+                instanceof
+                Element
+            )
+        ) {
+
+            return;
+
+        }
 
 
-                const view =
-                    botao.dataset.view;
+        const botao =
+            elemento.closest(
+                ".divulgacao-menu button"
+            );
+
+
+        if (!botao) {
+
+            return;
+
+        }
+
+
+        event.preventDefault();
+
+
+        document
+            .querySelectorAll(
+                ".divulgacao-menu button"
+            )
+            .forEach(
+                item => {
+
+                    item.classList
+                        .remove(
+                            "active"
+                        );
+
+                }
+            );
+
+
+        botao.classList
+            .add(
+                "active"
+            );
+
+
+        const view =
+            botao.dataset.view;
 
 
 // ======================================
 // VISÃO GERAL
 // ======================================
 
-                if (
-                    view ===
-                    "visao-geral"
-                ) {
+        if (
+            view ===
+            "visao-geral"
+        ) {
 
-                    mostrarVisaoGeral();
+            mostrarVisaoGeral();
 
-                    return;
-                }
+            return;
+        }
 
 
 // ======================================
 // POSTAR EM GRUPOS
 // ======================================
 
-                if (
-                    view ===
-                    "postar-grupos"
-                ) {
+        if (
+            view ===
+            "postar-grupos"
+        ) {
 
-                    abrirPostarGrupos();
+            abrirPostarGrupos();
 
-                    return;
-                }
+            return;
+        }
 
 
 // ======================================
 // ENCONTRAR GRUPOS
 // ======================================
 
-                if (
-                    view ===
-                    "grupos"
-                ) {
+        if (
+            view ===
+            "grupos"
+        ) {
 
-                    abrirEncontrarGrupos();
+            abrirEncontrarGrupos();
 
-                    return;
-                }
+            return;
+        }
 
-            }
-        );
+
+// ======================================
+// OUTRAS ÁREAS
+// ======================================
+
+        if (
+
+            [
+                "marketplace",
+                "agendamentos",
+                "metricas",
+                "contas",
+                "logs"
+            ]
+                .includes(
+                    view
+                )
+
+        ) {
+
+            abrirAreaEmBreve(
+                view
+            );
+
+        }
 
     }
+);
+
+
+console.log(
+    "✅ Divulgação carregada com sucesso."
 );
