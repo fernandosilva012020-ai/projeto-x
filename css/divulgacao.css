@@ -1,1 +1,132 @@
+/* ================================
+   DIVULGAÇÃO - PROJETO X
+================================ */
 
+.content {
+    background: #f5f7fb;
+}
+
+.topbar {
+    margin-bottom: 24px;
+}
+
+.topbar h1 {
+    margin-bottom: 6px;
+}
+
+.topbar p {
+    color: #64748b;
+}
+
+
+/* CARDS DO DASHBOARD */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.cards .card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    transition: .2s;
+}
+
+.cards .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,.08);
+}
+
+.cards .card h3 {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0 0 12px;
+    font-weight: 600;
+}
+
+.cards .card strong {
+    display: block;
+    font-size: 30px;
+    color: #111827;
+    margin-bottom: 6px;
+}
+
+.cards .card p {
+    margin: 0;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+
+/* ÁREAS */
+
+.area {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 22px;
+}
+
+.area h2 {
+    margin-top: 0;
+    color: #111827;
+}
+
+
+/* AÇÕES RÁPIDAS */
+
+.actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.actions a {
+    text-decoration: none;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 18px;
+    color: #111827;
+    transition: .2s;
+}
+
+.actions a:hover {
+    background: white;
+    border-color: #94a3b8;
+    transform: translateY(-2px);
+}
+
+.actions a > span {
+    display: block;
+    margin-top: 8px;
+    font-weight: 600;
+}
+
+
+/* RESPONSIVO */
+
+@media (max-width: 1000px) {
+
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .cards,
+    .actions {
+        grid-template-columns: 1fr;
+    }
+}
