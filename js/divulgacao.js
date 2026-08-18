@@ -748,6 +748,20 @@ function abrirEncontrarGrupos() {
 
                 </div>
 
+<div style="
+    display:flex;
+    justify-content:flex-end;
+    margin-top:15px;
+">
+
+    <button
+        id="carregarResultadosGrupos"
+        class="btn-divulgacao-secondary"
+    >
+        📥 Carregar resultados
+    </button>
+
+</div>
 
                 <div
                     id="resultadoBuscaGrupos"
