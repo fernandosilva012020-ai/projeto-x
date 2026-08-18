@@ -669,6 +669,139 @@ function renderizarGruposSelecionados() {
     `;
 }
 
+// ======================================
+// ENCONTRAR GRUPOS
+// ======================================
+
+function abrirEncontrarGrupos() {
+
+    esconderVisaoGeral();
+
+    if (!conteudoDinamico) return;
+
+    conteudoDinamico.style.display = "block";
+
+    conteudoDinamico.innerHTML = `
+        <section class="area">
+
+            <div style="margin-bottom:20px;">
+
+                <h2 style="margin:0 0 6px;">
+                    🔎 Encontrar grupos
+                </h2>
+
+                <p style="margin:0;color:#64748b;">
+                    Pesquise grupos do Facebook por palavra-chave.
+                </p>
+
+            </div>
+
+
+            <div class="publicacao-box">
+
+                <label>
+                    Palavra-chave ou nicho
+                </label>
+
+                <div style="
+                    display:flex;
+                    gap:10px;
+                    margin-top:8px;
+                ">
+
+                    <input
+                        id="termoBuscaGrupos"
+                        type="text"
+                        placeholder="Ex: imóveis Campinas, renda extra, carros..."
+                    >
+
+                    <button
+                        id="buscarGruposFacebook"
+                        class="btn-divulgacao-primary"
+                    >
+                        🔎 Buscar
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="publicacao-box"
+                style="margin-top:18px;"
+            >
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                ">
+
+                    <h3 style="margin:0;">
+                        👥 Grupos encontrados
+                    </h3>
+
+                    <span id="quantidadeGruposEncontrados">
+                        0 encontrados
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="resultadoBuscaGrupos"
+                    style="
+                        margin-top:20px;
+                        padding:35px;
+                        text-align:center;
+                        color:#64748b;
+                    "
+                >
+                    Faça uma busca para encontrar grupos.
+                </div>
+
+            </div>
+
+        </section>
+    `;
+
+
+    document
+        .getElementById("buscarGruposFacebook")
+        ?.addEventListener("click", () => {
+
+            const termo =
+                document
+                    .getElementById("termoBuscaGrupos")
+                    ?.value
+                    .trim();
+
+            if (!termo) {
+
+                alert(
+                    "Digite uma palavra-chave para buscar grupos."
+                );
+
+                return;
+            }
+
+
+            const resultado =
+                document.getElementById(
+                    "resultadoBuscaGrupos"
+                );
+
+            resultado.innerHTML = `
+                🔄 Preparando busca por
+                <strong>${escaparHTML(termo)}</strong>...
+                <br><br>
+                A extensão do Projeto X será responsável
+                por localizar os grupos no Facebook.
+            `;
+
+        });
+}
 
 // ======================================
 // MENU
