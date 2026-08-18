@@ -1,3 +1,7 @@
+// ======================================
+// ELEMENTOS PRINCIPAIS
+// ======================================
+
 const botoesMenu =
     document.querySelectorAll(".divulgacao-menu button");
 
@@ -11,6 +15,8 @@ const areasVisaoGeral =
     document.querySelectorAll(".area");
 
 let gruposSelecionados = [];
+
+let gruposEncontradosAtuais = [];
 
 
 // ======================================
@@ -35,11 +41,17 @@ function escaparHTML(texto = "") {
 function esconderVisaoGeral() {
 
     if (cardsVisaoGeral) {
-        cardsVisaoGeral.style.display = "none";
+
+        cardsVisaoGeral.style.display =
+            "none";
+
     }
 
     areasVisaoGeral.forEach(area => {
-        area.style.display = "none";
+
+        area.style.display =
+            "none";
+
     });
 }
 
@@ -47,16 +59,27 @@ function esconderVisaoGeral() {
 function mostrarVisaoGeral() {
 
     if (cardsVisaoGeral) {
-        cardsVisaoGeral.style.display = "";
+
+        cardsVisaoGeral.style.display =
+            "";
+
     }
 
     areasVisaoGeral.forEach(area => {
-        area.style.display = "";
+
+        area.style.display =
+            "";
+
     });
 
     if (conteudoDinamico) {
-        conteudoDinamico.style.display = "none";
-        conteudoDinamico.innerHTML = "";
+
+        conteudoDinamico.style.display =
+            "none";
+
+        conteudoDinamico.innerHTML =
+            "";
+
     }
 }
 
@@ -71,9 +94,11 @@ function abrirPostarGrupos() {
 
     if (!conteudoDinamico) return;
 
-    conteudoDinamico.style.display = "block";
+    conteudoDinamico.style.display =
+        "block";
 
     conteudoDinamico.innerHTML = `
+
         <section class="area">
 
             <div style="
@@ -86,17 +111,24 @@ function abrirPostarGrupos() {
 
                 <div>
 
-                    <h2 style="margin:0 0 5px;">
+                    <h2 style="
+                        margin:0 0 5px;
+                    ">
                         📢 Postar em Grupos
                     </h2>
 
-                    <p style="margin:0;color:#64748b;">
+                    <p style="
+                        margin:0;
+                        color:#64748b;
+                    ">
                         Configure sua publicação e escolha os grupos.
                     </p>
 
                 </div>
 
+
                 <button
+                    type="button"
                     id="selecionarGrupos"
                     class="btn-divulgacao-primary"
                 >
@@ -110,9 +142,14 @@ function abrirPostarGrupos() {
 
                 <div class="publicacao-box">
 
-                    <h3>✍️ Publicação</h3>
+                    <h3>
+                        ✍️ Publicação
+                    </h3>
 
-                    <label>Nome da campanha</label>
+
+                    <label>
+                        Nome da campanha
+                    </label>
 
                     <input
                         id="nomeCampanha"
@@ -121,7 +158,9 @@ function abrirPostarGrupos() {
                     >
 
 
-                    <label>Texto da publicação</label>
+                    <label>
+                        Texto da publicação
+                    </label>
 
                     <textarea
                         id="textoPublicacao"
@@ -129,7 +168,9 @@ function abrirPostarGrupos() {
                     ></textarea>
 
 
-                    <label>Imagem ou vídeo</label>
+                    <label>
+                        Imagem ou vídeo
+                    </label>
 
                     <input
                         id="midiaPublicacao"
@@ -142,7 +183,10 @@ function abrirPostarGrupos() {
 
                 <div class="publicacao-box">
 
-                    <h3>⚙️ Configurações</h3>
+                    <h3>
+                        ⚙️ Configurações
+                    </h3>
+
 
                     <label>
                         Intervalo entre publicações
@@ -150,17 +194,28 @@ function abrirPostarGrupos() {
 
                     <select id="intervaloPublicacao">
 
-                        <option value="5">5 minutos</option>
+                        <option value="5">
+                            5 minutos
+                        </option>
 
-                        <option value="10">10 minutos</option>
+                        <option value="10">
+                            10 minutos
+                        </option>
 
-                        <option value="15" selected>
+                        <option
+                            value="15"
+                            selected
+                        >
                             15 minutos
                         </option>
 
-                        <option value="30">30 minutos</option>
+                        <option value="30">
+                            30 minutos
+                        </option>
 
-                        <option value="60">1 hora</option>
+                        <option value="60">
+                            1 hora
+                        </option>
 
                     </select>
 
@@ -187,7 +242,9 @@ function abrirPostarGrupos() {
                         style="display:none;"
                     >
 
-                        <label>Data</label>
+                        <label>
+                            Data
+                        </label>
 
                         <input
                             id="dataAgendamento"
@@ -195,7 +252,9 @@ function abrirPostarGrupos() {
                         >
 
 
-                        <label>Horário</label>
+                        <label>
+                            Horário
+                        </label>
 
                         <input
                             id="horaAgendamento"
@@ -240,13 +299,16 @@ function abrirPostarGrupos() {
             ">
 
                 <button
+                    type="button"
                     id="salvarCampanha"
                     class="btn-divulgacao-secondary"
                 >
                     💾 Salvar campanha
                 </button>
 
+
                 <button
+                    type="button"
                     id="iniciarPublicacao"
                     class="btn-divulgacao-primary"
                 >
@@ -256,27 +318,44 @@ function abrirPostarGrupos() {
             </div>
 
         </section>
+
     `;
 
 
     const tipoPublicacao =
-        document.getElementById("tipoPublicacao");
+        document.getElementById(
+            "tipoPublicacao"
+        );
 
     const areaAgendamento =
-        document.getElementById("areaAgendamento");
+        document.getElementById(
+            "areaAgendamento"
+        );
 
 
-    tipoPublicacao?.addEventListener("change", () => {
+    tipoPublicacao
+        ?.addEventListener(
+            "change",
+            () => {
 
-        areaAgendamento.style.display =
-            tipoPublicacao.value === "agendar"
-                ? "block"
-                : "none";
-    });
+                if (!areaAgendamento) {
+                    return;
+                }
+
+                areaAgendamento.style.display =
+                    tipoPublicacao.value ===
+                    "agendar"
+                        ? "block"
+                        : "none";
+
+            }
+        );
 
 
     document
-        .getElementById("selecionarGrupos")
+        .getElementById(
+            "selecionarGrupos"
+        )
         ?.addEventListener(
             "click",
             abrirSeletorGrupos
@@ -288,7 +367,7 @@ function abrirPostarGrupos() {
 
 
 // ======================================
-// SELECIONAR GRUPOS
+// ABRIR SELETOR DE GRUPOS SALVOS
 // ======================================
 
 async function abrirSeletorGrupos() {
@@ -298,14 +377,19 @@ async function abrirSeletorGrupos() {
 
     if (!cliente) {
 
-        alert("Conexão com o banco não encontrada.");
+        alert(
+            "Conexão com o banco não encontrada."
+        );
 
         return;
     }
 
 
-    const { data: sessao } =
+    const {
+        data: sessao
+    } =
         await cliente.auth.getSession();
+
 
     const usuario =
         sessao?.session?.user;
@@ -313,33 +397,52 @@ async function abrirSeletorGrupos() {
 
     if (!usuario) {
 
-        alert("Usuário não conectado.");
+        alert(
+            "Usuário não conectado."
+        );
 
         return;
     }
 
 
-    const { data: grupos, error } =
+    const {
+        data: grupos,
+        error
+    } =
         await cliente
             .from("grupos")
-            .select("id, name, url, status")
-            .eq("user_id", usuario.id)
-            .order("created_at", {
-                ascending: false
-            });
+            .select(
+                "id, name, url, status"
+            )
+            .eq(
+                "user_id",
+                usuario.id
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
 
 
     if (error) {
 
-    console.error("Erro ao carregar grupos:", error);
+        console.error(
+            "Erro ao carregar grupos:",
+            error
+        );
 
-    alert(
-        "Erro ao carregar grupos: " +
-        (error.message || "erro desconhecido")
-    );
+        alert(
+            "Erro ao carregar grupos: " +
+            (
+                error.message ||
+                "erro desconhecido"
+            )
+        );
 
-    return;
-}
+        return;
+    }
 
 
     const modalAntigo =
@@ -351,10 +454,14 @@ async function abrirSeletorGrupos() {
 
 
     const modal =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     modal.id =
         "modalSelecionarGrupos";
+
 
     modal.style.cssText = `
         position:fixed;
@@ -407,6 +514,7 @@ async function abrirSeletorGrupos() {
 
 
                 <button
+                    type="button"
                     id="fecharGrupos"
                     style="
                         border:none;
@@ -430,58 +538,69 @@ async function abrirSeletorGrupos() {
                 ${
                     grupos?.length
 
-                    ? grupos.map(grupo => {
+                    ? grupos
+                        .map(grupo => {
 
-                        const selecionado =
-                            gruposSelecionados.some(
-                                item =>
-                                    item.id === grupo.id
-                            );
+                            const selecionado =
+                                gruposSelecionados
+                                    .some(
+                                        item =>
+                                            item.id ===
+                                            grupo.id
+                                    );
 
-                        return `
 
-                            <label style="
-                                display:flex;
-                                align-items:center;
-                                gap:12px;
-                                padding:13px;
-                                border:1px solid #e2e8f0;
-                                border-radius:9px;
-                                margin-bottom:8px;
-                                cursor:pointer;
-                            ">
+                            return `
 
-                                <input
-                                    type="checkbox"
-                                    class="grupoCheckbox"
-                                    value="${grupo.id}"
-                                    ${selecionado ? "checked" : ""}
-                                >
+                                <label style="
+                                    display:flex;
+                                    align-items:center;
+                                    gap:12px;
+                                    padding:13px;
+                                    border:1px solid #e2e8f0;
+                                    border-radius:9px;
+                                    margin-bottom:8px;
+                                    cursor:pointer;
+                                ">
 
-                                <div>
-
-                                    <strong>
-                                        ${escaparHTML(grupo.name)}
-                                    </strong>
-
-                                    <div style="
-                                        font-size:11px;
-                                        color:#64748b;
-                                        margin-top:4px;
-                                    ">
+                                    <input
+                                        type="checkbox"
+                                        class="grupoCheckbox"
+                                        value="${grupo.id}"
                                         ${
-                                            escaparHTML(
-                                                grupo.url || ""
-                                            )
+                                            selecionado
+                                                ? "checked"
+                                                : ""
                                         }
+                                    >
+
+                                    <div>
+
+                                        <strong>
+                                            ${escaparHTML(
+                                                grupo.name
+                                            )}
+                                        </strong>
+
+                                        <div style="
+                                            font-size:11px;
+                                            color:#64748b;
+                                            margin-top:4px;
+                                            word-break:break-all;
+                                        ">
+                                            ${escaparHTML(
+                                                grupo.url || ""
+                                            )}
+                                        </div>
+
                                     </div>
 
-                                </div>
+                                </label>
 
-                            </label>
-                        `;
+                            `;
 
-                    }).join("")
+                        })
+                        .join("")
 
                     : `
 
@@ -492,6 +611,7 @@ async function abrirSeletorGrupos() {
                         ">
                             👥 Nenhum grupo cadastrado.
                         </div>
+
                     `
                 }
 
@@ -507,6 +627,7 @@ async function abrirSeletorGrupos() {
             ">
 
                 <button
+                    type="button"
                     id="cancelarGrupos"
                     class="btn-divulgacao-secondary"
                 >
@@ -515,6 +636,7 @@ async function abrirSeletorGrupos() {
 
 
                 <button
+                    type="button"
                     id="confirmarGrupos"
                     class="btn-divulgacao-primary"
                 >
@@ -524,19 +646,26 @@ async function abrirSeletorGrupos() {
             </div>
 
         </div>
+
     `;
 
 
-    document.body.appendChild(modal);
+    document.body.appendChild(
+        modal
+    );
 
 
     function fecharModal() {
+
         modal.remove();
+
     }
 
 
     document
-        .getElementById("fecharGrupos")
+        .getElementById(
+            "fecharGrupos"
+        )
         ?.addEventListener(
             "click",
             fecharModal
@@ -544,7 +673,9 @@ async function abrirSeletorGrupos() {
 
 
     document
-        .getElementById("cancelarGrupos")
+        .getElementById(
+            "cancelarGrupos"
+        )
         ?.addEventListener(
             "click",
             fecharModal
@@ -555,8 +686,13 @@ async function abrirSeletorGrupos() {
         "click",
         event => {
 
-            if (event.target === modal) {
+            if (
+                event.target ===
+                modal
+            ) {
+
                 fecharModal();
+
             }
 
         }
@@ -564,7 +700,9 @@ async function abrirSeletorGrupos() {
 
 
     document
-        .getElementById("confirmarGrupos")
+        .getElementById(
+            "confirmarGrupos"
+        )
         ?.addEventListener(
             "click",
             () => {
@@ -574,31 +712,43 @@ async function abrirSeletorGrupos() {
                         ".grupoCheckbox:checked"
                     );
 
-                gruposSelecionados = [];
+
+                gruposSelecionados =
+                    [];
 
 
-                marcados.forEach(input => {
+                marcados.forEach(
+                    input => {
 
-                    const grupo =
-                        grupos.find(
-                            item =>
-                                String(item.id) ===
-                                String(input.value)
-                        );
+                        const grupo =
+                            grupos.find(
+                                item =>
+                                    String(
+                                        item.id
+                                    ) ===
+                                    String(
+                                        input.value
+                                    )
+                            );
 
-                    if (grupo) {
 
-                        gruposSelecionados.push(
-                            grupo
-                        );
+                        if (grupo) {
+
+                            gruposSelecionados
+                                .push(
+                                    grupo
+                                );
+
+                        }
+
                     }
-
-                });
+                );
 
 
                 renderizarGruposSelecionados();
 
                 fecharModal();
+
             }
         );
 }
@@ -615,10 +765,13 @@ function renderizarGruposSelecionados() {
             "listaGruposSelecionados"
         );
 
+
     if (!area) return;
 
 
-    if (!gruposSelecionados.length) {
+    if (
+        !gruposSelecionados.length
+    ) {
 
         area.innerHTML =
             "Nenhum grupo selecionado.";
@@ -627,10 +780,13 @@ function renderizarGruposSelecionados() {
     }
 
 
+    area.style.textAlign =
+        "left";
+
+
     area.innerHTML = `
 
         <div style="
-            text-align:left;
             margin-bottom:12px;
         ">
 
@@ -642,32 +798,37 @@ function renderizarGruposSelecionados() {
         </div>
 
 
-        ${gruposSelecionados.map(grupo => `
+        ${
+            gruposSelecionados
+                .map(
+                    grupo => `
 
-            <div style="
-                display:flex;
-                align-items:center;
-                justify-content:space-between;
-                padding:11px;
-                border:1px solid #e2e8f0;
-                border-radius:8px;
-                margin-bottom:7px;
-                text-align:left;
-            ">
+                        <div style="
+                            display:flex;
+                            align-items:center;
+                            justify-content:space-between;
+                            padding:11px;
+                            border:1px solid #e2e8f0;
+                            border-radius:8px;
+                            margin-bottom:7px;
+                        ">
 
-                <div>
+                            <strong>
+                                👥 ${escaparHTML(
+                                    grupo.name
+                                )}
+                            </strong>
 
-                    <strong>
-                        👥 ${escaparHTML(grupo.name)}
-                    </strong>
+                        </div>
 
-                </div>
+                    `
+                )
+                .join("")
+        }
 
-            </div>
-
-        `).join("")}
     `;
 }
+
 
 // ======================================
 // ENCONTRAR GRUPOS
@@ -677,20 +838,33 @@ function abrirEncontrarGrupos() {
 
     esconderVisaoGeral();
 
-    if (!conteudoDinamico) return;
+    if (!conteudoDinamico) {
+        return;
+    }
 
-    conteudoDinamico.style.display = "block";
+
+    conteudoDinamico.style.display =
+        "block";
+
 
     conteudoDinamico.innerHTML = `
+
         <section class="area">
 
-            <div style="margin-bottom:20px;">
+            <div style="
+                margin-bottom:20px;
+            ">
 
-                <h2 style="margin:0 0 6px;">
+                <h2 style="
+                    margin:0 0 6px;
+                ">
                     🔎 Encontrar grupos
                 </h2>
 
-                <p style="margin:0;color:#64748b;">
+                <p style="
+                    margin:0;
+                    color:#64748b;
+                ">
                     Pesquise grupos do Facebook por palavra-chave.
                 </p>
 
@@ -702,6 +876,7 @@ function abrirEncontrarGrupos() {
                 <label>
                     Palavra-chave ou nicho
                 </label>
+
 
                 <div style="
                     display:flex;
@@ -715,7 +890,9 @@ function abrirEncontrarGrupos() {
                         placeholder="Ex: imóveis Campinas, renda extra, carros..."
                     >
 
+
                     <button
+                        type="button"
                         id="buscarGruposFacebook"
                         class="btn-divulgacao-primary"
                     >
@@ -729,20 +906,28 @@ function abrirEncontrarGrupos() {
 
             <div
                 class="publicacao-box"
-                style="margin-top:18px;"
+                style="
+                    margin-top:18px;
+                "
             >
 
                 <div style="
                     display:flex;
                     justify-content:space-between;
                     align-items:center;
+                    gap:10px;
                 ">
 
-                    <h3 style="margin:0;">
+                    <h3 style="
+                        margin:0;
+                    ">
                         👥 Grupos encontrados
                     </h3>
 
-                    <span id="quantidadeGruposEncontrados">
+
+                    <span
+                        id="quantidadeGruposEncontrados"
+                    >
                         0 encontrados
                     </span>
 
@@ -756,6 +941,7 @@ function abrirEncontrarGrupos() {
                 ">
 
                     <button
+                        type="button"
                         id="carregarResultadosGrupos"
                         class="btn-divulgacao-secondary"
                     >
@@ -780,510 +966,906 @@ function abrirEncontrarGrupos() {
             </div>
 
         </section>
-    `;
-
-
-    // BOTÃO BUSCAR NO FACEBOOK
-
-    document
-        .getElementById("buscarGruposFacebook")
-        ?.addEventListener("click", () => {
-
-            const termo =
-                document
-                    .getElementById("termoBuscaGrupos")
-                    ?.value
-                    .trim();
-
-            if (!termo) {
-
-                alert(
-                    "Digite uma palavra-chave para buscar grupos."
-                );
-
-                return;
-            }
-
-            window.postMessage(
-                {
-                    source: "PROJETOX_APP",
-                    type: "PESQUISAR_GRUPOS_FACEBOOK",
-                    termo: termo
-                },
-                "*"
-            );
-
-            const resultado =
-                document.getElementById(
-                    "resultadoBuscaGrupos"
-                );
-
-            resultado.innerHTML = `
-                🔎 Buscando grupos relacionados a
-                <strong>${escaparHTML(termo)}</strong>...
-                <br><br>
-                A busca será aberta no Facebook.
-            `;
-
-        });
-
-
-    // BOTÃO CARREGAR RESULTADOS CAPTURADOS
-
-    document
-        .getElementById("carregarResultadosGrupos")
-        ?.addEventListener("click", () => {
-
-            const resultado =
-                document.getElementById(
-                    "resultadoBuscaGrupos"
-                );
-
-            if (resultado) {
-
-                resultado.innerHTML =
-                    "🔄 Carregando grupos capturados...";
-
-            }
-
-            window.postMessage(
-                {
-                    source: "PROJETOX_APP",
-                    type: "CARREGAR_GRUPOS_CAPTURADOS"
-                },
-                "*"
-            );
-
-        });
-
-}
-
-// ======================================
-// RECEBER GRUPOS CAPTURADOS
-// ======================================
-
-window.addEventListener("message", event => {
-
-    if (event.source !== window) return;
-
-    if (
-        event.data?.source !== "PROJETOX_EXTENSION" ||
-        event.data?.type !== "GRUPOS_CAPTURADOS"
-    ) {
-        return;
-    }
-
-    const grupos =
-        event.data.grupos || [];
-
-    const termo =
-        event.data.termo || "";
-
-    const resultado =
-        document.getElementById(
-            "resultadoBuscaGrupos"
-        );
-
-    const quantidade =
-        document.getElementById(
-            "quantidadeGruposEncontrados"
-        );
-
-    if (!resultado) return;
-
-    if (quantidade) {
-        quantidade.textContent =
-            `${grupos.length} encontrados`;
-    }
-
-    if (!grupos.length) {
-
-        resultado.innerHTML =
-            "Nenhum grupo capturado.";
-
-        return;
-    }
-
-    resultado.style.textAlign = "left";
-    resultado.style.padding = "10px";
-
-    resultado.innerHTML = `
-
-        <div style="
-            padding:12px;
-            margin-bottom:15px;
-            background:#f8fafc;
-            border-radius:9px;
-        ">
-
-            <strong>
-                🔎 ${escaparHTML(termo)}
-            </strong>
-
-            <div style="
-                margin-top:5px;
-                font-size:12px;
-                color:#64748b;
-            ">
-                ${grupos.length} grupos encontrados
-            </div>
-
-        </div>
-
-
-        <div style="
-            display:flex;
-            gap:10px;
-            flex-wrap:wrap;
-            margin-bottom:15px;
-        ">
-
-            <button
-                id="selecionarTodosEncontrados"
-                class="btn-divulgacao-secondary"
-            >
-                ☑ Selecionar todos
-            </button>
-
-            <button
-                id="desmarcarTodosEncontrados"
-                class="btn-divulgacao-secondary"
-            >
-                ☐ Desmarcar todos
-            </button>
-
-            <button
-                id="salvarGruposEncontrados"
-                class="btn-divulgacao-primary"
-            >
-                💾 Salvar selecionados
-            </button>
-
-        </div>
-
-
-        ${grupos.map((grupo, indice) => `
-
-            <label style="
-                display:flex;
-                gap:12px;
-                padding:12px;
-                margin-bottom:8px;
-                border:1px solid #e2e8f0;
-                border-radius:9px;
-                cursor:pointer;
-            ">
-
-                <input
-                    type="checkbox"
-                    class="grupoEncontradoCheckbox"
-                    data-indice="${indice}"
-                >
-
-                <div>
-
-                    <strong>
-                        👥 ${escaparHTML(grupo.nome)}
-                    </strong>
-
-                    <div style="
-                        margin-top:4px;
-                        font-size:11px;
-                        color:#64748b;
-                        word-break:break-all;
-                    ">
-                        ${escaparHTML(grupo.url)}
-                    </div>
-
-                </div>
-
-            </label>
-
-        `).join("")}
 
     `;
 
 
-    // ======================================
-    // SELECIONAR TODOS
-    // ======================================
+// ======================================
+// BOTÃO BUSCAR
+// ======================================
 
     document
         .getElementById(
-            "selecionarTodosEncontrados"
-        )
-        ?.addEventListener("click", () => {
-
-            document
-                .querySelectorAll(
-                    ".grupoEncontradoCheckbox"
-                )
-                .forEach(input => {
-                    input.checked = true;
-                });
-
-        });
-
-
-    // ======================================
-    // DESMARCAR TODOS
-    // ======================================
-
-    document
-        .getElementById(
-            "desmarcarTodosEncontrados"
-        )
-        ?.addEventListener("click", () => {
-
-            document
-                .querySelectorAll(
-                    ".grupoEncontradoCheckbox"
-                )
-                .forEach(input => {
-                    input.checked = false;
-                });
-
-        });
-
-
-    // ======================================
-    // SALVAR SELECIONADOS
-    // ======================================
-
-    document
-        .getElementById(
-            "salvarGruposEncontrados"
+            "buscarGruposFacebook"
         )
         ?.addEventListener(
             "click",
-            async () => {
+            () => {
 
-                const marcados =
-                    resultado.querySelectorAll(
-                        ".grupoEncontradoCheckbox:checked"
-                    );
-
-                if (!marcados.length) {
-
-                    alert(
-                        "Selecione pelo menos um grupo."
-                    );
-
-                    return;
-                }
-
-                const cliente =
-                    window.supabaseClient;
-
-                if (!cliente) {
-
-                    alert(
-                        "Conexão com o banco não encontrada."
-                    );
-
-                    return;
-                }
-
-                const { data: sessao } =
-                    await cliente.auth.getSession();
-
-                const usuario =
-                    sessao?.session?.user;
-
-                if (!usuario) {
-
-                    alert(
-                        "Usuário não conectado."
-                    );
-
-                    return;
-                }
-
-                const selecionados = [];
-
-                marcados.forEach(input => {
-
-                    const indice =
-                        Number(
-                            input.dataset.indice
-                        );
-
-                    const grupo =
-                        grupos[indice];
-
-                    if (grupo) {
-                        selecionados.push(grupo);
-                    }
-
-                });
-
-                const gruposUnicos =
-                    Array.from(
-                        new Map(
-                            selecionados.map(
-                                grupo => [
-                                    grupo.url,
-                                    grupo
-                                ]
-                            )
-                        ).values()
-                    );
-
-                const {
-                    data: gruposExistentes,
-                    error: erroExistentes
-                } =
-                    await cliente
-                        .from("grupos")
-                        .select("url")
-                        .eq(
-                            "user_id",
-                            usuario.id
-                        );
-
-                if (erroExistentes) {
-
-                    console.error(
-                        erroExistentes
-                    );
-
-                    alert(
-                        "Erro ao verificar grupos já cadastrados."
-                    );
-
-                    return;
-                }
-
-                const urlsExistentes =
-                    new Set(
-                        (gruposExistentes || [])
-                            .map(
-                                grupo => grupo.url
-                            )
-                    );
-
-                const novosGrupos =
-                    gruposUnicos
-                        .filter(
-                            grupo =>
-                                grupo.url &&
-                                !urlsExistentes.has(
-                                    grupo.url
-                                )
+                const termo =
+                    document
+                        .getElementById(
+                            "termoBuscaGrupos"
                         )
-                        .map(grupo => ({
+                        ?.value
+                        .trim();
 
-                            user_id:
-                                usuario.id,
 
-                            name:
-                                grupo.nome,
-
-                            url:
-                                grupo.url,
-
-                            status:
-                                "ativo"
-
-                        }));
-
-                if (!novosGrupos.length) {
+                if (!termo) {
 
                     alert(
-                        "✅ Todos os grupos selecionados já estão salvos."
+                        "Digite uma palavra-chave para buscar grupos."
                     );
 
                     return;
                 }
 
-                const {
-                    error: erroSalvar
-                } =
-                    await cliente
-                        .from("grupos")
-                        .insert(
-                            novosGrupos
-                        );
 
-                if (erroSalvar) {
+                window.postMessage(
+                    {
+                        source:
+                            "PROJETOX_APP",
 
-                    console.error(
-                        erroSalvar
+                        type:
+                            "PESQUISAR_GRUPOS_FACEBOOK",
+
+                        termo:
+                            termo
+                    },
+                    "*"
+                );
+
+
+                const resultado =
+                    document.getElementById(
+                        "resultadoBuscaGrupos"
                     );
 
-                    alert(
-                        "Erro ao salvar grupos: " +
+
+                if (resultado) {
+
+                    resultado.innerHTML = `
+
+                        🔎 Buscando grupos relacionados a
+                        <strong>
+                            ${escaparHTML(termo)}
+                        </strong>...
+
+                        <br><br>
+
+                        A busca será aberta no Facebook.
+
+                    `;
+
+                }
+
+            }
+        );
+
+
+// ======================================
+// BOTÃO CARREGAR RESULTADOS
+// ======================================
+
+    document
+        .getElementById(
+            "carregarResultadosGrupos"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                const resultado =
+                    document.getElementById(
+                        "resultadoBuscaGrupos"
+                    );
+
+
+                if (resultado) {
+
+                    resultado.innerHTML =
+                        "🔄 Carregando grupos capturados...";
+
+                }
+
+
+                window.postMessage(
+                    {
+                        source:
+                            "PROJETOX_APP",
+
+                        type:
+                            "CARREGAR_GRUPOS_CAPTURADOS"
+                    },
+                    "*"
+                );
+
+            }
+        );
+}
+
+
+// ======================================
+// RECEBER GRUPOS DA EXTENSÃO
+// ======================================
+
+window.addEventListener(
+    "message",
+    event => {
+
+        if (
+            event.source !==
+            window
+        ) {
+            return;
+        }
+
+
+        if (
+            event.data?.source !==
+                "PROJETOX_EXTENSION" ||
+
+            event.data?.type !==
+                "GRUPOS_CAPTURADOS"
+        ) {
+
+            return;
+        }
+
+
+        const grupos =
+            Array.isArray(
+                event.data.grupos
+            )
+                ? event.data.grupos
+                : [];
+
+
+        const termo =
+            event.data.termo || "";
+
+
+        gruposEncontradosAtuais =
+            grupos;
+
+
+        const resultado =
+            document.getElementById(
+                "resultadoBuscaGrupos"
+            );
+
+
+        const quantidade =
+            document.getElementById(
+                "quantidadeGruposEncontrados"
+            );
+
+
+        if (!resultado) {
+            return;
+        }
+
+
+        if (quantidade) {
+
+            quantidade.textContent =
+                `${grupos.length} encontrados`;
+
+        }
+
+
+        if (!grupos.length) {
+
+            resultado.innerHTML =
+                "Nenhum grupo capturado.";
+
+            return;
+        }
+
+
+        resultado.style.textAlign =
+            "left";
+
+        resultado.style.padding =
+            "10px";
+
+
+        resultado.innerHTML = `
+
+            <div style="
+                padding:12px;
+                margin-bottom:15px;
+                background:#f8fafc;
+                border-radius:9px;
+            ">
+
+                <strong>
+                    🔎 ${escaparHTML(
+                        termo
+                    )}
+                </strong>
+
+                <div style="
+                    margin-top:5px;
+                    font-size:12px;
+                    color:#64748b;
+                ">
+                    ${grupos.length}
+                    grupos encontrados
+                </div>
+
+            </div>
+
+
+            <div style="
+                display:flex;
+                gap:10px;
+                flex-wrap:wrap;
+                margin-bottom:15px;
+            ">
+
+                <button
+                    type="button"
+                    id="selecionarTodosEncontrados"
+                    class="btn-divulgacao-secondary"
+                >
+                    ☑ Selecionar todos
+                </button>
+
+
+                <button
+                    type="button"
+                    id="desmarcarTodosEncontrados"
+                    class="btn-divulgacao-secondary"
+                >
+                    ☐ Desmarcar todos
+                </button>
+
+
+                <button
+                    type="button"
+                    id="salvarGruposEncontrados"
+                    class="btn-divulgacao-primary"
+                >
+                    💾 Salvar selecionados
+                </button>
+
+            </div>
+
+
+            ${
+                grupos
+                    .map(
                         (
-                            erroSalvar.message ||
-                            "erro desconhecido"
-                        )
-                    );
+                            grupo,
+                            indice
+                        ) => `
 
-                    return;
+                            <label style="
+                                display:flex;
+                                gap:12px;
+                                align-items:flex-start;
+                                padding:12px;
+                                margin-bottom:8px;
+                                border:1px solid #e2e8f0;
+                                border-radius:9px;
+                                cursor:pointer;
+                            ">
+
+                                <input
+                                    type="checkbox"
+                                    class="grupoEncontradoCheckbox"
+                                    data-indice="${indice}"
+                                >
+
+                                <div>
+
+                                    <strong>
+                                        👥 ${escaparHTML(
+                                            grupo.nome
+                                        )}
+                                    </strong>
+
+
+                                    <div style="
+                                        margin-top:4px;
+                                        font-size:11px;
+                                        color:#64748b;
+                                        word-break:break-all;
+                                    ">
+                                        ${escaparHTML(
+                                            grupo.url
+                                        )}
+                                    </div>
+
+                                </div>
+
+                            </label>
+
+                        `
+                    )
+                    .join("")
+            }
+
+        `;
+
+    }
+);
+
+
+// ======================================
+// AÇÕES DOS GRUPOS ENCONTRADOS
+// ======================================
+
+document.addEventListener(
+    "click",
+    async event => {
+
+        const elemento =
+            event.target;
+
+
+        if (
+            !(elemento instanceof Element)
+        ) {
+
+            return;
+        }
+
+
+        const botao =
+            elemento.closest(
+                "button"
+            );
+
+
+        if (!botao) {
+            return;
+        }
+
+
+// ======================================
+// SELECIONAR TODOS
+// ======================================
+
+        if (
+            botao.id ===
+            "selecionarTodosEncontrados"
+        ) {
+
+            event.preventDefault();
+
+            const checkboxes =
+                document.querySelectorAll(
+                    ".grupoEncontradoCheckbox"
+                );
+
+
+            checkboxes.forEach(
+                checkbox => {
+
+                    checkbox.checked =
+                        true;
+
                 }
+            );
 
-                const repetidos =
-                    gruposUnicos.length -
-                    novosGrupos.length;
+
+            console.log(
+                `✅ ${checkboxes.length} grupos marcados.`
+            );
+
+
+            return;
+        }
+
+
+// ======================================
+// DESMARCAR TODOS
+// ======================================
+
+        if (
+            botao.id ===
+            "desmarcarTodosEncontrados"
+        ) {
+
+            event.preventDefault();
+
+
+            const checkboxes =
+                document.querySelectorAll(
+                    ".grupoEncontradoCheckbox"
+                );
+
+
+            checkboxes.forEach(
+                checkbox => {
+
+                    checkbox.checked =
+                        false;
+
+                }
+            );
+
+
+            console.log(
+                "✅ Todos os grupos foram desmarcados."
+            );
+
+
+            return;
+        }
+
+
+// ======================================
+// SALVAR SELECIONADOS
+// ======================================
+
+        if (
+            botao.id !==
+            "salvarGruposEncontrados"
+        ) {
+
+            return;
+        }
+
+
+        event.preventDefault();
+
+
+        const marcados =
+            document.querySelectorAll(
+                ".grupoEncontradoCheckbox:checked"
+            );
+
+
+        if (!marcados.length) {
+
+            alert(
+                "Selecione pelo menos um grupo."
+            );
+
+            return;
+        }
+
+
+        const cliente =
+            window.supabaseClient;
+
+
+        if (!cliente) {
+
+            alert(
+                "Conexão com o banco não encontrada."
+            );
+
+            return;
+        }
+
+
+// ======================================
+// USUÁRIO LOGADO
+// ======================================
+
+        let usuario;
+
+
+        try {
+
+            const {
+                data,
+                error
+            } =
+                await cliente.auth
+                    .getSession();
+
+
+            if (error) {
+
+                console.error(
+                    "Erro de sessão:",
+                    error
+                );
 
                 alert(
-                    `✅ ${novosGrupos.length} grupo(s) salvo(s)!` +
-                    (
-                        repetidos
-                            ? `\n${repetidos} já estavam cadastrados.`
-                            : ""
-                    )
+                    "Erro ao verificar usuário conectado."
+                );
+
+                return;
+            }
+
+
+            usuario =
+                data?.session?.user;
+
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao verificar sessão:",
+                erro
+            );
+
+            alert(
+                "Não foi possível verificar sua sessão."
+            );
+
+            return;
+        }
+
+
+        if (!usuario) {
+
+            alert(
+                "Usuário não conectado."
+            );
+
+            return;
+        }
+
+
+// ======================================
+// PEGAR GRUPOS MARCADOS
+// ======================================
+
+        const selecionados =
+            [];
+
+
+        marcados.forEach(
+            checkbox => {
+
+                const indice =
+                    Number(
+                        checkbox.dataset
+                            .indice
+                    );
+
+
+                const grupo =
+                    gruposEncontradosAtuais[
+                        indice
+                    ];
+
+
+                if (
+                    grupo &&
+                    grupo.url &&
+                    grupo.nome
+                ) {
+
+                    selecionados.push(
+                        grupo
+                    );
+
+                }
+
+            }
+        );
+
+
+        if (!selecionados.length) {
+
+            alert(
+                "Não foi possível identificar os grupos selecionados."
+            );
+
+            return;
+        }
+
+
+// ======================================
+// REMOVER DUPLICADOS DA SELEÇÃO
+// ======================================
+
+        const mapaGrupos =
+            new Map();
+
+
+        selecionados.forEach(
+            grupo => {
+
+                mapaGrupos.set(
+                    grupo.url,
+                    grupo
                 );
 
             }
         );
 
-});
+
+        const gruposUnicos =
+            Array.from(
+                mapaGrupos.values()
+            );
 
 
 // ======================================
-// MENU
+// BUSCAR GRUPOS JÁ SALVOS
 // ======================================
 
-botoesMenu.forEach(botao => {
-
-    botao.addEventListener(
-        "click",
-        () => {
-
-            botoesMenu.forEach(item => {
-                item.classList.remove("active");
-            });
-
-            botao.classList.add("active");
-
-            const view =
-                botao.dataset.view;
+        let gruposExistentes =
+            [];
 
 
-            if (view === "visao-geral") {
+        try {
 
-                mostrarVisaoGeral();
+            const {
+                data,
+                error
+            } =
+                await cliente
+                    .from("grupos")
+                    .select("url")
+                    .eq(
+                        "user_id",
+                        usuario.id
+                    );
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao verificar grupos:",
+                    error
+                );
+
+                alert(
+                    "Erro ao verificar grupos já cadastrados."
+                );
 
                 return;
             }
 
 
-            if (view === "postar-grupos") {
+            gruposExistentes =
+                data || [];
 
-                abrirPostarGrupos();
+
+        } catch (erro) {
+
+            console.error(
+                "Erro Supabase:",
+                erro
+            );
+
+            alert(
+                "Erro ao acessar os grupos cadastrados."
+            );
+
+            return;
+        }
+
+
+// ======================================
+// FILTRAR GRUPOS NOVOS
+// ======================================
+
+        const urlsExistentes =
+            new Set(
+                gruposExistentes
+                    .map(
+                        grupo =>
+                            grupo.url
+                    )
+            );
+
+
+        const novosGrupos =
+            gruposUnicos
+                .filter(
+                    grupo =>
+                        !urlsExistentes.has(
+                            grupo.url
+                        )
+                )
+                .map(
+                    grupo => ({
+
+                        user_id:
+                            usuario.id,
+
+                        name:
+                            grupo.nome,
+
+                        url:
+                            grupo.url,
+
+                        status:
+                            "ativo"
+
+                    })
+                );
+
+
+// ======================================
+// TODOS JÁ EXISTEM
+// ======================================
+
+        if (
+            !novosGrupos.length
+        ) {
+
+            alert(
+                "✅ Todos os grupos selecionados já estão salvos."
+            );
+
+            return;
+        }
+
+
+// ======================================
+// SALVAR
+// ======================================
+
+        const textoOriginal =
+            botao.innerHTML;
+
+
+        botao.disabled =
+            true;
+
+        botao.innerHTML =
+            "⏳ Salvando...";
+
+
+        try {
+
+            const {
+                error
+            } =
+                await cliente
+                    .from("grupos")
+                    .insert(
+                        novosGrupos
+                    );
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao salvar grupos:",
+                    error
+                );
+
+                alert(
+                    "Erro ao salvar grupos: " +
+                    (
+                        error.message ||
+                        "erro desconhecido"
+                    )
+                );
 
                 return;
             }
 
-            if (view === "grupos") {
 
-    abrirEncontrarGrupos();
+            const repetidos =
+                gruposUnicos.length -
+                novosGrupos.length;
 
-    return;
-}
+
+            let mensagem =
+                `✅ ${novosGrupos.length} grupo(s) salvo(s) com sucesso!`;
+
+
+            if (repetidos > 0) {
+
+                mensagem +=
+                    `\n${repetidos} grupo(s) já estavam cadastrados.`;
+
+            }
+
+
+            alert(
+                mensagem
+            );
+
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao salvar:",
+                erro
+            );
+
+            alert(
+                "Erro inesperado ao salvar grupos."
+            );
+
+
+        } finally {
+
+            botao.disabled =
+                false;
+
+            botao.innerHTML =
+                textoOriginal;
 
         }
-    );
 
-});
+    }
+);
+
+
+// ======================================
+// MENU DA DIVULGAÇÃO
+// ======================================
+
+botoesMenu.forEach(
+    botao => {
+
+        botao.addEventListener(
+            "click",
+            () => {
+
+                botoesMenu.forEach(
+                    item => {
+
+                        item.classList
+                            .remove(
+                                "active"
+                            );
+
+                    }
+                );
+
+
+                botao.classList.add(
+                    "active"
+                );
+
+
+                const view =
+                    botao.dataset.view;
+
+
+// ======================================
+// VISÃO GERAL
+// ======================================
+
+                if (
+                    view ===
+                    "visao-geral"
+                ) {
+
+                    mostrarVisaoGeral();
+
+                    return;
+                }
+
+
+// ======================================
+// POSTAR EM GRUPOS
+// ======================================
+
+                if (
+                    view ===
+                    "postar-grupos"
+                ) {
+
+                    abrirPostarGrupos();
+
+                    return;
+                }
+
+
+// ======================================
+// ENCONTRAR GRUPOS
+// ======================================
+
+                if (
+                    view ===
+                    "grupos"
+                ) {
+
+                    abrirEncontrarGrupos();
+
+                    return;
+                }
+
+            }
+        );
+
+    }
+);
