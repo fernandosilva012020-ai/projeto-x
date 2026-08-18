@@ -6,25 +6,24 @@ window.addEventListener("message", event => {
 
     if (
         event.data?.source !== "PROJETOX_APP" ||
-        event.data?.type !== "BUSCAR_GRUPOS_CAPTURADOS"
+        event.data?.type !== "PESQUISAR_GRUPOS_FACEBOOK"
     ) {
         return;
     }
 
-    chrome.storage.local.get(
-        ["gruposEncontrados"],
-        resultado => {
+    const termo =
+        String(event.data?.termo || "").trim();
 
-            window.postMessage(
-                {
-                    source: "PROJETOX_EXTENSION",
-                    type: "GRUPOS_CAPTURADOS",
-                    grupos: resultado.gruposEncontrados || []
-                },
-                "*"
-            );
+    if (!termo) return;
 
-        }
-    );
+    chrome.storage.local.set({
+        buscaGruposProjetoX: termo,
+        gruposEncontrados: []
+    });
 
+    const url =
+        "https://www.facebook.com/search/groups?q=" +
+        encodeURIComponent(termo);
+
+    window.open(url, "_blank");
 });
