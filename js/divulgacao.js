@@ -9,7 +9,7 @@ const cardsVisaoGeral =
 
 const areasVisaoGeral =
     document.querySelectorAll(".area");
-
+let gruposSelecionados = [];
 
 // ======================================
 // VISÃO GERAL
