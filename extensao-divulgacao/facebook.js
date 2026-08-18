@@ -2,12 +2,37 @@ console.log("✅ Projeto X Divulgação carregado no Facebook");
 
 
 // ======================================
+// VERIFICAR CONTEXTO DA EXTENSÃO
+// ======================================
+
+function extensaoEstaAtiva() {
+
+    try {
+
+        return Boolean(
+            chrome &&
+            chrome.runtime &&
+            chrome.runtime.id &&
+            chrome.storage &&
+            chrome.storage.local
+        );
+
+    } catch {
+
+        return false;
+
+    }
+}
+
+
+// ======================================
 // VERIFICAR SE ESTÁ NA BUSCA DE GRUPOS
 // ======================================
 
 function obterTermoBusca() {
 
-    const url = new URL(window.location.href);
+    const url =
+        new URL(window.location.href);
 
     const termo =
         url.searchParams.get("q") || "";
@@ -19,41 +44,147 @@ function obterTermoBusca() {
 function estaNaBuscaDeGrupos() {
 
     return (
-        window.location.pathname.includes("/search/groups")
+        window.location.pathname.includes(
+            "/search/groups"
+        )
     );
 }
 
 
 // ======================================
-// CRIAR BOTÃO
+// REMOVER BOTÃO ANTIGO
 // ======================================
 
-if (!document.getElementById("projetox-capturar-grupos")) {
+const botaoAntigo =
+    document.getElementById(
+        "projetox-capturar-grupos"
+    );
 
-    const botao = document.createElement("button");
+if (botaoAntigo) {
 
-    botao.id = "projetox-capturar-grupos";
+    botaoAntigo.remove();
 
-    botao.textContent =
-        "🔎 Capturar grupos desta busca";
+}
 
-    botao.style.cssText = `
-        position:fixed;
-        right:20px;
-        bottom:20px;
-        z-index:99999999;
-        background:#111827;
-        color:#ffffff;
-        border:none;
-        border-radius:10px;
-        padding:13px 17px;
-        font-size:14px;
-        font-weight:bold;
-        cursor:pointer;
-        box-shadow:0 8px 25px rgba(0,0,0,.35);
-    `;
 
-    document.body.appendChild(botao);
+// ======================================
+// CRIAR BOTÃO NOVO
+// ======================================
+
+const botao =
+    document.createElement("button");
+
+botao.id =
+    "projetox-capturar-grupos";
+
+botao.textContent =
+    "🔎 Capturar grupos desta busca";
+
+botao.style.cssText = `
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    z-index:99999999;
+    background:#111827;
+    color:#ffffff;
+    border:none;
+    border-radius:10px;
+    padding:13px 17px;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 8px 25px rgba(0,0,0,.35);
+`;
+
+document.body.appendChild(botao);
+
+
+// ======================================
+// SALVAR GRUPOS NA EXTENSÃO
+// ======================================
+
+function salvarGruposCapturados(
+    termo,
+    grupos
+) {
+
+    if (!extensaoEstaAtiva()) {
+
+        alert(
+            "⚠️ A extensão foi atualizada. Feche esta aba do Facebook e abra novamente."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        chrome.storage.local.set(
+            {
+                termoBuscaGrupos: termo,
+
+                gruposEncontrados:
+                    grupos,
+
+                dataCapturaGrupos:
+                    new Date().toISOString()
+            },
+            () => {
+
+                try {
+
+                    if (
+                        chrome.runtime.lastError
+                    ) {
+
+                        console.warn(
+                            "Projeto X:",
+                            chrome.runtime.lastError.message
+                        );
+
+                        return;
+                    }
+
+
+                    alert(
+                        `✅ ${grupos.length} grupo(s) encontrados para "${termo}".`
+                    );
+
+
+                    console.log(
+                        "👥 Projeto X - resultados:",
+                        {
+                            termo,
+                            grupos
+                        }
+                    );
+
+                } catch {
+
+                    console.warn(
+                        "⚠️ Contexto da extensão foi atualizado."
+                    );
+
+                }
+
+            }
+        );
+
+    } catch (erro) {
+
+        console.warn(
+            "⚠️ Não foi possível acessar a extensão:",
+            erro
+        );
+
+
+        alert(
+            "⚠️ A extensão foi atualizada. Feche esta aba do Facebook e abra uma nova."
+        );
+
+    }
+
 }
 
 
@@ -90,12 +221,14 @@ function capturarGruposFacebook() {
 
         let nome =
             (link.innerText || "")
-            .trim()
-            .replace(/\s+/g, " ");
+                .trim()
+                .replace(/\s+/g, " ");
 
 
         if (!nome) {
+
             return;
+
         }
 
 
@@ -104,7 +237,9 @@ function capturarGruposFacebook() {
 
 
         if (!url) {
+
             return;
+
         }
 
 
@@ -120,7 +255,6 @@ function capturarGruposFacebook() {
                     .filter(Boolean);
 
 
-            // Precisamos de /groups/IDENTIFICADOR
             const indiceGroups =
                 partes.indexOf("groups");
 
@@ -129,7 +263,9 @@ function capturarGruposFacebook() {
                 indiceGroups === -1 ||
                 !partes[indiceGroups + 1]
             ) {
+
                 return;
+
             }
 
 
@@ -137,7 +273,6 @@ function capturarGruposFacebook() {
                 partes[indiceGroups + 1];
 
 
-            // Ignorar páginas internas do Facebook
             const ignorar = [
                 "feed",
                 "discover",
@@ -152,7 +287,9 @@ function capturarGruposFacebook() {
                     identificador.toLowerCase()
                 )
             ) {
+
                 return;
+
             }
 
 
@@ -164,6 +301,7 @@ function capturarGruposFacebook() {
         } catch {
 
             return;
+
         }
 
 
@@ -175,7 +313,9 @@ function capturarGruposFacebook() {
 
 
         if (repetido) {
+
             return;
+
         }
 
 
@@ -187,30 +327,11 @@ function capturarGruposFacebook() {
     });
 
 
-    chrome.storage.local.set(
-        {
-            termoBuscaGrupos: termo,
-            gruposEncontrados: grupos,
-            dataCapturaGrupos:
-                new Date().toISOString()
-        },
-        () => {
-
-            alert(
-                `✅ ${grupos.length} grupo(s) encontrados para "${termo}".`
-            );
-
-
-            console.log(
-                "👥 Projeto X - resultados:",
-                {
-                    termo,
-                    grupos
-                }
-            );
-
-        }
+    salvarGruposCapturados(
+        termo,
+        grupos
     );
+
 }
 
 
@@ -218,11 +339,7 @@ function capturarGruposFacebook() {
 // CLIQUE
 // ======================================
 
-document
-    .getElementById(
-        "projetox-capturar-grupos"
-    )
-    ?.addEventListener(
-        "click",
-        capturarGruposFacebook
-    );
+botao.addEventListener(
+    "click",
+    capturarGruposFacebook
+);
