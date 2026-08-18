@@ -331,15 +331,15 @@ async function abrirSeletorGrupos() {
 
     if (error) {
 
-        console.error(
-            "Erro ao carregar grupos:",
-            error
-        );
+    console.error("Erro ao carregar grupos:", error);
 
-        alert("Erro ao carregar os grupos.");
+    alert(
+        "Erro ao carregar grupos: " +
+        (error.message || "erro desconhecido")
+    );
 
-        return;
-    }
+    return;
+}
 
 
     const modalAntigo =
