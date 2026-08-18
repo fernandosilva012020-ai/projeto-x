@@ -12,182 +12,104 @@
 
 </head>
 
-
 <body>
-
 
 <div class="app">
 
-
 <aside class="sidebar">
-
 
 <div class="logo">
 🚀 Projeto X
 </div>
 
-
 <nav>
 
-
-<a href="dashboard.html">
-🏠 Dashboard
-</a>
-
-
-<a href="sbcforge.html">
-⚽ SBCForge
-</a>
-
-
-<a href="divulgacao.html">
-📢 Divulgação
-</a>
-
-
-<a href="templates.html">
-📁 Templates
-</a>
-
+<a href="dashboard.html">🏠 Dashboard</a>
+<a href="sbcforge.html">⚽ SBCForge</a>
+<a href="divulgacao.html">📢 Divulgação</a>
+<a href="templates.html">📁 Templates</a>
 
 <a class="active" href="grupos.html">
 👥 Grupos
 </a>
 
-
-<a href="estatisticas.html">
-📈 Estatísticas
-</a>
-
-
-<a href="assinatura.html">
-💳 Assinatura
-</a>
-
-
-<a href="perfil.html">
-👤 Meu Perfil
-</a>
-
-
-<a href="configuracoes.html">
-⚙ Configurações
-</a>
-
+<a href="estatisticas.html">📈 Estatísticas</a>
+<a href="assinatura.html">💳 Assinatura</a>
+<a href="perfil.html">👤 Meu Perfil</a>
+<a href="configuracoes.html">⚙ Configurações</a>
 
 </nav>
-
 
 <button onclick="logout()" class="logout">
 🚪 Sair
 </button>
 
-
 </aside>
-
-
-
 
 
 <main class="content">
 
-
 <header class="topbar">
-
 
 <div>
 
-<h1>
-👥 Grupos
-</h1>
-
+<h1>👥 Grupos</h1>
 
 <p>
 Gerencie seus grupos de divulgação.
 </p>
 
-
 </div>
 
-
 <div id="usuario" class="user"></div>
-
 
 </header>
 
 
-
-
-
 <section class="cards">
 
-
 <div class="card">
 
-<h3>
-Grupos cadastrados
-</h3>
+<h3>Grupos cadastrados</h3>
 
-<strong>
-0
-</strong>
+<strong id="totalGrupos">0</strong>
 
 </div>
 
 
-
 <div class="card">
 
-<h3>
-Ativos
-</h3>
+<h3>Ativos</h3>
 
-<strong>
-0
-</strong>
+<strong id="totalAtivos">0</strong>
 
 </div>
 
 
-
 <div class="card">
 
-<h3>
-Campanhas vinculadas
-</h3>
+<h3>Campanhas vinculadas</h3>
 
-<strong>
-0
-</strong>
+<strong>0</strong>
 
 </div>
-
 
 </section>
 
 
-
-
-
 <section class="area">
 
-
-<h2>
-Gerenciamento de grupos
-</h2>
-
+<h2>Gerenciamento de grupos</h2>
 
 <div class="actions">
 
-
-<a href="#">
+<a href="#" id="adicionarGrupo">
 ➕
 
 <span>
 Adicionar grupo
 </span>
 </a>
-
 
 
 <a href="#">
@@ -199,7 +121,6 @@ Lista de grupos
 </a>
 
 
-
 <a href="#">
 🏷️
 
@@ -207,7 +128,6 @@ Lista de grupos
 Categorias
 </span>
 </a>
-
 
 
 <a href="#">
@@ -218,46 +138,32 @@ Sincronizar extensão
 </span>
 </a>
 
-
 </div>
 
-
 </section>
-
-
 
 
 <section class="area">
 
+<h2>Meus grupos</h2>
 
-<h2>
-Meus grupos
-</h2>
-
-
-<p>
-Nenhum grupo cadastrado ainda.
-</p>
-
+<div id="listaGrupos">
+Carregando grupos...
+</div>
 
 </section>
 
-
-
-
 </main>
 
-
 </div>
-
-
-
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="js/config.js"></script>
+<script src="js/auth.js"></script>
 <script src="js/protect.js"></script>
+<script src="js/grupos.js"></script>
 
 <script>
 
@@ -266,6 +172,4 @@ protectPage("grupos");
 </script>
 
 </body>
-
 </html>
-
