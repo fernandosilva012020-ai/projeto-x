@@ -321,7 +321,7 @@ async function abrirSeletorGrupos() {
 
     const { data: grupos, error } =
         await cliente
-            .from("igrupos")
+            .from("grupos")
             .select("id, name, url, status")
             .eq("user_id", usuario.id)
             .order("created_at", {
