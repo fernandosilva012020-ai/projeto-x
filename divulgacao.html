@@ -3,311 +3,438 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Divulgação - Projeto X</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<link rel="stylesheet" href="css/dashboard.css">
-    
-<link rel="stylesheet" href="css/divulgacao.css">   
+    <title>
+        Divulgação - Projeto X
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="css/dashboard.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/divulgacao.css"
+    >
 
 </head>
 
 
 <body>
 
-
 <div class="app">
 
 
-<aside class="sidebar">
+    <!-- ======================================
+         MENU LATERAL
+    ======================================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            🚀 Projeto X
+        </div>
 
 
-<div class="logo">
-🚀 Projeto X
+        <nav>
+
+            <a href="dashboard.html">
+                🏠 Dashboard
+            </a>
+
+            <a href="sbcforge.html">
+                ⚽ SBCForge
+            </a>
+
+            <a
+                class="active"
+                href="divulgacao.html"
+            >
+                📢 Divulgação
+            </a>
+
+            <a href="templates.html">
+                📁 Templates
+            </a>
+
+            <a href="grupos.html">
+                👥 Grupos
+            </a>
+
+            <a href="estatisticas.html">
+                📈 Estatísticas
+            </a>
+
+            <a href="assinatura.html">
+                💳 Assinatura
+            </a>
+
+            <a href="perfil.html">
+                👤 Meu Perfil
+            </a>
+
+            <a href="configuracoes.html">
+                ⚙ Configurações
+            </a>
+
+        </nav>
+
+
+        <button
+            type="button"
+            onclick="logout()"
+            class="logout"
+        >
+            🚪 Sair
+        </button>
+
+    </aside>
+
+
+
+    <!-- ======================================
+         CONTEÚDO
+    ======================================= -->
+
+    <main class="content">
+
+
+        <!-- TOPO -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>
+                    📢 Divulgação
+                </h1>
+
+                <p>
+                    Central de campanhas e compartilhamentos.
+                </p>
+
+            </div>
+
+
+            <div
+                id="usuario"
+                class="user"
+            ></div>
+
+        </header>
+
+
+
+        <!-- ======================================
+             MENU INTERNO DA DIVULGAÇÃO
+        ======================================= -->
+
+        <div class="divulgacao-menu">
+
+            <button
+                type="button"
+                class="active"
+                data-view="visao-geral"
+            >
+                📊 Visão Geral
+            </button>
+
+
+            <button
+                type="button"
+                data-view="postar-grupos"
+            >
+                📢 Postar em Grupos
+            </button>
+
+
+            <button
+                type="button"
+                data-view="marketplace"
+            >
+                🛒 Marketplace
+            </button>
+
+
+            <button
+                type="button"
+                data-view="agendamentos"
+            >
+                📅 Agendamentos
+            </button>
+
+
+            <button
+                type="button"
+                data-view="grupos"
+            >
+                🔎 Encontrar grupos
+            </button>
+
+
+            <button
+                type="button"
+                data-view="metricas"
+            >
+                📈 Métricas
+            </button>
+
+
+            <button
+                type="button"
+                data-view="contas"
+            >
+                👤 Contas
+            </button>
+
+
+            <button
+                type="button"
+                data-view="logs"
+            >
+                📋 Logs
+            </button>
+
+        </div>
+
+
+
+        <!-- ======================================
+             ÁREA DINÂMICA
+        ======================================= -->
+
+        <div
+            id="divulgacao-conteudo-dinamico"
+            style="display:none;"
+        ></div>
+
+
+
+        <!-- ======================================
+             CARDS PRINCIPAIS
+        ======================================= -->
+
+        <section class="cards">
+
+            <div class="card">
+
+                <h3>
+                    Campanhas
+                </h3>
+
+                <strong>
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    Grupos cadastrados
+                </h3>
+
+                <strong>
+                    0
+                </strong>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ======================================
+             MÉTRICAS
+        ======================================= -->
+
+        <section class="cards">
+
+            <div class="card">
+
+                <h3>
+                    👤 Contas conectadas
+                </h3>
+
+                <strong id="totalContas">
+                    0
+                </strong>
+
+                <p>
+                    Facebook
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    📢 Posts hoje
+                </h3>
+
+                <strong id="postsHoje">
+                    0
+                </strong>
+
+                <p>
+                    Publicações realizadas
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    📈 Posts esta semana
+                </h3>
+
+                <strong id="postsSemana">
+                    0
+                </strong>
+
+                <p>
+                    Últimos 7 dias
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    📅 Agendamentos
+                </h3>
+
+                <strong id="totalAgendamentos">
+                    0
+                </strong>
+
+                <p>
+                    Próximas publicações
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ======================================
+             AÇÕES RÁPIDAS
+        ======================================= -->
+
+        <section class="area">
+
+            <h2>
+                Ações rápidas
+            </h2>
+
+
+            <div class="actions">
+
+                <a href="#">
+                    📢
+                    <span>
+                        Nova campanha
+                    </span>
+                </a>
+
+
+                <a href="grupos.html">
+                    👥
+                    <span>
+                        Gerenciar grupos
+                    </span>
+                </a>
+
+
+                <a href="templates.html">
+                    📝
+                    <span>
+                        Criar template
+                    </span>
+                </a>
+
+
+                <a href="#">
+                    🚀
+                    <span>
+                        Extensão
+                    </span>
+                </a>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ======================================
+             STATUS
+        ======================================= -->
+
+        <section class="area">
+
+            <h2>
+                Status da divulgação
+            </h2>
+
+            <p>
+                Nenhuma campanha criada ainda.
+            </p>
+
+        </section>
+
+
+    </main>
+
 </div>
 
 
-<nav>
 
+<!-- ======================================
+     SCRIPTS
+======================================= -->
 
-<a href="dashboard.html">
-🏠 Dashboard
-</a>
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
 
-
-<a href="sbcforge.html">
-⚽ SBCForge
-</a>
-
-
-<a class="active" href="divulgacao.html">
-📢 Divulgação
-</a>
-
-
-<a href="templates.html">
-📁 Templates
-</a>
-
-
-<a href="grupos.html">
-👥 Grupos
-</a>
-
-
-<a href="estatisticas.html">
-📈 Estatísticas
-</a>
-
-
-<a href="assinatura.html">
-💳 Assinatura
-</a>
-
-
-<a href="perfil.html">
-👤 Meu Perfil
-</a>
-
-
-<a href="configuracoes.html">
-⚙ Configurações
-</a>
-
-
-</nav>
-
-
-<button onclick="logout()" class="logout">
-🚪 Sair
-</button>
-
-
-</aside>
-
-
-
-
-
-<main class="content">
-
-
-<header class="topbar">
-
-
-<div>
-
-<h1>
-📢 Divulgação
-</h1>
-
-
-<p>
-Central de campanhas e compartilhamentos.
-</p>
-
-
-</div>
-
-
-<div id="usuario" class="user"></div>
-
-
-</header>
-
-
-<div class="divulgacao-menu">
-
-    <button class="active" data-view="visao-geral">
-        📊 Visão Geral
-    </button>
-
-    <button data-view="postar-grupos">
-        📢 Postar em Grupos
-    </button>
-
-    <button data-view="marketplace">
-        🛒 Marketplace
-    </button>
-
-    <button data-view="agendamentos">
-        📅 Agendamentos
-    </button>
-
-   <button data-view="grupos">
-    🔎 Encontrar grupos
-</button>
-
-    <button data-view="metricas">
-        📈 Métricas
-    </button>
-
-    <button data-view="contas">
-        👤 Contas
-    </button>
-
-    <button data-view="logs">
-        📋 Logs
-    </button>
-
-</div>
-    
-<div id="divulgacao-conteudo-dinamico" style="display:none;"></div>
-    
-<section class="cards">
-
-
-<div class="card">
-
-<h3>
-Campanhas
-</h3>
-
-<strong>
-0
-</strong>
-
-</div>
-
-
-
-<div class="card">
-
-<h3>
-Grupos cadastrados
-</h3>
-
-<strong>
-0
-</strong>
-
-</div>
-
-<section class="cards">
-
-    <div class="card">
-        <h3>👤 Contas conectadas</h3>
-        <strong id="totalContas">0</strong>
-        <p>Facebook</p>
-    </div>
-
-    <div class="card">
-        <h3>📢 Posts hoje</h3>
-        <strong id="postsHoje">0</strong>
-        <p>Publicações realizadas</p>
-    </div>
-
-    <div class="card">
-        <h3>📈 Posts esta semana</h3>
-        <strong id="postsSemana">0</strong>
-        <p>Últimos 7 dias</p>
-    </div>
-
-    <div class="card">
-        <h3>📅 Agendamentos</h3>
-        <strong id="totalAgendamentos">0</strong>
-        <p>Próximas publicações</p>
-    </div>
-
-</section>
-
-<section class="area">
-
-
-<h2>
-Ações rápidas
-</h2>
-
-
-<div class="actions">
-
-
-<a href="#">
-📢
-<span>
-Nova campanha
-</span>
-</a>
-
-
-
-<a href="grupos.html">
-👥
-<span>
-Gerenciar grupos
-</span>
-</a>
-
-
-
-<a href="templates.html">
-📝
-<span>
-Criar template
-</span>
-</a>
-
-
-
-<a href="#">
-🚀
-<span>
-Extensão
-</span>
-</a>
-
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-<section class="area">
-
-
-<h2>
-Status da divulgação
-</h2>
-
-
-<p>
-Nenhuma campanha criada ainda.
-</p>
-
-
-</section>
-
-
-
-
-</main>
-
-
-</div>
-
-
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="js/config.js"></script>
+
 <script src="js/auth.js"></script>
+
 <script src="js/protect.js"></script>
-    
+
+
 <script>
-protectPage("divulgacao");
+
+    protectPage(
+        "divulgacao"
+    );
+
 </script>
-    
-<script src="js/divulgacao.js"></script>
-    
+
+
+<!--
+    v=10 força o navegador a buscar
+    a versão nova do JavaScript
+-->
+
+<script src="js/divulgacao.js?v=10"></script>
+
+
 </body>
 
 </html>
