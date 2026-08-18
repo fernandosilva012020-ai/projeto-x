@@ -1,13 +1,14 @@
 {
   "manifest_version": 3,
   "name": "Projeto X Divulgação",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Integração de divulgação do Projeto X com o Facebook.",
   "permissions": [
     "storage"
   ],
   "host_permissions": [
-    "https://www.facebook.com/*"
+    "https://www.facebook.com/*",
+    "https://projeto-x.fernandosilva012020.workers.dev/*"
   ],
   "content_scripts": [
     {
@@ -16,6 +17,15 @@
       ],
       "js": [
         "facebook.js"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://projeto-x.fernandosilva012020.workers.dev/*"
+      ],
+      "js": [
+        "projectx.js"
       ],
       "run_at": "document_idle"
     }
