@@ -838,6 +838,13 @@ botoesMenu.forEach(botao => {
                 return;
             }
 
+            if (view === "grupos") {
+
+    abrirEncontrarGrupos();
+
+    return;
+}
+
         }
     );
 
