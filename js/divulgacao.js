@@ -748,20 +748,22 @@ function abrirEncontrarGrupos() {
 
                 </div>
 
-<div style="
-    display:flex;
-    justify-content:flex-end;
-    margin-top:15px;
-">
 
-    <button
-        id="carregarResultadosGrupos"
-        class="btn-divulgacao-secondary"
-    >
-        📥 Carregar resultados
-    </button>
+                <div style="
+                    display:flex;
+                    justify-content:flex-end;
+                    margin-top:15px;
+                ">
 
-</div>
+                    <button
+                        id="carregarResultadosGrupos"
+                        class="btn-divulgacao-secondary"
+                    >
+                        📥 Carregar resultados
+                    </button>
+
+                </div>
+
 
                 <div
                     id="resultadoBuscaGrupos"
@@ -781,47 +783,79 @@ function abrirEncontrarGrupos() {
     `;
 
 
+    // BOTÃO BUSCAR NO FACEBOOK
+
     document
-    .getElementById("buscarGruposFacebook")
-    ?.addEventListener("click", () => {
+        .getElementById("buscarGruposFacebook")
+        ?.addEventListener("click", () => {
 
-        const termo =
-            document
-                .getElementById("termoBuscaGrupos")
-                ?.value
-                .trim();
+            const termo =
+                document
+                    .getElementById("termoBuscaGrupos")
+                    ?.value
+                    .trim();
 
-        if (!termo) {
+            if (!termo) {
 
-            alert(
-                "Digite uma palavra-chave para buscar grupos."
+                alert(
+                    "Digite uma palavra-chave para buscar grupos."
+                );
+
+                return;
+            }
+
+            window.postMessage(
+                {
+                    source: "PROJETOX_APP",
+                    type: "PESQUISAR_GRUPOS_FACEBOOK",
+                    termo: termo
+                },
+                "*"
             );
 
-            return;
-        }
+            const resultado =
+                document.getElementById(
+                    "resultadoBuscaGrupos"
+                );
 
-        window.postMessage(
-            {
-                source: "PROJETOX_APP",
-                type: "PESQUISAR_GRUPOS_FACEBOOK",
-                termo: termo
-            },
-            "*"
-        );
+            resultado.innerHTML = `
+                🔎 Buscando grupos relacionados a
+                <strong>${escaparHTML(termo)}</strong>...
+                <br><br>
+                A busca será aberta no Facebook.
+            `;
 
-        const resultado =
-            document.getElementById(
-                "resultadoBuscaGrupos"
+        });
+
+
+    // BOTÃO CARREGAR RESULTADOS CAPTURADOS
+
+    document
+        .getElementById("carregarResultadosGrupos")
+        ?.addEventListener("click", () => {
+
+            const resultado =
+                document.getElementById(
+                    "resultadoBuscaGrupos"
+                );
+
+            if (resultado) {
+
+                resultado.innerHTML =
+                    "🔄 Carregando grupos capturados...";
+
+            }
+
+            window.postMessage(
+                {
+                    source: "PROJETOX_APP",
+                    type: "CARREGAR_GRUPOS_CAPTURADOS"
+                },
+                "*"
             );
 
-        resultado.innerHTML = `
-            🔎 Buscando grupos relacionados a
-            <strong>${escaparHTML(termo)}</strong>...
-            <br><br>
-            A busca será aberta no Facebook.
-        `;
+        });
 
-    });
 }
 
 // ======================================
