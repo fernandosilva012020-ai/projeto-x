@@ -1,1 +1,23 @@
-
+{
+  "manifest_version": 3,
+  "name": "Projeto X Divulgação",
+  "version": "0.1.0",
+  "description": "Integração de divulgação do Projeto X com o Facebook.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://www.facebook.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.facebook.com/*"
+      ],
+      "js": [
+        "facebook.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
