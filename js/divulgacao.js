@@ -37,24 +37,48 @@ function escaparHTML(texto = "") {
 
 
 // ======================================
+// DATA E HORA
+// ======================================
+
+function formatarDataHora(valor) {
+
+    if (!valor) {
+        return "Sem data definida";
+    }
+
+    const data =
+        new Date(valor);
+
+    if (
+        Number.isNaN(
+            data.getTime()
+        )
+    ) {
+        return "Data inválida";
+    }
+
+    return data.toLocaleString(
+        "pt-BR",
+        {
+            dateStyle: "short",
+            timeStyle: "short"
+        }
+    );
+}
+
+
+// ======================================
 // VISÃO GERAL
 // ======================================
 
 function esconderVisaoGeral() {
 
     cardsVisaoGeral.forEach(card => {
-
-        card.style.display =
-            "none";
-
+        card.style.display = "none";
     });
 
-
     areasVisaoGeral.forEach(area => {
-
-        area.style.display =
-            "none";
-
+        area.style.display = "none";
     });
 }
 
@@ -62,20 +86,12 @@ function esconderVisaoGeral() {
 function mostrarVisaoGeral() {
 
     cardsVisaoGeral.forEach(card => {
-
-        card.style.display =
-            "";
-
+        card.style.display = "";
     });
-
 
     areasVisaoGeral.forEach(area => {
-
-        area.style.display =
-            "";
-
+        area.style.display = "";
     });
-
 
     if (conteudoDinamico) {
 
@@ -84,7 +100,6 @@ function mostrarVisaoGeral() {
 
         conteudoDinamico.innerHTML =
             "";
-
     }
 }
 
@@ -99,10 +114,8 @@ function abrirPostarGrupos() {
 
     if (!conteudoDinamico) return;
 
-
     conteudoDinamico.style.display =
         "block";
-
 
     conteudoDinamico.innerHTML = `
 
@@ -145,13 +158,11 @@ function abrirPostarGrupos() {
 
             <div class="publicacao-grid">
 
-
                 <div class="publicacao-box">
 
                     <h3>
                         ✍️ Publicação
                     </h3>
-
 
                     <label>
                         Nome da campanha
@@ -192,7 +203,6 @@ function abrirPostarGrupos() {
                     <h3>
                         ⚙️ Configurações
                     </h3>
-
 
                     <label>
                         Intervalo entre publicações
@@ -283,7 +293,6 @@ function abrirPostarGrupos() {
                     👥 Grupos selecionados
                 </h3>
 
-
                 <div
                     id="listaGruposSelecionados"
                     style="
@@ -313,7 +322,6 @@ function abrirPostarGrupos() {
                     💾 Salvar campanha
                 </button>
 
-
                 <button
                     type="button"
                     id="iniciarPublicacao"
@@ -334,7 +342,6 @@ function abrirPostarGrupos() {
             "tipoPublicacao"
         );
 
-
     const areaAgendamento =
         document.getElementById(
             "areaAgendamento"
@@ -350,13 +357,11 @@ function abrirPostarGrupos() {
                     return;
                 }
 
-
                 areaAgendamento.style.display =
                     tipoPublicacao.value ===
                     "agendar"
                         ? "block"
                         : "none";
-
             }
         );
 
@@ -370,345 +375,44 @@ function abrirPostarGrupos() {
             abrirSeletorGrupos
         );
 
-// ======================================
-// SALVAR CAMPANHA
-// ======================================
 
-document
-    .getElementById("salvarCampanha")
-    ?.addEventListener(
-        "click",
-        async () => {
-
-            const cliente =
-                window.supabaseClient;
-
-            if (!cliente) {
-
-                alert(
-                    "Conexão com o banco não encontrada."
-                );
-
-                return;
-            }
+    document
+        .getElementById(
+            "salvarCampanha"
+        )
+        ?.addEventListener(
+            "click",
+            salvarCampanha
+        );
 
 
-            // USUÁRIO LOGADO
-
-            const {
-                data: sessao,
-                error: erroSessao
-            } =
-                await cliente.auth.getSession();
-
-
-            if (erroSessao) {
-
-                console.error(
-                    erroSessao
-                );
+    document
+        .getElementById(
+            "iniciarPublicacao"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
 
                 alert(
-                    "Erro ao verificar usuário."
+                    "🚀 A publicação automática será configurada na próxima etapa."
                 );
-
-                return;
             }
+        );
 
 
-            const usuario =
-                sessao?.session?.user;
-
-
-            if (!usuario) {
-
-                alert(
-                    "Usuário não conectado."
-                );
-
-                return;
-            }
-
-
-            // DADOS DA CAMPANHA
-
-            const nome =
-                document
-                    .getElementById(
-                        "nomeCampanha"
-                    )
-                    ?.value
-                    .trim();
-
-
-            const conteudo =
-                document
-                    .getElementById(
-                        "textoPublicacao"
-                    )
-                    ?.value
-                    .trim();
-
-
-            const intervalo =
-                Number(
-                    document
-                        .getElementById(
-                            "intervaloPublicacao"
-                        )
-                        ?.value || 15
-                );
-
-
-            const modo =
-                document
-                    .getElementById(
-                        "tipoPublicacao"
-                    )
-                    ?.value || "agora";
-
-
-            if (!nome) {
-
-                alert(
-                    "Digite o nome da campanha."
-                );
-
-                return;
-            }
-
-
-            if (!conteudo) {
-
-                alert(
-                    "Digite o texto da publicação."
-                );
-
-                return;
-            }
-
-
-            if (
-                !gruposSelecionados.length
-            ) {
-
-                alert(
-                    "Selecione pelo menos um grupo."
-                );
-
-                return;
-            }
-
-
-            // AGENDAMENTO
-
-            let agendadoPara =
-                null;
-
-
-            if (modo === "agendar") {
-
-                const data =
-                    document
-                        .getElementById(
-                            "dataAgendamento"
-                        )
-                        ?.value;
-
-
-                const hora =
-                    document
-                        .getElementById(
-                            "horaAgendamento"
-                        )
-                        ?.value;
-
-
-                if (!data || !hora) {
-
-                    alert(
-                        "Escolha a data e o horário."
-                    );
-
-                    return;
-                }
-
-
-                agendadoPara =
-                    new Date(
-                        `${data}T${hora}:00`
-                    )
-                    .toISOString();
-
-            }
-
-
-            const botao =
-                document.getElementById(
-                    "salvarCampanha"
-                );
-
-
-            const textoOriginal =
-                botao.textContent;
-
-
-            botao.disabled =
-                true;
-
-
-            botao.textContent =
-                "⏳ Salvando...";
-
-
-            try {
-
-                // CRIAR CAMPANHA
-
-                const {
-                    data: campanha,
-                    error: erroCampanha
-                } =
-                    await cliente
-                        .from("campaigns")
-                        .insert({
-
-                            user_id:
-                                usuario.id,
-
-                            name:
-                                nome,
-
-                            content:
-                                conteudo,
-
-                            media_url:
-                                null,
-
-                            interval_minutes:
-                                intervalo,
-
-                            publish_mode:
-                                modo,
-
-                            scheduled_at:
-                                agendadoPara,
-
-                            status:
-                                modo === "agendar"
-                                    ? "agendada"
-                                    : "rascunho"
-
-                        })
-                        .select("id")
-                        .single();
-
-
-                if (erroCampanha) {
-
-                    console.error(
-                        "Erro campanha:",
-                        erroCampanha
-                    );
-
-                    alert(
-                        "Erro ao salvar campanha: " +
-                        erroCampanha.message
-                    );
-
-                    return;
-                }
-
-
-                // VINCULAR GRUPOS
-
-                const vinculos =
-                    gruposSelecionados.map(
-                        grupo => ({
-
-                            campaign_id:
-                                campanha.id,
-
-                            group_id:
-                                grupo.id,
-
-                            status:
-                                "pendente"
-
-                        })
-                    );
-
-
-                const {
-                    error: erroGrupos
-                } =
-                    await cliente
-                        .from(
-                            "campaign_groups"
-                        )
-                        .insert(
-                            vinculos
-                        );
-
-
-                if (erroGrupos) {
-
-                    console.error(
-                        "Erro grupos:",
-                        erroGrupos
-                    );
-
-                    alert(
-                        "Campanha criada, mas houve erro ao vincular os grupos: " +
-                        erroGrupos.message
-                    );
-
-                    return;
-                }
-
-
-                alert(
-                    `✅ Campanha "${nome}" salva com sucesso!\n\n👥 ${gruposSelecionados.length} grupo(s) vinculados.`
-                );
-
-
-            } catch (erro) {
-
-                console.error(
-                    erro
-                );
-
-                alert(
-                    "Erro inesperado ao salvar campanha."
-                );
-
-
-            } finally {
-
-                botao.disabled =
-                    false;
-
-                botao.textContent =
-                    textoOriginal;
-
-            }
-
-        }
-    );
-    
     renderizarGruposSelecionados();
 }
 
 
 // ======================================
-// SELECIONAR GRUPOS SALVOS
+// SALVAR CAMPANHA
 // ======================================
 
-async function abrirSeletorGrupos() {
+async function salvarCampanha() {
 
     const cliente =
         window.supabaseClient;
-
 
     if (!cliente) {
 
@@ -724,8 +428,337 @@ async function abrirSeletorGrupos() {
         data: sessao,
         error: erroSessao
     } =
-        await cliente.auth
-            .getSession();
+        await cliente.auth.getSession();
+
+
+    if (erroSessao) {
+
+        console.error(
+            "Erro de sessão:",
+            erroSessao
+        );
+
+        alert(
+            "Erro ao verificar usuário."
+        );
+
+        return;
+    }
+
+
+    const usuario =
+        sessao?.session?.user;
+
+
+    if (!usuario) {
+
+        alert(
+            "Usuário não conectado."
+        );
+
+        return;
+    }
+
+
+    const nome =
+        document
+            .getElementById(
+                "nomeCampanha"
+            )
+            ?.value
+            .trim();
+
+
+    const conteudo =
+        document
+            .getElementById(
+                "textoPublicacao"
+            )
+            ?.value
+            .trim();
+
+
+    const intervalo =
+        Number(
+            document
+                .getElementById(
+                    "intervaloPublicacao"
+                )
+                ?.value || 15
+        );
+
+
+    const modo =
+        document
+            .getElementById(
+                "tipoPublicacao"
+            )
+            ?.value || "agora";
+
+
+    if (!nome) {
+
+        alert(
+            "Digite o nome da campanha."
+        );
+
+        return;
+    }
+
+
+    if (!conteudo) {
+
+        alert(
+            "Digite o texto da publicação."
+        );
+
+        return;
+    }
+
+
+    if (!gruposSelecionados.length) {
+
+        alert(
+            "Selecione pelo menos um grupo."
+        );
+
+        return;
+    }
+
+
+    let agendadoPara =
+        null;
+
+
+    if (modo === "agendar") {
+
+        const data =
+            document
+                .getElementById(
+                    "dataAgendamento"
+                )
+                ?.value;
+
+
+        const hora =
+            document
+                .getElementById(
+                    "horaAgendamento"
+                )
+                ?.value;
+
+
+        if (!data || !hora) {
+
+            alert(
+                "Escolha a data e o horário."
+            );
+
+            return;
+        }
+
+
+        const dataLocal =
+            new Date(
+                `${data}T${hora}:00`
+            );
+
+
+        if (
+            Number.isNaN(
+                dataLocal.getTime()
+            )
+        ) {
+
+            alert(
+                "Data ou horário inválido."
+            );
+
+            return;
+        }
+
+
+        agendadoPara =
+            dataLocal.toISOString();
+    }
+
+
+    const botao =
+        document.getElementById(
+            "salvarCampanha"
+        );
+
+
+    const textoOriginal =
+        botao?.textContent ||
+        "💾 Salvar campanha";
+
+
+    if (botao) {
+
+        botao.disabled = true;
+
+        botao.textContent =
+            "⏳ Salvando...";
+    }
+
+
+    try {
+
+        const {
+            data: campanha,
+            error: erroCampanha
+        } =
+            await cliente
+                .from("campaigns")
+                .insert({
+
+                    user_id:
+                        usuario.id,
+
+                    name:
+                        nome,
+
+                    content:
+                        conteudo,
+
+                    media_url:
+                        null,
+
+                    interval_minutes:
+                        intervalo,
+
+                    publish_mode:
+                        modo,
+
+                    scheduled_at:
+                        agendadoPara,
+
+                    status:
+                        modo === "agendar"
+                            ? "agendada"
+                            : "rascunho"
+
+                })
+                .select("id")
+                .single();
+
+
+        if (erroCampanha) {
+
+            console.error(
+                "Erro campanha:",
+                erroCampanha
+            );
+
+            alert(
+                "Erro ao salvar campanha: " +
+                erroCampanha.message
+            );
+
+            return;
+        }
+
+
+        const vinculos =
+            gruposSelecionados.map(
+                grupo => ({
+
+                    campaign_id:
+                        campanha.id,
+
+                    group_id:
+                        grupo.id,
+
+                    status:
+                        "pendente"
+
+                })
+            );
+
+
+        const {
+            error: erroGrupos
+        } =
+            await cliente
+                .from(
+                    "campaign_groups"
+                )
+                .insert(
+                    vinculos
+                );
+
+
+        if (erroGrupos) {
+
+            console.error(
+                "Erro grupos:",
+                erroGrupos
+            );
+
+            alert(
+                "Campanha criada, mas houve erro ao vincular os grupos: " +
+                erroGrupos.message
+            );
+
+            return;
+        }
+
+
+        alert(
+            `✅ Campanha "${nome}" salva com sucesso!\n\n👥 ${gruposSelecionados.length} grupo(s) vinculados.`
+        );
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro inesperado ao salvar campanha:",
+            erro
+        );
+
+        alert(
+            "Erro inesperado ao salvar campanha."
+        );
+
+
+    } finally {
+
+        if (botao) {
+
+            botao.disabled = false;
+
+            botao.textContent =
+                textoOriginal;
+        }
+    }
+}
+
+
+// ======================================
+// SELECIONAR GRUPOS SALVOS
+// ======================================
+
+async function abrirSeletorGrupos() {
+
+    const cliente =
+        window.supabaseClient;
+
+    if (!cliente) {
+
+        alert(
+            "Conexão com o banco não encontrada."
+        );
+
+        return;
+    }
+
+
+    const {
+        data: sessao,
+        error: erroSessao
+    } =
+        await cliente.auth.getSession();
 
 
     if (erroSessao) {
@@ -784,7 +817,6 @@ async function abrirSeletorGrupos() {
             "Erro ao carregar grupos:",
             error
         );
-
 
         alert(
             "Erro ao carregar grupos: " +
@@ -848,9 +880,7 @@ async function abrirSeletorGrupos() {
 
                 <div>
 
-                    <h2 style="
-                        margin:0 0 5px;
-                    ">
+                    <h2 style="margin:0 0 5px;">
                         👥 Selecionar grupos
                     </h2>
 
@@ -1190,12 +1220,9 @@ function abrirEncontrarGrupos() {
                 margin-bottom:20px;
             ">
 
-                <h2 style="
-                    margin:0 0 6px;
-                ">
+                <h2 style="margin:0 0 6px;">
                     🔎 Encontrar grupos
                 </h2>
-
 
                 <p style="
                     margin:0;
@@ -1213,7 +1240,6 @@ function abrirEncontrarGrupos() {
                     Palavra-chave ou nicho
                 </label>
 
-
                 <div style="
                     display:flex;
                     gap:10px;
@@ -1225,7 +1251,6 @@ function abrirEncontrarGrupos() {
                         type="text"
                         placeholder="Ex: imóveis Campinas, renda extra, carros..."
                     >
-
 
                     <button
                         type="button"
@@ -1252,12 +1277,9 @@ function abrirEncontrarGrupos() {
                     gap:10px;
                 ">
 
-                    <h3 style="
-                        margin:0;
-                    ">
+                    <h3 style="margin:0;">
                         👥 Grupos encontrados
                     </h3>
-
 
                     <span
                         id="quantidadeGruposEncontrados"
@@ -1303,10 +1325,6 @@ function abrirEncontrarGrupos() {
 
     `;
 
-
-// ======================================
-// BUSCAR NO FACEBOOK
-// ======================================
 
     document
         .getElementById(
@@ -1365,9 +1383,7 @@ function abrirEncontrarGrupos() {
                         🔎 Buscando grupos relacionados a
 
                         <strong>
-                            ${escaparHTML(
-                                termo
-                            )}
+                            ${escaparHTML(termo)}
                         </strong>...
 
                         <br><br>
@@ -1381,10 +1397,6 @@ function abrirEncontrarGrupos() {
             }
         );
 
-
-// ======================================
-// CARREGAR RESULTADOS
-// ======================================
 
     document
         .getElementById(
@@ -1455,6 +1467,7 @@ window.addEventListener(
         ) {
 
             return;
+
         }
 
 
@@ -1487,9 +1500,7 @@ window.addEventListener(
             );
 
 
-        if (!resultado) {
-            return;
-        }
+        if (!resultado) return;
 
 
         if (quantidade) {
@@ -1506,6 +1517,7 @@ window.addEventListener(
                 "Nenhum grupo capturado.";
 
             return;
+
         }
 
 
@@ -1526,9 +1538,7 @@ window.addEventListener(
             ">
 
                 <strong>
-                    🔎 ${escaparHTML(
-                        termo
-                    )}
+                    🔎 ${escaparHTML(termo)}
                 </strong>
 
                 <div style="
@@ -1695,6 +1705,7 @@ document.addEventListener(
 
 
             return;
+
         }
 
 
@@ -1725,11 +1736,12 @@ document.addEventListener(
 
 
             return;
+
         }
 
 
 // ======================================
-// SALVAR SELECIONADOS
+// SALVAR GRUPOS ENCONTRADOS
 // ======================================
 
         if (
@@ -1758,6 +1770,7 @@ document.addEventListener(
             );
 
             return;
+
         }
 
 
@@ -1772,6 +1785,7 @@ document.addEventListener(
             );
 
             return;
+
         }
 
 
@@ -1779,8 +1793,7 @@ document.addEventListener(
             data: sessao,
             error: erroSessao
         } =
-            await cliente.auth
-                .getSession();
+            await cliente.auth.getSession();
 
 
         if (erroSessao) {
@@ -1795,6 +1808,7 @@ document.addEventListener(
             );
 
             return;
+
         }
 
 
@@ -1809,6 +1823,7 @@ document.addEventListener(
             );
 
             return;
+
         }
 
 
@@ -1821,8 +1836,7 @@ document.addEventListener(
 
                 const indice =
                     Number(
-                        input.dataset
-                            .indice
+                        input.dataset.indice
                     );
 
 
@@ -1837,10 +1851,9 @@ document.addEventListener(
                     grupo?.nome
                 ) {
 
-                    selecionados
-                        .push(
-                            grupo
-                        );
+                    selecionados.push(
+                        grupo
+                    );
 
                 }
 
@@ -1857,7 +1870,6 @@ document.addEventListener(
                         grupo => [
 
                             grupo.url,
-
                             grupo
 
                         ]
@@ -1893,6 +1905,7 @@ document.addEventListener(
             );
 
             return;
+
         }
 
 
@@ -1913,15 +1926,12 @@ document.addEventListener(
 
         const novosGrupos =
             gruposUnicos
-
                 .filter(
                     grupo =>
-                        !urlsExistentes
-                            .has(
-                                grupo.url
-                            )
+                        !urlsExistentes.has(
+                            grupo.url
+                        )
                 )
-
                 .map(
                     grupo => ({
 
@@ -1941,15 +1951,14 @@ document.addEventListener(
                 );
 
 
-        if (
-            !novosGrupos.length
-        ) {
+        if (!novosGrupos.length) {
 
             alert(
                 "✅ Todos os grupos selecionados já estão salvos."
             );
 
             return;
+
         }
 
 
@@ -1984,7 +1993,6 @@ document.addEventListener(
                     erroSalvar
                 );
 
-
                 alert(
                     "Erro ao salvar grupos: " +
                     (
@@ -1993,8 +2001,8 @@ document.addEventListener(
                     )
                 );
 
-
                 return;
+
             }
 
 
@@ -2007,9 +2015,7 @@ document.addEventListener(
                 `✅ ${novosGrupos.length} grupo(s) salvo(s) com sucesso!`;
 
 
-            if (
-                repetidos > 0
-            ) {
+            if (repetidos > 0) {
 
                 mensagem +=
                     `\n${repetidos} grupo(s) já estavam cadastrados.`;
@@ -2025,10 +2031,9 @@ document.addEventListener(
         } catch (erro) {
 
             console.error(
-                "Erro inesperado ao salvar:",
+                "Erro inesperado ao salvar grupos:",
                 erro
             );
-
 
             alert(
                 "Erro inesperado ao salvar grupos."
@@ -2051,13 +2056,489 @@ document.addEventListener(
 
 
 // ======================================
+// AGENDAMENTOS
+// ======================================
+
+async function abrirAgendamentos() {
+
+    esconderVisaoGeral();
+
+    if (!conteudoDinamico) return;
+
+
+    conteudoDinamico.style.display =
+        "block";
+
+
+    conteudoDinamico.innerHTML = `
+
+        <section class="area">
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:15px;
+                margin-bottom:20px;
+                flex-wrap:wrap;
+            ">
+
+                <div>
+
+                    <h2 style="margin:0 0 6px;">
+                        📅 Agendamentos
+                    </h2>
+
+                    <p style="
+                        margin:0;
+                        color:#64748b;
+                    ">
+                        Campanhas agendadas salvas no Projeto X.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="atualizarAgendamentos"
+                    class="btn-divulgacao-secondary"
+                >
+                    🔄 Atualizar
+                </button>
+
+            </div>
+
+
+            <div
+                id="listaAgendamentos"
+                class="publicacao-box"
+            >
+
+                <div style="
+                    padding:35px;
+                    text-align:center;
+                    color:#64748b;
+                ">
+                    ⏳ Carregando agendamentos...
+                </div>
+
+            </div>
+
+        </section>
+
+    `;
+
+
+    document
+        .getElementById(
+            "atualizarAgendamentos"
+        )
+        ?.addEventListener(
+            "click",
+            carregarAgendamentos
+        );
+
+
+    await carregarAgendamentos();
+}
+
+
+// ======================================
+// CARREGAR AGENDAMENTOS DO SUPABASE
+// ======================================
+
+async function carregarAgendamentos() {
+
+    const area =
+        document.getElementById(
+            "listaAgendamentos"
+        );
+
+
+    if (!area) return;
+
+
+    area.innerHTML = `
+
+        <div style="
+            padding:35px;
+            text-align:center;
+            color:#64748b;
+        ">
+            ⏳ Carregando agendamentos...
+        </div>
+
+    `;
+
+
+    const cliente =
+        window.supabaseClient;
+
+
+    if (!cliente) {
+
+        area.innerHTML = `
+
+            <div style="
+                padding:30px;
+                text-align:center;
+                color:#b91c1c;
+            ">
+                ❌ Conexão com o banco não encontrada.
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    try {
+
+        const {
+            data: sessao,
+            error: erroSessao
+        } =
+            await cliente.auth.getSession();
+
+
+        if (erroSessao) {
+
+            throw erroSessao;
+
+        }
+
+
+        const usuario =
+            sessao?.session?.user;
+
+
+        if (!usuario) {
+
+            area.innerHTML = `
+
+                <div style="
+                    padding:30px;
+                    text-align:center;
+                    color:#b91c1c;
+                ">
+                    ❌ Usuário não conectado.
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        const {
+            data: campanhas,
+            error: erroCampanhas
+        } =
+            await cliente
+                .from("campaigns")
+                .select(
+                    "id, name, status, publish_mode, scheduled_at, created_at, interval_minutes"
+                )
+                .eq(
+                    "user_id",
+                    usuario.id
+                )
+                .eq(
+                    "publish_mode",
+                    "agendar"
+                )
+                .order(
+                    "scheduled_at",
+                    {
+                        ascending: true
+                    }
+                );
+
+
+        if (erroCampanhas) {
+
+            throw erroCampanhas;
+
+        }
+
+
+        if (!campanhas?.length) {
+
+            area.innerHTML = `
+
+                <div style="
+                    padding:40px;
+                    text-align:center;
+                    color:#64748b;
+                ">
+                    📅 Nenhuma campanha agendada ainda.
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        const idsCampanhas =
+            campanhas.map(
+                campanha =>
+                    campanha.id
+            );
+
+
+        let vinculos =
+            [];
+
+
+        if (idsCampanhas.length) {
+
+            const {
+                data,
+                error: erroVinculos
+            } =
+                await cliente
+                    .from(
+                        "campaign_groups"
+                    )
+                    .select(
+                        "campaign_id"
+                    )
+                    .in(
+                        "campaign_id",
+                        idsCampanhas
+                    );
+
+
+            if (erroVinculos) {
+
+                throw erroVinculos;
+
+            }
+
+
+            vinculos =
+                data || [];
+
+        }
+
+
+        const contagemGrupos =
+            new Map();
+
+
+        vinculos.forEach(
+            vinculo => {
+
+                const atual =
+                    contagemGrupos.get(
+                        vinculo.campaign_id
+                    ) || 0;
+
+
+                contagemGrupos.set(
+                    vinculo.campaign_id,
+                    atual + 1
+                );
+
+            }
+        );
+
+
+        const agora =
+            new Date();
+
+
+        area.innerHTML = `
+
+            <div style="
+                display:flex;
+                flex-direction:column;
+                gap:12px;
+            ">
+
+                ${campanhas.map(
+                    campanha => {
+
+                        const quantidadeGrupos =
+                            contagemGrupos.get(
+                                campanha.id
+                            ) || 0;
+
+
+                        const dataAgendada =
+                            campanha.scheduled_at
+                                ? new Date(
+                                    campanha.scheduled_at
+                                )
+                                : null;
+
+
+                        const passou =
+                            dataAgendada &&
+                            dataAgendada <
+                            agora;
+
+
+                        const statusTexto =
+                            campanha.status ===
+                            "agendada"
+
+                                ? passou
+                                    ? "⏰ Horário atingido"
+                                    : "🟢 Agendada"
+
+                                : escaparHTML(
+                                    campanha.status ||
+                                    "Sem status"
+                                );
+
+
+                        return `
+
+                            <div style="
+                                border:1px solid #e2e8f0;
+                                border-radius:12px;
+                                padding:18px;
+                                background:#ffffff;
+                            ">
+
+                                <div style="
+                                    display:flex;
+                                    justify-content:space-between;
+                                    align-items:flex-start;
+                                    gap:15px;
+                                    flex-wrap:wrap;
+                                ">
+
+                                    <div style="
+                                        min-width:220px;
+                                        flex:1;
+                                    ">
+
+                                        <h3 style="
+                                            margin:0 0 8px;
+                                        ">
+                                            ${escaparHTML(
+                                                campanha.name
+                                            )}
+                                        </h3>
+
+
+                                        <div style="
+                                            display:flex;
+                                            flex-wrap:wrap;
+                                            gap:8px 18px;
+                                            color:#64748b;
+                                            font-size:13px;
+                                        ">
+
+                                            <span>
+
+                                                📅
+                                                ${escaparHTML(
+                                                    formatarDataHora(
+                                                        campanha.scheduled_at
+                                                    )
+                                                )}
+
+                                            </span>
+
+
+                                            <span>
+
+                                                👥
+                                                ${quantidadeGrupos}
+                                                grupo(s)
+
+                                            </span>
+
+
+                                            <span>
+
+                                                ⏱️
+                                                ${Number(
+                                                    campanha.interval_minutes ||
+                                                    15
+                                                )}
+                                                min
+
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div style="
+                                        font-size:13px;
+                                        font-weight:700;
+                                        padding:8px 12px;
+                                        border-radius:999px;
+                                        background:#f8fafc;
+                                        border:1px solid #e2e8f0;
+                                        white-space:nowrap;
+                                    ">
+
+                                        ${statusTexto}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        `;
+
+                    }
+
+                ).join("")}
+
+            </div>
+
+        `;
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar agendamentos:",
+            erro
+        );
+
+
+        area.innerHTML = `
+
+            <div style="
+                padding:30px;
+                text-align:center;
+                color:#b91c1c;
+            ">
+
+                ❌ Erro ao carregar agendamentos:
+
+                ${escaparHTML(
+                    erro?.message ||
+                    "erro desconhecido"
+                )}
+
+            </div>
+
+        `;
+
+    }
+}
+
+
+// ======================================
 // OUTRAS ÁREAS DO MENU
 // ======================================
 
 function abrirAreaEmBreve(view) {
 
     esconderVisaoGeral();
-
 
     if (!conteudoDinamico) return;
 
@@ -2067,11 +2548,6 @@ function abrirAreaEmBreve(view) {
         marketplace: [
             "🛒",
             "Marketplace"
-        ],
-
-        agendamentos: [
-            "📅",
-            "Agendamentos"
         ],
 
         metricas: [
@@ -2181,10 +2657,9 @@ document.addEventListener(
             .forEach(
                 item => {
 
-                    item.classList
-                        .remove(
-                            "active"
-                        );
+                    item.classList.remove(
+                        "active"
+                    );
 
                 }
             );
@@ -2217,6 +2692,7 @@ document.addEventListener(
             mostrarVisaoGeral();
 
             return;
+
         }
 
 
@@ -2232,6 +2708,7 @@ document.addEventListener(
             abrirPostarGrupos();
 
             return;
+
         }
 
 
@@ -2247,6 +2724,23 @@ document.addEventListener(
             abrirEncontrarGrupos();
 
             return;
+
+        }
+
+
+// ======================================
+// AGENDAMENTOS
+// ======================================
+
+        if (
+            view ===
+            "agendamentos"
+        ) {
+
+            abrirAgendamentos();
+
+            return;
+
         }
 
 
@@ -2258,7 +2752,6 @@ document.addEventListener(
 
             [
                 "marketplace",
-                "agendamentos",
                 "metricas",
                 "contas",
                 "logs"
