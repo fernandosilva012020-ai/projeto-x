@@ -22,32 +22,367 @@ function extensaoEstaAtiva() {
         return false;
 
     }
+
 }
 
 
 // ======================================
-// VERIFICAR SE ESTÁ NA BUSCA DE GRUPOS
+// VERIFICAR BUSCA DE GRUPOS
 // ======================================
 
 function obterTermoBusca() {
 
-    const url =
-        new URL(window.location.href);
+    try {
 
-    const termo =
-        url.searchParams.get("q") || "";
+        const url =
+            new URL(
+                window.location.href
+            );
 
-    return termo.trim();
+        const termo =
+            url.searchParams.get("q") || "";
+
+        return termo.trim();
+
+    } catch {
+
+        return "";
+
+    }
+
 }
 
 
 function estaNaBuscaDeGrupos() {
 
     return (
-        window.location.pathname.includes(
-            "/search/groups"
-        )
+        window.location.pathname
+            .includes(
+                "/search/groups"
+            )
     );
+
+}
+
+
+// ======================================
+// NORMALIZAR TEXTO
+// ======================================
+
+function normalizarTexto(
+    texto = ""
+) {
+
+    return String(texto)
+        .replace(/\s+/g, " ")
+        .trim();
+
+}
+
+
+// ======================================
+// DESCOBRIR O BLOCO DO RESULTADO
+// ======================================
+
+function obterBlocoDoGrupo(
+    link
+) {
+
+    let elemento =
+        link;
+
+
+    /*
+        O Facebook altera bastante o HTML.
+
+        Por isso subimos alguns níveis
+        procurando o bloco que contém:
+
+        - nome do grupo
+        - público / privado
+        - membros
+        - descrição
+    */
+
+    for (
+        let nivel = 0;
+        nivel < 8 && elemento;
+        nivel++
+    ) {
+
+        const texto =
+            normalizarTexto(
+                elemento.innerText || ""
+            );
+
+
+        if (
+            texto.length >= 10 &&
+            texto.length <= 1800
+        ) {
+
+            const pareceResultado =
+                /público|public group|grupo público|privado|private group|membros|members/i
+                    .test(
+                        texto
+                    );
+
+
+            if (
+                pareceResultado
+            ) {
+
+                return elemento;
+
+            }
+
+        }
+
+
+        elemento =
+            elemento.parentElement;
+
+    }
+
+
+    return link.parentElement;
+
+}
+
+
+// ======================================
+// VERIFICAR SE O GRUPO É PÚBLICO
+// ======================================
+
+function grupoEhPublico(
+    link
+) {
+
+    const bloco =
+        obterBlocoDoGrupo(
+            link
+        );
+
+
+    if (!bloco) {
+
+        return false;
+
+    }
+
+
+    const texto =
+        normalizarTexto(
+            bloco.innerText || ""
+        )
+            .toLowerCase();
+
+
+    /*
+        Português
+    */
+
+    if (
+        texto.includes(
+            "grupo público"
+        )
+    ) {
+
+        return true;
+
+    }
+
+
+    /*
+        Em algumas telas o Facebook
+        mostra apenas "Público".
+    */
+
+    if (
+        /(^|\s|·)público(\s|·|$)/i
+            .test(
+                texto
+            )
+    ) {
+
+        return true;
+
+    }
+
+
+    /*
+        Inglês, caso o Facebook
+        apareça nesse idioma.
+    */
+
+    if (
+        texto.includes(
+            "public group"
+        )
+    ) {
+
+        return true;
+
+    }
+
+
+    return false;
+
+}
+
+
+// ======================================
+// NORMALIZAR URL DO GRUPO
+// ======================================
+
+function obterUrlGrupo(
+    link
+) {
+
+    let url =
+        link.href || "";
+
+
+    if (!url) {
+
+        return null;
+
+    }
+
+
+    try {
+
+        const endereco =
+            new URL(
+                url
+            );
+
+
+        const partes =
+            endereco.pathname
+                .split("/")
+                .filter(
+                    Boolean
+                );
+
+
+        const indiceGroups =
+            partes.indexOf(
+                "groups"
+            );
+
+
+        if (
+            indiceGroups === -1 ||
+            !partes[
+                indiceGroups + 1
+            ]
+        ) {
+
+            return null;
+
+        }
+
+
+        const identificador =
+            partes[
+                indiceGroups + 1
+            ];
+
+
+        const ignorar = [
+
+            "feed",
+            "discover",
+            "create",
+            "joins",
+            "notifications",
+            "search",
+            "groups"
+
+        ];
+
+
+        if (
+            ignorar.includes(
+                identificador
+                    .toLowerCase()
+            )
+        ) {
+
+            return null;
+
+        }
+
+
+        return (
+
+            "https://www.facebook.com/groups/" +
+            identificador
+
+        );
+
+
+    } catch {
+
+        return null;
+
+    }
+
+}
+
+
+// ======================================
+// OBTER NOME DO GRUPO
+// ======================================
+
+function obterNomeGrupo(
+    link
+) {
+
+    const nome =
+        normalizarTexto(
+            link.innerText || ""
+        );
+
+
+    if (!nome) {
+
+        return null;
+
+    }
+
+
+    /*
+        Ignora textos que claramente
+        não parecem nome de grupo.
+    */
+
+    const nomesInvalidos = [
+
+        "participar",
+        "join",
+        "ver grupo",
+        "view group",
+        "grupo",
+        "groups"
+
+    ];
+
+
+    if (
+        nomesInvalidos.includes(
+            nome.toLowerCase()
+        )
+    ) {
+
+        return null;
+
+    }
+
+
+    return nome;
+
 }
 
 
@@ -60,6 +395,7 @@ const botaoAntigo =
         "projetox-capturar-grupos"
     );
 
+
 if (botaoAntigo) {
 
     botaoAntigo.remove();
@@ -68,39 +404,62 @@ if (botaoAntigo) {
 
 
 // ======================================
-// CRIAR BOTÃO NOVO
+// CRIAR BOTÃO
 // ======================================
 
 const botao =
-    document.createElement("button");
+    document.createElement(
+        "button"
+    );
+
 
 botao.id =
     "projetox-capturar-grupos";
 
+
 botao.textContent =
-    "🔎 Capturar grupos desta busca";
+    "🌐 Capturar grupos públicos";
+
 
 botao.style.cssText = `
+
     position:fixed;
+
     right:20px;
     bottom:20px;
+
     z-index:99999999;
+
     background:#111827;
+
     color:#ffffff;
+
     border:none;
+
     border-radius:10px;
+
     padding:13px 17px;
+
     font-size:14px;
+
     font-weight:bold;
+
     cursor:pointer;
-    box-shadow:0 8px 25px rgba(0,0,0,.35);
+
+    box-shadow:
+    0 8px 25px
+    rgba(0,0,0,.35);
+
 `;
 
-document.body.appendChild(botao);
+
+document.body.appendChild(
+    botao
+);
 
 
 // ======================================
-// SALVAR GRUPOS NA EXTENSÃO
+// SALVAR GRUPOS
 // ======================================
 
 function salvarGruposCapturados(
@@ -108,13 +467,16 @@ function salvarGruposCapturados(
     grupos
 ) {
 
-    if (!extensaoEstaAtiva()) {
+    if (
+        !extensaoEstaAtiva()
+    ) {
 
         alert(
             "⚠️ A extensão foi atualizada. Feche esta aba do Facebook e abra novamente."
         );
 
         return;
+
     }
 
 
@@ -122,43 +484,65 @@ function salvarGruposCapturados(
 
         chrome.storage.local.set(
             {
-                termoBuscaGrupos: termo,
+
+                termoBuscaGrupos:
+                    termo,
 
                 gruposEncontrados:
                     grupos,
 
+                filtroGrupos:
+                    "publicos",
+
                 dataCapturaGrupos:
-                    new Date().toISOString()
+                    new Date()
+                        .toISOString()
+
             },
             () => {
 
                 try {
 
                     if (
-                        chrome.runtime.lastError
+                        chrome.runtime
+                            .lastError
                     ) {
 
                         console.warn(
+
                             "Projeto X:",
-                            chrome.runtime.lastError.message
+
+                            chrome.runtime
+                                .lastError
+                                .message
+
                         );
 
                         return;
+
                     }
 
 
                     alert(
-                        `✅ ${grupos.length} grupo(s) encontrados para "${termo}".`
+
+                        `✅ ${grupos.length} grupo(s) público(s) encontrado(s) para "${termo}".`
+
                     );
 
 
                     console.log(
-                        "👥 Projeto X - resultados:",
+
+                        "🌐 Projeto X - grupos públicos:",
+
                         {
                             termo,
+                            quantidade:
+                                grupos.length,
                             grupos
                         }
+
                     );
+
 
                 } catch {
 
@@ -171,11 +555,15 @@ function salvarGruposCapturados(
             }
         );
 
+
     } catch (erro) {
 
         console.warn(
+
             "⚠️ Não foi possível acessar a extensão:",
+
             erro
+
         );
 
 
@@ -189,18 +577,21 @@ function salvarGruposCapturados(
 
 
 // ======================================
-// CAPTURAR RESULTADOS DA BUSCA
+// CAPTURAR SOMENTE GRUPOS PÚBLICOS
 // ======================================
 
 function capturarGruposFacebook() {
 
-    if (!estaNaBuscaDeGrupos()) {
+    if (
+        !estaNaBuscaDeGrupos()
+    ) {
 
         alert(
             "⚠️ Abra primeiro uma pesquisa de grupos pelo Projeto X."
         );
 
         return;
+
     }
 
 
@@ -214,117 +605,129 @@ function capturarGruposFacebook() {
         );
 
 
-    const grupos = [];
+    const grupos =
+        [];
 
 
-    links.forEach(link => {
-
-        let nome =
-            (link.innerText || "")
-                .trim()
-                .replace(/\s+/g, " ");
+    let ignoradosPrivados =
+        0;
 
 
-        if (!nome) {
-
-            return;
-
-        }
+    let ignoradosInvalidos =
+        0;
 
 
-        let url =
-            link.href || "";
+    links.forEach(
+        link => {
 
 
-        if (!url) {
-
-            return;
-
-        }
-
-
-        try {
-
-            const endereco =
-                new URL(url);
+            const nome =
+                obterNomeGrupo(
+                    link
+                );
 
 
-            const partes =
-                endereco.pathname
-                    .split("/")
-                    .filter(Boolean);
+            if (!nome) {
 
-
-            const indiceGroups =
-                partes.indexOf("groups");
-
-
-            if (
-                indiceGroups === -1 ||
-                !partes[indiceGroups + 1]
-            ) {
+                ignoradosInvalidos++;
 
                 return;
 
             }
 
 
-            const identificador =
-                partes[indiceGroups + 1];
+            const url =
+                obterUrlGrupo(
+                    link
+                );
 
 
-            const ignorar = [
-                "feed",
-                "discover",
-                "create",
-                "joins",
-                "notifications"
-            ];
+            if (!url) {
 
-
-            if (
-                ignorar.includes(
-                    identificador.toLowerCase()
-                )
-            ) {
+                ignoradosInvalidos++;
 
                 return;
 
             }
 
 
-            url =
-                "https://www.facebook.com/groups/" +
-                identificador;
+            /*
+                FILTRO PRINCIPAL
+
+                Se o resultado não for
+                identificado como público,
+                ele não entra na lista.
+            */
+
+            const publico =
+                grupoEhPublico(
+                    link
+                );
 
 
-        } catch {
+            if (!publico) {
 
-            return;
+                ignoradosPrivados++;
+
+                return;
+
+            }
+
+
+            const repetido =
+                grupos.some(
+                    grupo =>
+                        grupo.url ===
+                        url
+                );
+
+
+            if (repetido) {
+
+                return;
+
+            }
+
+
+            grupos.push({
+
+                nome,
+
+                url,
+
+                tipo:
+                    "publico"
+
+            });
+
+
+        }
+    );
+
+
+    console.log(
+
+        "🔎 Projeto X - filtro da busca:",
+
+        {
+
+            termo,
+
+            linksAnalisados:
+                links.length,
+
+            publicosEncontrados:
+                grupos.length,
+
+            naoPublicosIgnorados:
+                ignoradosPrivados,
+
+            linksInvalidos:
+                ignoradosInvalidos
 
         }
 
-
-        const repetido =
-            grupos.some(
-                grupo =>
-                    grupo.url === url
-            );
-
-
-        if (repetido) {
-
-            return;
-
-        }
-
-
-        grupos.push({
-            nome,
-            url
-        });
-
-    });
+    );
 
 
     salvarGruposCapturados(
@@ -336,7 +739,7 @@ function capturarGruposFacebook() {
 
 
 // ======================================
-// CLIQUE
+// CLIQUE NO BOTÃO
 // ======================================
 
 botao.addEventListener(
