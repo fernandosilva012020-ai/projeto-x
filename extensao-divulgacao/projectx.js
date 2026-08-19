@@ -215,6 +215,109 @@ function enviarParaProjetoX(
 
 
 // ======================================
+// ABRIR GRUPO NO FACEBOOK
+// ======================================
+
+function abrirGrupoFacebook(
+    grupoUrl
+) {
+
+    try {
+
+        const url =
+            new URL(
+                grupoUrl
+            );
+
+
+        const hostValido =
+            [
+                "facebook.com",
+                "www.facebook.com"
+            ].includes(
+                url.hostname
+                    .toLowerCase()
+            );
+
+
+        const caminhoValido =
+            url.pathname
+                .startsWith(
+                    "/groups/"
+                );
+
+
+        if (
+            !hostValido ||
+            !caminhoValido
+        ) {
+
+            console.warn(
+                "⚠️ URL de grupo inválida:",
+                grupoUrl
+            );
+
+
+            enviarParaProjetoX(
+                "ERRO_PREPARAR_PUBLICACAO",
+                {
+
+                    mensagem:
+                        "A URL recebida não é de um grupo válido do Facebook."
+
+                }
+            );
+
+
+            return;
+
+        }
+
+
+        const aba =
+            window.open(
+                url.href,
+                "_blank"
+            );
+
+
+        if (!aba) {
+
+            /*
+                Se o navegador bloquear a nova aba,
+                abre o grupo na própria aba.
+            */
+
+            window.location.href =
+                url.href;
+
+        }
+
+
+    } catch (erro) {
+
+        console.warn(
+            "⚠️ Não foi possível abrir o grupo:",
+            erro
+        );
+
+
+        enviarParaProjetoX(
+            "ERRO_PREPARAR_PUBLICACAO",
+            {
+
+                mensagem:
+                    "Não foi possível abrir o grupo do Facebook."
+
+            }
+        );
+
+    }
+
+}
+
+
+// ======================================
 // PREPARAR PUBLICAÇÃO DO FACEBOOK
 // ======================================
 
@@ -344,6 +447,11 @@ function prepararPublicacaoFacebook(
                     grupoUrl
 
                 }
+            );
+
+
+            abrirGrupoFacebook(
+                grupoUrl
             );
 
         }
@@ -663,12 +771,6 @@ window.addEventListener(
                 }
             );
 
-
-            /*
-                Se futuramente o Projeto X
-                já mandar a publicação junto,
-                o arquivo também aceita.
-            */
 
             if (
                 event.data
