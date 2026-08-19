@@ -1,29 +1,14 @@
 console.log("✅ js/divulgacao.js carregado");
 
-const conteudoDinamico =
-    document.getElementById(
-        "divulgacao-conteudo-dinamico"
-    );
-
-const cardsVisaoGeral =
-    document.querySelectorAll(".cards");
-
-const areasVisaoGeral =
-    document.querySelectorAll(
-        "main.content > section.area"
-    );
+const conteudoDinamico = document.getElementById("divulgacao-conteudo-dinamico");
+const cardsVisaoGeral = document.querySelectorAll(".cards");
+const areasVisaoGeral = document.querySelectorAll("main.content > section.area");
 
 let gruposSelecionados = [];
 let gruposEncontradosAtuais = [];
 let campanhaAtivaId = null;
 
-
-// ======================================
-// SEGURANÇA
-// ======================================
-
 function escaparHTML(texto = "") {
-
     return String(texto)
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
@@ -32,34 +17,14 @@ function escaparHTML(texto = "") {
         .replaceAll("'", "&#039;");
 }
 
-
-// ======================================
-// DATA E HORA
-// ======================================
-
 function formatarDataHora(valor) {
+    if (!valor) return "Sem data definida";
 
-    if (!valor) {
+    const data = new Date(valor);
 
-        return "Sem data definida";
-
-    }
-
-
-    const data =
-        new Date(valor);
-
-
-    if (
-        Number.isNaN(
-            data.getTime()
-        )
-    ) {
-
+    if (Number.isNaN(data.getTime())) {
         return "Data inválida";
-
     }
-
 
     return data.toLocaleString(
         "pt-BR",
@@ -70,59 +35,35 @@ function formatarDataHora(valor) {
     );
 }
 
-
-// ======================================
-// USUÁRIO LOGADO
-// ======================================
-
 async function obterContextoUsuario() {
-
-    const cliente =
-        window.supabaseClient;
-
+    const cliente = window.supabaseClient;
 
     if (!cliente) {
-
         throw new Error(
             "Conexão com o banco não encontrada."
         );
-
     }
-
 
     const {
         data,
         error
-    } =
-        await cliente.auth
-            .getSession();
-
+    } = await cliente.auth.getSession();
 
     if (error) {
-
         throw error;
-
     }
 
-
-    const usuario =
-        data?.session?.user;
-
+    const usuario = data?.session?.user;
 
     if (!usuario) {
-
         throw new Error(
             "Usuário não conectado."
         );
-
     }
 
-
     return {
-
         cliente,
         usuario
-
     };
 }
 
@@ -132,66 +73,36 @@ async function obterContextoUsuario() {
 // ======================================
 
 function esconderVisaoGeral() {
+    cardsVisaoGeral.forEach(
+        card => {
+            card.style.display = "none";
+        }
+    );
 
-    cardsVisaoGeral
-        .forEach(
-            card => {
-
-                card.style.display =
-                    "none";
-
-            }
-        );
-
-
-    areasVisaoGeral
-        .forEach(
-            area => {
-
-                area.style.display =
-                    "none";
-
-            }
-        );
-
+    areasVisaoGeral.forEach(
+        area => {
+            area.style.display = "none";
+        }
+    );
 }
 
-
 function mostrarVisaoGeral() {
+    cardsVisaoGeral.forEach(
+        card => {
+            card.style.display = "";
+        }
+    );
 
-    cardsVisaoGeral
-        .forEach(
-            card => {
-
-                card.style.display =
-                    "";
-
-            }
-        );
-
-
-    areasVisaoGeral
-        .forEach(
-            area => {
-
-                area.style.display =
-                    "";
-
-            }
-        );
-
+    areasVisaoGeral.forEach(
+        area => {
+            area.style.display = "";
+        }
+    );
 
     if (conteudoDinamico) {
-
-        conteudoDinamico.style.display =
-            "none";
-
-
-        conteudoDinamico.innerHTML =
-            "";
-
+        conteudoDinamico.style.display = "none";
+        conteudoDinamico.innerHTML = "";
     }
-
 }
 
 
@@ -200,25 +111,17 @@ function mostrarVisaoGeral() {
 // ======================================
 
 function abrirPostarGrupos() {
-
     esconderVisaoGeral();
 
-
     if (!conteudoDinamico) {
-
         return;
-
     }
 
-
-    conteudoDinamico.style.display =
-        "block";
-
+    conteudoDinamico.style.display = "block";
 
     conteudoDinamico.innerHTML = `
 
         <section class="area">
-
 
             <div style="
                 display:flex;
@@ -229,7 +132,6 @@ function abrirPostarGrupos() {
                 flex-wrap:wrap;
             ">
 
-
                 <div>
 
                     <h2 style="
@@ -237,7 +139,6 @@ function abrirPostarGrupos() {
                     ">
                         📢 Postar em Grupos
                     </h2>
-
 
                     <p style="
                         margin:0;
@@ -249,23 +150,36 @@ function abrirPostarGrupos() {
                 </div>
 
 
-                <button
-                    type="button"
-                    id="selecionarGrupos"
-                    class="btn-divulgacao-primary"
-                >
-                    👥 Selecionar grupos
-                </button>
+                <div style="
+                    display:flex;
+                    gap:10px;
+                    flex-wrap:wrap;
+                ">
 
+                    <button
+                        type="button"
+                        id="retomarCampanha"
+                        class="btn-divulgacao-secondary"
+                    >
+                        ▶ Retomar campanha
+                    </button>
+
+                    <button
+                        type="button"
+                        id="selecionarGrupos"
+                        class="btn-divulgacao-primary"
+                    >
+                        👥 Selecionar grupos
+                    </button>
+
+                </div>
 
             </div>
 
 
             <div class="publicacao-grid">
 
-
                 <div class="publicacao-box">
-
 
                     <h3>
                         ✍️ Publicação
@@ -275,7 +189,6 @@ function abrirPostarGrupos() {
                     <label>
                         Nome da campanha
                     </label>
-
 
                     <input
                         id="nomeCampanha"
@@ -288,7 +201,6 @@ function abrirPostarGrupos() {
                         Texto da publicação
                     </label>
 
-
                     <textarea
                         id="textoPublicacao"
                         placeholder="Digite o texto que será publicado..."
@@ -299,19 +211,16 @@ function abrirPostarGrupos() {
                         Imagem ou vídeo
                     </label>
 
-
                     <input
                         id="midiaPublicacao"
                         type="file"
                         accept="image/*,video/*"
                     >
 
-
                 </div>
 
 
                 <div class="publicacao-box">
-
 
                     <h3>
                         ⚙️ Configurações
@@ -321,7 +230,6 @@ function abrirPostarGrupos() {
                     <label>
                         Intervalo entre publicações
                     </label>
-
 
                     <select id="intervaloPublicacao">
 
@@ -355,7 +263,6 @@ function abrirPostarGrupos() {
                         Quando publicar?
                     </label>
 
-
                     <select id="tipoPublicacao">
 
                         <option value="agora">
@@ -374,11 +281,9 @@ function abrirPostarGrupos() {
                         style="display:none;"
                     >
 
-
                         <label>
                             Data
                         </label>
-
 
                         <input
                             id="dataAgendamento"
@@ -390,18 +295,14 @@ function abrirPostarGrupos() {
                             Horário
                         </label>
 
-
                         <input
                             id="horaAgendamento"
                             type="time"
                         >
 
-
                     </div>
 
-
                 </div>
-
 
             </div>
 
@@ -411,11 +312,9 @@ function abrirPostarGrupos() {
                 style="margin-top:18px;"
             >
 
-
                 <h3>
                     👥 Grupos selecionados
                 </h3>
-
 
                 <div
                     id="listaGruposSelecionados"
@@ -428,7 +327,6 @@ function abrirPostarGrupos() {
                     Nenhum grupo selecionado.
                 </div>
 
-
             </div>
 
 
@@ -440,7 +338,6 @@ function abrirPostarGrupos() {
                 flex-wrap:wrap;
             ">
 
-
                 <button
                     type="button"
                     id="salvarCampanha"
@@ -448,7 +345,6 @@ function abrirPostarGrupos() {
                 >
                     💾 Salvar campanha
                 </button>
-
 
                 <button
                     type="button"
@@ -458,135 +354,95 @@ function abrirPostarGrupos() {
                     🚀 Iniciar divulgação
                 </button>
 
-
             </div>
-
 
         </section>
 
     `;
 
-
     renderizarGruposSelecionados();
-
 }
 
 
 // ======================================
-// DADOS DO FORMULÁRIO
+// FORMULÁRIO DA CAMPANHA
 // ======================================
 
 function obterDadosFormularioCampanha() {
-
     const nome =
         document
-            .getElementById(
-                "nomeCampanha"
-            )
+            .getElementById("nomeCampanha")
             ?.value
             .trim();
-
 
     const conteudo =
         document
-            .getElementById(
-                "textoPublicacao"
-            )
+            .getElementById("textoPublicacao")
             ?.value
             .trim();
 
-
     const intervalo =
         Number(
-
             document
-                .getElementById(
-                    "intervaloPublicacao"
-                )
+                .getElementById("intervaloPublicacao")
                 ?.value || 5
-
         );
-
 
     const modo =
         document
-            .getElementById(
-                "tipoPublicacao"
-            )
+            .getElementById("tipoPublicacao")
             ?.value || "agora";
 
 
     if (!nome) {
-
         alert(
             "Digite o nome da campanha."
         );
 
         return null;
-
     }
 
 
     if (!conteudo) {
-
         alert(
             "Digite o texto da publicação."
         );
 
         return null;
-
     }
 
 
-    if (
-        !gruposSelecionados.length
-    ) {
-
+    if (!gruposSelecionados.length) {
         alert(
             "Selecione pelo menos um grupo."
         );
 
         return null;
-
     }
 
 
-    let agendadoPara =
-        null;
+    let agendadoPara = null;
 
 
-    if (
-        modo ===
-        "agendar"
-    ) {
+    if (modo === "agendar") {
 
         const data =
             document
-                .getElementById(
-                    "dataAgendamento"
-                )
+                .getElementById("dataAgendamento")
                 ?.value;
-
 
         const hora =
             document
-                .getElementById(
-                    "horaAgendamento"
-                )
+                .getElementById("horaAgendamento")
                 ?.value;
 
 
-        if (
-            !data ||
-            !hora
-        ) {
-
+        if (!data || !hora) {
             alert(
                 "Escolha a data e o horário."
             );
 
             return null;
-
         }
 
 
@@ -601,32 +457,168 @@ function obterDadosFormularioCampanha() {
                 dataLocal.getTime()
             )
         ) {
-
             alert(
                 "Data ou horário inválido."
             );
 
             return null;
-
         }
 
 
         agendadoPara =
             dataLocal.toISOString();
-
     }
 
 
     return {
-
         nome,
         conteudo,
         intervalo,
         modo,
         agendadoPara
-
     };
+}
 
+
+// ======================================
+// CRIAR CAMPANHA + FILA
+// ======================================
+
+async function criarCampanhaComGrupos(
+    dados,
+    status,
+    startedAt = null
+) {
+    const {
+        cliente,
+        usuario
+    } =
+        await obterContextoUsuario();
+
+
+    const {
+        data: campanha,
+        error: erroCampanha
+    } =
+        await cliente
+            .from("campaigns")
+            .insert({
+
+                user_id:
+                    usuario.id,
+
+                name:
+                    dados.nome,
+
+                content:
+                    dados.conteudo,
+
+                media_url:
+                    null,
+
+                interval_minutes:
+                    dados.intervalo,
+
+                publish_mode:
+                    dados.modo,
+
+                scheduled_at:
+                    dados.agendadoPara,
+
+                status:
+                    status,
+
+                started_at:
+                    startedAt,
+
+                paused_at:
+                    null,
+
+                finished_at:
+                    null
+
+            })
+            .select(
+                "id, name, interval_minutes, status"
+            )
+            .single();
+
+
+    if (erroCampanha) {
+        throw erroCampanha;
+    }
+
+
+    const vinculos =
+        gruposSelecionados.map(
+            grupo => ({
+
+                campaign_id:
+                    campanha.id,
+
+                group_id:
+                    grupo.id,
+
+                status:
+                    "pendente",
+
+                attempt_count:
+                    0,
+
+                posted_at:
+                    null,
+
+                error_message:
+                    null
+
+            })
+        );
+
+
+    const {
+        error: erroVinculos
+    } =
+        await cliente
+            .from("campaign_groups")
+            .insert(
+                vinculos
+            );
+
+
+    if (erroVinculos) {
+
+        await cliente
+            .from("campaigns")
+            .update({
+
+                status:
+                    "erro",
+
+                finished_at:
+                    new Date()
+                        .toISOString()
+
+            })
+            .eq(
+                "id",
+                campanha.id
+            )
+            .eq(
+                "user_id",
+                usuario.id
+            );
+
+
+        throw new Error(
+
+            "Campanha criada, mas houve erro ao preparar a fila: " +
+            erroVinculos.message
+
+        );
+    }
+
+
+    return campanha;
 }
 
 
@@ -639,11 +631,8 @@ async function salvarCampanha() {
     const dados =
         obterDadosFormularioCampanha();
 
-
     if (!dados) {
-
         return;
-
     }
 
 
@@ -659,132 +648,36 @@ async function salvarCampanha() {
 
 
     if (botao) {
-
-        botao.disabled =
-            true;
-
-
+        botao.disabled = true;
         botao.textContent =
             "⏳ Salvando...";
-
     }
 
 
     try {
 
-
-        const {
-            cliente,
-            usuario
-        } =
-            await obterContextoUsuario();
+        const status =
+            dados.modo === "agendar"
+                ? "agendada"
+                : "rascunho";
 
 
-        const {
-            data: campanha,
-            error: erroCampanha
-        } =
-            await cliente
-                .from(
-                    "campaigns"
-                )
-                .insert({
-
-                    user_id:
-                        usuario.id,
-
-                    name:
-                        dados.nome,
-
-                    content:
-                        dados.conteudo,
-
-                    media_url:
-                        null,
-
-                    interval_minutes:
-                        dados.intervalo,
-
-                    publish_mode:
-                        dados.modo,
-
-                    scheduled_at:
-                        dados.agendadoPara,
-
-                    status:
-                        dados.modo ===
-                        "agendar"
-
-                            ? "agendada"
-
-                            : "rascunho"
-
-                })
-                .select(
-                    "id"
-                )
-                .single();
-
-
-        if (erroCampanha) {
-
-            throw erroCampanha;
-
-        }
-
-
-        const vinculos =
-            gruposSelecionados
-                .map(
-                    grupo => ({
-
-                        campaign_id:
-                            campanha.id,
-
-                        group_id:
-                            grupo.id,
-
-                        status:
-                            "pendente"
-
-                    })
-                );
-
-
-        const {
-            error: erroGrupos
-        } =
-            await cliente
-                .from(
-                    "campaign_groups"
-                )
-                .insert(
-                    vinculos
-                );
-
-
-        if (erroGrupos) {
-
-            throw new Error(
-
-                "Campanha criada, mas houve erro ao vincular os grupos: " +
-                erroGrupos.message
-
-            );
-
-        }
+        await criarCampanhaComGrupos(
+            dados,
+            status,
+            null
+        );
 
 
         alert(
 
             `✅ Campanha "${dados.nome}" salva com sucesso!\n\n` +
-            `👥 ${gruposSelecionados.length} grupo(s) vinculados.`
+
+            `👥 ${gruposSelecionados.length} grupo(s) vinculado(s).`
 
         );
 
-
     } catch (erro) {
-
 
         console.error(
             "Erro ao salvar campanha:",
@@ -793,29 +686,18 @@ async function salvarCampanha() {
 
 
         alert(
-
             erro?.message ||
             "Erro inesperado ao salvar campanha."
-
         );
-
 
     } finally {
 
-
         if (botao) {
-
-            botao.disabled =
-                false;
-
-
+            botao.disabled = false;
             botao.textContent =
                 textoOriginal;
-
         }
-
     }
-
 }
 
 
@@ -828,18 +710,12 @@ async function iniciarDivulgacao() {
     const dados =
         obterDadosFormularioCampanha();
 
-
     if (!dados) {
-
         return;
-
     }
 
 
-    if (
-        dados.modo ===
-        "agendar"
-    ) {
+    if (dados.modo === "agendar") {
 
         alert(
 
@@ -849,7 +725,6 @@ async function iniciarDivulgacao() {
         );
 
         return;
-
     }
 
 
@@ -865,163 +740,33 @@ async function iniciarDivulgacao() {
 
 
     if (botao) {
-
-        botao.disabled =
-            true;
-
-
+        botao.disabled = true;
         botao.textContent =
             "⏳ Preparando...";
-
     }
 
 
     try {
 
+        const campanha =
+            await criarCampanhaComGrupos(
 
-        const {
-            cliente,
-            usuario
-        } =
-            await obterContextoUsuario();
+                {
+                    ...dados,
 
-
-        const agora =
-            new Date()
-                .toISOString();
-
-
-        const {
-            data: campanha,
-            error: erroCampanha
-        } =
-            await cliente
-                .from(
-                    "campaigns"
-                )
-                .insert({
-
-                    user_id:
-                        usuario.id,
-
-                    name:
-                        dados.nome,
-
-                    content:
-                        dados.conteudo,
-
-                    media_url:
-                        null,
-
-                    interval_minutes:
-                        dados.intervalo,
-
-                    publish_mode:
+                    modo:
                         "agora",
 
-                    scheduled_at:
-                        null,
-
-                    status:
-                        "em_andamento",
-
-                    started_at:
-                        agora,
-
-                    paused_at:
-                        null,
-
-                    finished_at:
+                    agendadoPara:
                         null
+                },
 
-                })
-                .select(
-                    "id, name, interval_minutes, status"
-                )
-                .single();
+                "em_andamento",
 
-
-        if (erroCampanha) {
-
-            throw erroCampanha;
-
-        }
-
-
-        const vinculos =
-            gruposSelecionados
-                .map(
-                    grupo => ({
-
-                        campaign_id:
-                            campanha.id,
-
-                        group_id:
-                            grupo.id,
-
-                        status:
-                            "pendente",
-
-                        attempt_count:
-                            0,
-
-                        posted_at:
-                            null,
-
-                        error_message:
-                            null
-
-                    })
-                );
-
-
-        const {
-            error: erroVinculos
-        } =
-            await cliente
-                .from(
-                    "campaign_groups"
-                )
-                .insert(
-                    vinculos
-                );
-
-
-        if (erroVinculos) {
-
-
-            await cliente
-                .from(
-                    "campaigns"
-                )
-                .update({
-
-                    status:
-                        "erro",
-
-                    finished_at:
-                        new Date()
-                            .toISOString()
-
-                })
-                .eq(
-                    "id",
-                    campanha.id
-                )
-                .eq(
-                    "user_id",
-                    usuario.id
-                );
-
-
-            throw new Error(
-
-                "Campanha criada, mas houve erro ao preparar a fila: " +
-                erroVinculos.message
+                new Date()
+                    .toISOString()
 
             );
-
-        }
 
 
         campanhaAtivaId =
@@ -1065,9 +810,7 @@ async function iniciarDivulgacao() {
             campanha.id
         );
 
-
     } catch (erro) {
-
 
         console.error(
             "Erro ao iniciar divulgação:",
@@ -1082,23 +825,14 @@ async function iniciarDivulgacao() {
 
         );
 
-
     } finally {
 
-
         if (botao) {
-
-            botao.disabled =
-                false;
-
-
+            botao.disabled = false;
             botao.textContent =
                 textoOriginal;
-
         }
-
     }
-
 }
 
 
@@ -1109,7 +843,6 @@ async function iniciarDivulgacao() {
 async function abrirSeletorGrupos() {
 
     try {
-
 
         const {
             cliente,
@@ -1123,9 +856,7 @@ async function abrirSeletorGrupos() {
             error
         } =
             await cliente
-                .from(
-                    "grupos"
-                )
+                .from("grupos")
                 .select(
                     "id, name, url, status"
                 )
@@ -1143,9 +874,7 @@ async function abrirSeletorGrupos() {
 
 
         if (error) {
-
             throw error;
-
         }
 
 
@@ -1169,13 +898,16 @@ async function abrirSeletorGrupos() {
         modal.style.cssText = `
 
             position:fixed;
+
             inset:0;
 
             background:
             rgba(15,23,42,.60);
 
             display:flex;
+
             align-items:center;
+
             justify-content:center;
 
             z-index:99999;
@@ -1186,50 +918,30 @@ async function abrirSeletorGrupos() {
         modal.innerHTML = `
 
             <div style="
-
                 background:white;
-
                 width:600px;
                 max-width:92%;
                 max-height:80vh;
-
                 border-radius:14px;
-
                 overflow:hidden;
-
-                box-shadow:
-                0 20px 60px
-                rgba(0,0,0,.30);
-
+                box-shadow:0 20px 60px rgba(0,0,0,.30);
             ">
 
-
                 <div style="
-
                     padding:20px;
-
-                    border-bottom:
-                    1px solid #e5e7eb;
-
+                    border-bottom:1px solid #e5e7eb;
                     display:flex;
-
-                    justify-content:
-                    space-between;
-
+                    justify-content:space-between;
                     align-items:center;
-
                 ">
 
-
                     <div>
-
 
                         <h2 style="
                             margin:0 0 5px;
                         ">
                             👥 Selecionar grupos
                         </h2>
-
 
                         <p style="
                             margin:0;
@@ -1238,7 +950,6 @@ async function abrirSeletorGrupos() {
                         ">
                             Escolha os grupos desta divulgação.
                         </p>
-
 
                     </div>
 
@@ -1256,119 +967,73 @@ async function abrirSeletorGrupos() {
                         ✕
                     </button>
 
-
                 </div>
 
 
                 <div style="
-
-                    padding:
-                    18px 20px;
-
-                    max-height:
-                    430px;
-
-                    overflow-y:
-                    auto;
-
+                    padding:18px 20px;
+                    max-height:430px;
+                    overflow-y:auto;
                 ">
 
-
                     ${
-
-
                         grupos?.length
 
                         ?
 
-                        grupos
-                            .map(
-                                grupo => {
+                        grupos.map(
+                            grupo => {
+
+                                const selecionado =
+                                    gruposSelecionados.some(
+                                        item =>
+                                            item.id ===
+                                            grupo.id
+                                    );
 
 
-                                    const selecionado =
-                                        gruposSelecionados
-                                            .some(
-                                                item =>
-                                                    item.id ===
-                                                    grupo.id
-                                            );
+                                return `
 
+                                    <label style="
+                                        display:flex;
+                                        align-items:center;
+                                        gap:12px;
+                                        padding:13px;
+                                        border:1px solid #e2e8f0;
+                                        border-radius:9px;
+                                        margin-bottom:8px;
+                                        cursor:pointer;
+                                    ">
 
-                                    return `
+                                        <input
+                                            type="checkbox"
+                                            class="grupoCheckbox"
+                                            value="${escaparHTML(grupo.id)}"
+                                            ${selecionado ? "checked" : ""}
+                                        >
 
+                                        <div>
 
-                                        <label style="
+                                            <strong>
+                                                ${escaparHTML(grupo.name)}
+                                            </strong>
 
-                                            display:flex;
-
-                                            align-items:center;
-
-                                            gap:12px;
-
-                                            padding:13px;
-
-                                            border:
-                                            1px solid #e2e8f0;
-
-                                            border-radius:9px;
-
-                                            margin-bottom:8px;
-
-                                            cursor:pointer;
-
-                                        ">
-
-
-                                            <input
-                                                type="checkbox"
-                                                class="grupoCheckbox"
-                                                value="${escaparHTML(
-                                                    grupo.id
-                                                )}"
-                                                ${
-                                                    selecionado
-                                                        ? "checked"
-                                                        : ""
-                                                }
-                                            >
-
-
-                                            <div>
-
-
-                                                <strong>
-                                                    ${escaparHTML(
-                                                        grupo.name
-                                                    )}
-                                                </strong>
-
-
-                                                <div style="
-                                                    font-size:11px;
-                                                    color:#64748b;
-                                                    margin-top:4px;
-                                                    word-break:break-all;
-                                                ">
-                                                    ${escaparHTML(
-                                                        grupo.url ||
-                                                        ""
-                                                    )}
-                                                </div>
-
-
+                                            <div style="
+                                                font-size:11px;
+                                                color:#64748b;
+                                                margin-top:4px;
+                                                word-break:break-all;
+                                            ">
+                                                ${escaparHTML(grupo.url || "")}
                                             </div>
 
+                                        </div>
 
-                                        </label>
+                                    </label>
 
-
-                                    `;
-
-                                }
-                            )
-                            .join("")
-
+                                `;
+                            }
+                        ).join("")
 
                         :
 
@@ -1383,31 +1048,18 @@ async function abrirSeletorGrupos() {
                             </div>
 
                         `
-
-
                     }
-
 
                 </div>
 
 
                 <div style="
-
-                    padding:
-                    15px 20px;
-
-                    border-top:
-                    1px solid #e5e7eb;
-
+                    padding:15px 20px;
+                    border-top:1px solid #e5e7eb;
                     display:flex;
-
-                    justify-content:
-                    flex-end;
-
+                    justify-content:flex-end;
                     gap:10px;
-
                 ">
-
 
                     <button
                         type="button"
@@ -1417,7 +1069,6 @@ async function abrirSeletorGrupos() {
                         Cancelar
                     </button>
 
-
                     <button
                         type="button"
                         id="confirmarGrupos"
@@ -1426,26 +1077,21 @@ async function abrirSeletorGrupos() {
                         ✅ Confirmar seleção
                     </button>
 
-
                 </div>
-
 
             </div>
 
         `;
 
 
-        document.body
-            .appendChild(
-                modal
-            );
+        document.body.appendChild(
+            modal
+        );
 
 
         const fecharModal =
             () => {
-
                 modal.remove();
-
             };
 
 
@@ -1477,11 +1123,8 @@ async function abrirSeletorGrupos() {
                     event.target ===
                     modal
                 ) {
-
                     fecharModal();
-
                 }
-
             }
         );
 
@@ -1494,65 +1137,51 @@ async function abrirSeletorGrupos() {
                 "click",
                 () => {
 
-
                     const marcados =
-                        modal
-                            .querySelectorAll(
-                                ".grupoCheckbox:checked"
-                            );
+                        modal.querySelectorAll(
+                            ".grupoCheckbox:checked"
+                        );
 
 
                     gruposSelecionados =
                         [];
 
 
-                    marcados
-                        .forEach(
-                            input => {
+                    marcados.forEach(
+                        input => {
+
+                            const grupo =
+                                grupos.find(
+                                    item =>
+
+                                        String(
+                                            item.id
+                                        ) ===
+
+                                        String(
+                                            input.value
+                                        )
+                                );
 
 
-                                const grupo =
-                                    grupos
-                                        .find(
-                                            item =>
+                            if (grupo) {
 
-                                                String(
-                                                    item.id
-                                                ) ===
-
-                                                String(
-                                                    input.value
-                                                )
-
-                                        );
-
-
-                                if (grupo) {
-
-                                    gruposSelecionados
-                                        .push(
-                                            grupo
-                                        );
-
-                                }
-
-
+                                gruposSelecionados
+                                    .push(
+                                        grupo
+                                    );
                             }
-                        );
+                        }
+                    );
 
 
                     renderizarGruposSelecionados();
 
-
                     fecharModal();
-
-
                 }
             );
 
-
     } catch (erro) {
-
 
         console.error(
             "Erro ao carregar grupos:",
@@ -1570,9 +1199,7 @@ async function abrirSeletorGrupos() {
             )
 
         );
-
     }
-
 }
 
 
@@ -1583,33 +1210,25 @@ async function abrirSeletorGrupos() {
 function renderizarGruposSelecionados() {
 
     const area =
-        document
-            .getElementById(
-                "listaGruposSelecionados"
-            );
+        document.getElementById(
+            "listaGruposSelecionados"
+        );
 
 
     if (!area) {
-
         return;
-
     }
 
 
-    if (
-        !gruposSelecionados.length
-    ) {
+    if (!gruposSelecionados.length) {
 
         area.style.textAlign =
             "center";
 
-
         area.innerHTML =
             "Nenhum grupo selecionado.";
 
-
         return;
-
     }
 
 
@@ -1619,70 +1238,40 @@ function renderizarGruposSelecionados() {
 
     area.innerHTML = `
 
-
         <div style="
             margin-bottom:12px;
         ">
 
-
             <strong>
-
-                ✅
-                ${gruposSelecionados.length}
-
+                ✅ ${gruposSelecionados.length}
                 grupo(s) selecionado(s)
-
             </strong>
-
 
         </div>
 
 
         ${
+            gruposSelecionados.map(
+                grupo => `
 
+                    <div style="
+                        padding:11px;
+                        border:1px solid #e2e8f0;
+                        border-radius:8px;
+                        margin-bottom:7px;
+                    ">
 
-            gruposSelecionados
-                .map(
-                    grupo => `
+                        <strong>
+                            👥 ${escaparHTML(grupo.name)}
+                        </strong>
 
+                    </div>
 
-                        <div style="
-
-                            padding:11px;
-
-                            border:
-                            1px solid #e2e8f0;
-
-                            border-radius:8px;
-
-                            margin-bottom:7px;
-
-                        ">
-
-
-                            <strong>
-
-                                👥
-                                ${escaparHTML(
-                                    grupo.name
-                                )}
-
-                            </strong>
-
-
-                        </div>
-
-
-                    `
-                )
-                .join("")
-
-
+                `
+            ).join("")
         }
 
-
     `;
-
 }
 
 
@@ -1694,11 +1283,8 @@ function abrirEncontrarGrupos() {
 
     esconderVisaoGeral();
 
-
     if (!conteudoDinamico) {
-
         return;
-
     }
 
 
@@ -1708,14 +1294,11 @@ function abrirEncontrarGrupos() {
 
     conteudoDinamico.innerHTML = `
 
-
         <section class="area">
-
 
             <div style="
                 margin-bottom:20px;
             ">
-
 
                 <h2 style="
                     margin:0 0 6px;
@@ -1723,25 +1306,21 @@ function abrirEncontrarGrupos() {
                     🔎 Encontrar grupos
                 </h2>
 
-
                 <p style="
                     margin:0;
                     color:#64748b;
                 ">
-                    Pesquise grupos do Facebook por palavra-chave.
+                    Pesquise grupos públicos do Facebook por palavra-chave.
                 </p>
-
 
             </div>
 
 
             <div class="publicacao-box">
 
-
                 <label>
                     Palavra-chave ou nicho
                 </label>
-
 
                 <div style="
                     display:flex;
@@ -1749,13 +1328,11 @@ function abrirEncontrarGrupos() {
                     margin-top:8px;
                 ">
 
-
                     <input
                         id="termoBuscaGrupos"
                         type="text"
                         placeholder="Ex: imóveis Campinas, renda extra, carros..."
                     >
-
 
                     <button
                         type="button"
@@ -1765,41 +1342,28 @@ function abrirEncontrarGrupos() {
                         🔎 Buscar
                     </button>
 
-
                 </div>
-
 
             </div>
 
 
             <div
                 class="publicacao-box"
-                style="
-                    margin-top:18px;
-                "
+                style="margin-top:18px;"
             >
 
-
                 <div style="
-
                     display:flex;
-
-                    justify-content:
-                    space-between;
-
+                    justify-content:space-between;
                     align-items:center;
-
                     gap:10px;
-
                 ">
-
 
                     <h3 style="
                         margin:0;
                     ">
-                        👥 Grupos encontrados
+                        🌐 Grupos públicos encontrados
                     </h3>
-
 
                     <span
                         id="quantidadeGruposEncontrados"
@@ -1807,22 +1371,14 @@ function abrirEncontrarGrupos() {
                         0 encontrados
                     </span>
 
-
                 </div>
 
 
                 <div style="
-
                     display:flex;
-
-                    justify-content:
-                    flex-end;
-
-                    margin-top:
-                    15px;
-
+                    justify-content:flex-end;
+                    margin-top:15px;
                 ">
-
 
                     <button
                         type="button"
@@ -1831,7 +1387,6 @@ function abrirEncontrarGrupos() {
                     >
                         📥 Carregar resultados
                     </button>
-
 
                 </div>
 
@@ -1845,23 +1400,19 @@ function abrirEncontrarGrupos() {
                         color:#64748b;
                     "
                 >
-                    Faça uma busca para encontrar grupos.
+                    Faça uma busca para encontrar grupos públicos.
                 </div>
-
 
             </div>
 
-
         </section>
 
-
     `;
-
 }
 
 
 // ======================================
-// BUSCAR GRUPOS FACEBOOK
+// BUSCAR GRUPOS
 // ======================================
 
 function buscarGruposFacebook() {
@@ -1882,7 +1433,6 @@ function buscarGruposFacebook() {
         );
 
         return;
-
     }
 
 
@@ -1904,23 +1454,19 @@ function buscarGruposFacebook() {
 
 
     const resultado =
-        document
-            .getElementById(
-                "resultadoBuscaGrupos"
-            );
+        document.getElementById(
+            "resultadoBuscaGrupos"
+        );
 
 
     if (resultado) {
 
-
         resultado.innerHTML = `
 
-            🔎 Buscando grupos relacionados a
+            🔎 Buscando grupos públicos relacionados a
 
             <strong>
-                ${escaparHTML(
-                    termo
-                )}
+                ${escaparHTML(termo)}
             </strong>...
 
             <br><br>
@@ -1928,10 +1474,7 @@ function buscarGruposFacebook() {
             A busca será aberta no Facebook.
 
         `;
-
-
     }
-
 }
 
 
@@ -1942,17 +1485,15 @@ function buscarGruposFacebook() {
 function carregarResultadosGrupos() {
 
     const resultado =
-        document
-            .getElementById(
-                "resultadoBuscaGrupos"
-            );
+        document.getElementById(
+            "resultadoBuscaGrupos"
+        );
 
 
     if (resultado) {
 
         resultado.innerHTML =
             "🔄 Carregando grupos capturados...";
-
     }
 
 
@@ -1968,293 +1509,166 @@ function carregarResultadosGrupos() {
         },
         "*"
     );
-
 }
 
 
 // ======================================
-// RECEBER GRUPOS DA EXTENSÃO
+// RENDERIZAR GRUPOS CAPTURADOS
 // ======================================
 
-window.addEventListener(
-    "message",
-    event => {
+function renderizarGruposEncontrados(
+    grupos,
+    termo
+) {
 
+    const resultado =
+        document.getElementById(
+            "resultadoBuscaGrupos"
+        );
 
-        if (
-            event.source !==
-            window
-        ) {
 
-            return;
+    const quantidade =
+        document.getElementById(
+            "quantidadeGruposEncontrados"
+        );
 
-        }
 
-
-        if (
-
-            event.data?.source !==
-            "PROJETOX_EXTENSION"
-
-            ||
-
-            event.data?.type !==
-            "GRUPOS_CAPTURADOS"
-
-        ) {
-
-            return;
-
-        }
-
-
-        const grupos =
-            Array.isArray(
-                event.data.grupos
-            )
-
-                ? event.data.grupos
-
-                : [];
-
-
-        const termo =
-            event.data.termo ||
-            "";
-
-
-        gruposEncontradosAtuais =
-            grupos;
-
-
-        const resultado =
-            document
-                .getElementById(
-                    "resultadoBuscaGrupos"
-                );
-
-
-        const quantidade =
-            document
-                .getElementById(
-                    "quantidadeGruposEncontrados"
-                );
-
-
-        if (!resultado) {
-
-            return;
-
-        }
-
-
-        if (quantidade) {
-
-            quantidade.textContent =
-                `${grupos.length} encontrados`;
-
-        }
-
-
-        if (!grupos.length) {
-
-            resultado.innerHTML =
-                "Nenhum grupo capturado.";
-
-
-            return;
-
-        }
-
-
-        resultado.style.textAlign =
-            "left";
-
-
-        resultado.style.padding =
-            "10px";
-
-
-        resultado.innerHTML = `
-
-
-            <div style="
-
-                padding:12px;
-
-                margin-bottom:15px;
-
-                background:#f8fafc;
-
-                border-radius:9px;
-
-            ">
-
-
-                <strong>
-
-                    🔎
-                    ${escaparHTML(
-                        termo
-                    )}
-
-                </strong>
-
-
-                <div style="
-
-                    margin-top:5px;
-
-                    font-size:12px;
-
-                    color:#64748b;
-
-                ">
-
-                    ${grupos.length}
-                    grupos encontrados
-
-                </div>
-
-
-            </div>
-
-
-            <div style="
-
-                display:flex;
-
-                gap:10px;
-
-                flex-wrap:wrap;
-
-                margin-bottom:15px;
-
-            ">
-
-
-                <button
-                    type="button"
-                    id="selecionarTodosEncontrados"
-                    class="btn-divulgacao-secondary"
-                >
-                    ☑ Selecionar todos
-                </button>
-
-
-                <button
-                    type="button"
-                    id="desmarcarTodosEncontrados"
-                    class="btn-divulgacao-secondary"
-                >
-                    ☐ Desmarcar todos
-                </button>
-
-
-                <button
-                    type="button"
-                    id="salvarGruposEncontrados"
-                    class="btn-divulgacao-primary"
-                >
-                    💾 Salvar selecionados
-                </button>
-
-
-            </div>
-
-
-            ${
-
-
-                grupos
-                    .map(
-                        (
-                            grupo,
-                            indice
-                        ) => `
-
-
-                            <label style="
-
-                                display:flex;
-
-                                gap:12px;
-
-                                align-items:flex-start;
-
-                                padding:12px;
-
-                                margin-bottom:8px;
-
-                                border:
-                                1px solid #e2e8f0;
-
-                                border-radius:9px;
-
-                                cursor:pointer;
-
-                            ">
-
-
-                                <input
-                                    type="checkbox"
-                                    class="grupoEncontradoCheckbox"
-                                    data-indice="${indice}"
-                                >
-
-
-                                <div>
-
-
-                                    <strong>
-
-                                        👥
-                                        ${escaparHTML(
-                                            grupo.nome
-                                        )}
-
-                                    </strong>
-
-
-                                    <div style="
-
-                                        margin-top:4px;
-
-                                        font-size:11px;
-
-                                        color:#64748b;
-
-                                        word-break:
-                                        break-all;
-
-                                    ">
-
-                                        ${escaparHTML(
-                                            grupo.url
-                                        )}
-
-                                    </div>
-
-
-                                </div>
-
-
-                            </label>
-
-
-                        `
-                    )
-                    .join("")
-
-
-            }
-
-
-        `;
-
-
+    if (!resultado) {
+        return;
     }
-);
+
+
+    if (quantidade) {
+
+        quantidade.textContent =
+            `${grupos.length} encontrados`;
+    }
+
+
+    if (!grupos.length) {
+
+        resultado.innerHTML =
+            "Nenhum grupo público capturado.";
+
+        return;
+    }
+
+
+    resultado.style.textAlign =
+        "left";
+
+    resultado.style.padding =
+        "10px";
+
+
+    resultado.innerHTML = `
+
+        <div style="
+            padding:12px;
+            margin-bottom:15px;
+            background:#f8fafc;
+            border-radius:9px;
+        ">
+
+            <strong>
+                🌐 ${escaparHTML(termo)}
+            </strong>
+
+            <div style="
+                margin-top:5px;
+                font-size:12px;
+                color:#64748b;
+            ">
+                ${grupos.length}
+                grupos públicos encontrados
+            </div>
+
+        </div>
+
+
+        <div style="
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+            margin-bottom:15px;
+        ">
+
+            <button
+                type="button"
+                id="selecionarTodosEncontrados"
+                class="btn-divulgacao-secondary"
+            >
+                ☑ Selecionar todos
+            </button>
+
+            <button
+                type="button"
+                id="desmarcarTodosEncontrados"
+                class="btn-divulgacao-secondary"
+            >
+                ☐ Desmarcar todos
+            </button>
+
+            <button
+                type="button"
+                id="salvarGruposEncontrados"
+                class="btn-divulgacao-primary"
+            >
+                💾 Salvar selecionados
+            </button>
+
+        </div>
+
+
+        ${
+            grupos.map(
+                (
+                    grupo,
+                    indice
+                ) => `
+
+                    <label style="
+                        display:flex;
+                        gap:12px;
+                        align-items:flex-start;
+                        padding:12px;
+                        margin-bottom:8px;
+                        border:1px solid #e2e8f0;
+                        border-radius:9px;
+                        cursor:pointer;
+                    ">
+
+                        <input
+                            type="checkbox"
+                            class="grupoEncontradoCheckbox"
+                            data-indice="${indice}"
+                        >
+
+                        <div>
+
+                            <strong>
+                                🌐 ${escaparHTML(grupo.nome)}
+                            </strong>
+
+                            <div style="
+                                margin-top:4px;
+                                font-size:11px;
+                                color:#64748b;
+                                word-break:break-all;
+                            ">
+                                ${escaparHTML(grupo.url)}
+                            </div>
+
+                        </div>
+
+                    </label>
+
+                `
+            ).join("")
+        }
+
+    `;
+}
 
 
 // ======================================
@@ -2274,10 +1688,8 @@ function selecionarTodosEncontrados(
 
                 input.checked =
                     valor;
-
             }
         );
-
 }
 
 
@@ -2288,10 +1700,9 @@ function selecionarTodosEncontrados(
 async function salvarGruposEncontrados() {
 
     const marcados =
-        document
-            .querySelectorAll(
-                ".grupoEncontradoCheckbox:checked"
-            );
+        document.querySelectorAll(
+            ".grupoEncontradoCheckbox:checked"
+        );
 
 
     if (!marcados.length) {
@@ -2301,15 +1712,13 @@ async function salvarGruposEncontrados() {
         );
 
         return;
-
     }
 
 
     const botao =
-        document
-            .getElementById(
-                "salvarGruposEncontrados"
-            );
+        document.getElementById(
+            "salvarGruposEncontrados"
+        );
 
 
     const textoOriginal =
@@ -2319,18 +1728,14 @@ async function salvarGruposEncontrados() {
 
     if (botao) {
 
-        botao.disabled =
-            true;
-
+        botao.disabled = true;
 
         botao.textContent =
             "⏳ Salvando...";
-
     }
 
 
     try {
-
 
         const {
             cliente,
@@ -2343,38 +1748,32 @@ async function salvarGruposEncontrados() {
             [];
 
 
-        marcados
-            .forEach(
-                input => {
+        marcados.forEach(
+            input => {
+
+                const indice =
+                    Number(
+                        input.dataset.indice
+                    );
 
 
-                    const indice =
-                        Number(
-                            input.dataset
-                                .indice
-                        );
+                const grupo =
+                    gruposEncontradosAtuais[
+                        indice
+                    ];
 
 
-                    const grupo =
-                        gruposEncontradosAtuais[
-                            indice
-                        ];
+                if (
+                    grupo?.url &&
+                    grupo?.nome
+                ) {
 
-
-                    if (
-                        grupo?.url &&
-                        grupo?.nome
-                    ) {
-
-                        selecionados.push(
-                            grupo
-                        );
-
-                    }
-
-
+                    selecionados.push(
+                        grupo
+                    );
                 }
-            );
+            }
+        );
 
 
         const gruposUnicos =
@@ -2382,15 +1781,14 @@ async function salvarGruposEncontrados() {
 
                 new Map(
 
-                    selecionados
-                        .map(
-                            grupo => [
+                    selecionados.map(
+                        grupo => [
 
-                                grupo.url,
-                                grupo
+                            grupo.url,
+                            grupo
 
-                            ]
-                        )
+                        ]
+                    )
 
                 ).values()
 
@@ -2398,20 +1796,12 @@ async function salvarGruposEncontrados() {
 
 
         const {
-            data:
-                gruposExistentes,
-
-            error:
-                erroExistentes
-
+            data: gruposExistentes,
+            error: erroExistentes
         } =
             await cliente
-                .from(
-                    "grupos"
-                )
-                .select(
-                    "url"
-                )
+                .from("grupos")
+                .select("url")
                 .eq(
                     "user_id",
                     usuario.id
@@ -2419,9 +1809,7 @@ async function salvarGruposEncontrados() {
 
 
         if (erroExistentes) {
-
             throw erroExistentes;
-
         }
 
 
@@ -2431,28 +1819,22 @@ async function salvarGruposEncontrados() {
                 (
                     gruposExistentes ||
                     []
+                ).map(
+                    grupo =>
+                        grupo.url
                 )
-                    .map(
-                        grupo =>
-                            grupo.url
-                    )
 
             );
 
 
         const novosGrupos =
             gruposUnicos
-
                 .filter(
                     grupo =>
-
-                        !urlsExistentes
-                            .has(
-                                grupo.url
-                            )
-
+                        !urlsExistentes.has(
+                            grupo.url
+                        )
                 )
-
                 .map(
                     grupo => ({
 
@@ -2479,27 +1861,21 @@ async function salvarGruposEncontrados() {
             );
 
             return;
-
         }
 
 
         const {
-            error:
-                erroSalvar
+            error: erroSalvar
         } =
             await cliente
-                .from(
-                    "grupos"
-                )
+                .from("grupos")
                 .insert(
                     novosGrupos
                 );
 
 
         if (erroSalvar) {
-
             throw erroSalvar;
-
         }
 
 
@@ -2512,13 +1888,10 @@ async function salvarGruposEncontrados() {
             `✅ ${novosGrupos.length} grupo(s) salvo(s) com sucesso!`;
 
 
-        if (
-            repetidos > 0
-        ) {
+        if (repetidos > 0) {
 
             mensagem +=
                 `\n${repetidos} grupo(s) já estavam cadastrados.`;
-
         }
 
 
@@ -2526,9 +1899,7 @@ async function salvarGruposEncontrados() {
             mensagem
         );
 
-
     } catch (erro) {
-
 
         console.error(
             "Erro ao salvar grupos:",
@@ -2547,23 +1918,16 @@ async function salvarGruposEncontrados() {
 
         );
 
-
     } finally {
-
 
         if (botao) {
 
-            botao.disabled =
-                false;
-
+            botao.disabled = false;
 
             botao.textContent =
                 textoOriginal;
-
         }
-
     }
-
 }
 
 
@@ -2575,11 +1939,8 @@ async function abrirAgendamentos() {
 
     esconderVisaoGeral();
 
-
     if (!conteudoDinamico) {
-
         return;
-
     }
 
 
@@ -2589,30 +1950,18 @@ async function abrirAgendamentos() {
 
     conteudoDinamico.innerHTML = `
 
-
         <section class="area">
 
-
             <div style="
-
                 display:flex;
-
-                justify-content:
-                space-between;
-
+                justify-content:space-between;
                 align-items:center;
-
                 gap:15px;
-
                 margin-bottom:20px;
-
                 flex-wrap:wrap;
-
             ">
 
-
                 <div>
-
 
                     <h2 style="
                         margin:0 0 6px;
@@ -2620,14 +1969,12 @@ async function abrirAgendamentos() {
                         📅 Agendamentos
                     </h2>
 
-
                     <p style="
                         margin:0;
                         color:#64748b;
                     ">
                         Campanhas agendadas salvas no Projeto X.
                     </p>
-
 
                 </div>
 
@@ -2640,7 +1987,6 @@ async function abrirAgendamentos() {
                     🔄 Atualizar
                 </button>
 
-
             </div>
 
 
@@ -2648,7 +1994,6 @@ async function abrirAgendamentos() {
                 id="listaAgendamentos"
                 class="publicacao-box"
             >
-
 
                 <div style="
                     padding:35px;
@@ -2658,18 +2003,14 @@ async function abrirAgendamentos() {
                     ⏳ Carregando agendamentos...
                 </div>
 
-
             </div>
 
-
         </section>
-
 
     `;
 
 
     await carregarAgendamentos();
-
 }
 
 
@@ -2680,16 +2021,13 @@ async function abrirAgendamentos() {
 async function carregarAgendamentos() {
 
     const area =
-        document
-            .getElementById(
-                "listaAgendamentos"
-            );
+        document.getElementById(
+            "listaAgendamentos"
+        );
 
 
     if (!area) {
-
         return;
-
     }
 
 
@@ -2708,7 +2046,6 @@ async function carregarAgendamentos() {
 
     try {
 
-
         const {
             cliente,
             usuario
@@ -2717,20 +2054,13 @@ async function carregarAgendamentos() {
 
 
         const {
-            data:
-                campanhas,
-
-            error:
-                erroCampanhas
+            data: campanhas,
+            error: erroCampanhas
         } =
             await cliente
-                .from(
-                    "campaigns"
-                )
+                .from("campaigns")
                 .select(
-
                     "id, name, status, publish_mode, scheduled_at, created_at, interval_minutes"
-
                 )
                 .eq(
                     "user_id",
@@ -2750,15 +2080,11 @@ async function carregarAgendamentos() {
 
 
         if (erroCampanhas) {
-
             throw erroCampanhas;
-
         }
 
 
-        if (
-            !campanhas?.length
-        ) {
+        if (!campanhas?.length) {
 
             area.innerHTML = `
 
@@ -2772,33 +2098,26 @@ async function carregarAgendamentos() {
 
             `;
 
-
             return;
-
         }
 
 
         const idsCampanhas =
-            campanhas
-                .map(
-                    campanha =>
-                        campanha.id
-                );
+            campanhas.map(
+                campanha =>
+                    campanha.id
+            );
 
 
         let vinculos =
             [];
 
 
-        if (
-            idsCampanhas.length
-        ) {
-
+        if (idsCampanhas.length) {
 
             const {
                 data,
-                error:
-                    erroVinculos
+                error
             } =
                 await cliente
                     .from(
@@ -2813,52 +2132,38 @@ async function carregarAgendamentos() {
                     );
 
 
-            if (erroVinculos) {
-
-                throw erroVinculos;
-
+            if (error) {
+                throw error;
             }
 
 
             vinculos =
                 data ||
                 [];
-
-
         }
 
 
-        const contagemGrupos =
+        const contagem =
             new Map();
 
 
-        vinculos
-            .forEach(
-                vinculo => {
+        vinculos.forEach(
+            vinculo => {
 
+                contagem.set(
 
-                    const atual =
-                        contagemGrupos
-                            .get(
-                                vinculo
-                                    .campaign_id
-                            ) ||
-                        0;
+                    vinculo.campaign_id,
 
+                    (
+                        contagem.get(
+                            vinculo.campaign_id
+                        ) ||
+                        0
+                    ) + 1
 
-                    contagemGrupos
-                        .set(
-
-                            vinculo
-                                .campaign_id,
-
-                            atual + 1
-
-                        );
-
-
-                }
-            );
+                );
+            }
+        );
 
 
         const agora =
@@ -2867,316 +2172,200 @@ async function carregarAgendamentos() {
 
         area.innerHTML = `
 
-
             <div style="
                 display:flex;
                 flex-direction:column;
                 gap:12px;
             ">
 
-
                 ${
+                    campanhas.map(
+                        campanha => {
+
+                            const quantidade =
+                                contagem.get(
+                                    campanha.id
+                                ) ||
+                                0;
 
 
-                    campanhas
-                        .map(
-                            campanha => {
+                            const dataAgendada =
+                                campanha.scheduled_at
+
+                                    ?
+
+                                    new Date(
+                                        campanha.scheduled_at
+                                    )
+
+                                    :
+
+                                    null;
 
 
-                                const quantidadeGrupos =
-                                    contagemGrupos
-                                        .get(
-                                            campanha.id
-                                        ) ||
-                                    0;
+                            const passou =
+                                dataAgendada &&
+                                dataAgendada <
+                                agora;
 
 
-                                const dataAgendada =
-                                    campanha
-                                        .scheduled_at
+                            let statusTexto =
+                                escaparHTML(
 
-                                        ?
+                                    campanha.status ||
+                                    "Sem status"
 
-                                        new Date(
-                                            campanha
-                                                .scheduled_at
-                                        )
-
-                                        :
-
-                                        null;
+                                );
 
 
-                                const passou =
-                                    dataAgendada &&
-                                    dataAgendada <
-                                    agora;
+                            if (
+                                campanha.status ===
+                                "agendada"
+                            ) {
+
+                                statusTexto =
+                                    passou
+
+                                        ? "⏰ Horário atingido"
+
+                                        : "🟢 Agendada";
+                            }
 
 
-                                let statusTexto =
-                                    escaparHTML(
+                            if (
+                                campanha.status ===
+                                "cancelada"
+                            ) {
 
-                                        campanha
-                                            .status ||
-
-                                        "Sem status"
-
-                                    );
-
-
-                                if (
-
-                                    campanha.status ===
-                                    "agendada"
-
-                                ) {
+                                statusTexto =
+                                    "🔴 Cancelada";
+                            }
 
 
-                                    statusTexto =
-                                        passou
+                            return `
 
-                                            ? "⏰ Horário atingido"
-
-                                            : "🟢 Agendada";
-
-
-                                }
-
-
-                                if (
-
-                                    campanha.status ===
-                                    "cancelada"
-
-                                ) {
-
-
-                                    statusTexto =
-                                        "🔴 Cancelada";
-
-
-                                }
-
-
-                                return `
-
+                                <div style="
+                                    border:1px solid #e2e8f0;
+                                    border-radius:12px;
+                                    padding:18px;
+                                    background:#fff;
+                                ">
 
                                     <div style="
-
-                                        border:
-                                        1px solid #e2e8f0;
-
-                                        border-radius:
-                                        12px;
-
-                                        padding:
-                                        18px;
-
-                                        background:
-                                        #ffffff;
-
+                                        display:flex;
+                                        justify-content:space-between;
+                                        align-items:flex-start;
+                                        gap:15px;
+                                        flex-wrap:wrap;
                                     ">
 
-
                                         <div style="
-
-                                            display:flex;
-
-                                            justify-content:
-                                            space-between;
-
-                                            align-items:
-                                            flex-start;
-
-                                            gap:15px;
-
-                                            flex-wrap:
-                                            wrap;
-
+                                            min-width:220px;
+                                            flex:1;
                                         ">
 
-
-                                            <div style="
-                                                min-width:220px;
-                                                flex:1;
+                                            <h3 style="
+                                                margin:0 0 8px;
                                             ">
-
-
-                                                <h3 style="
-                                                    margin:0 0 8px;
-                                                ">
-                                                    ${escaparHTML(
-                                                        campanha.name
-                                                    )}
-                                                </h3>
-
-
-                                                <div style="
-
-                                                    display:flex;
-
-                                                    flex-wrap:wrap;
-
-                                                    gap:
-                                                    8px 18px;
-
-                                                    color:
-                                                    #64748b;
-
-                                                    font-size:
-                                                    13px;
-
-                                                ">
-
-
-                                                    <span>
-
-                                                        📅
-
-                                                        ${escaparHTML(
-
-                                                            formatarDataHora(
-                                                                campanha
-                                                                    .scheduled_at
-                                                            )
-
-                                                        )}
-
-                                                    </span>
-
-
-                                                    <span>
-
-                                                        👥
-
-                                                        ${quantidadeGrupos}
-
-                                                        grupo(s)
-
-                                                    </span>
-
-
-                                                    <span>
-
-                                                        ⏱️
-
-                                                        ${Number(
-
-                                                            campanha
-                                                                .interval_minutes ||
-
-                                                            5
-
-                                                        )}
-
-                                                        min
-
-                                                    </span>
-
-
-                                                </div>
-
-
-                                            </div>
-
+                                                ${escaparHTML(campanha.name)}
+                                            </h3>
 
                                             <div style="
-
                                                 display:flex;
-
-                                                align-items:center;
-
-                                                gap:10px;
-
                                                 flex-wrap:wrap;
-
+                                                gap:8px 18px;
+                                                color:#64748b;
+                                                font-size:13px;
                                             ">
 
+                                                <span>
+                                                    📅
+                                                    ${escaparHTML(
+                                                        formatarDataHora(
+                                                            campanha.scheduled_at
+                                                        )
+                                                    )}
+                                                </span>
 
-                                                <div style="
+                                                <span>
+                                                    👥
+                                                    ${quantidade}
+                                                    grupo(s)
+                                                </span>
 
-                                                    font-size:13px;
-
-                                                    font-weight:700;
-
-                                                    padding:
-                                                    8px 12px;
-
-                                                    border-radius:
-                                                    999px;
-
-                                                    background:
-                                                    #f8fafc;
-
-                                                    border:
-                                                    1px solid #e2e8f0;
-
-                                                    white-space:
-                                                    nowrap;
-
-                                                ">
-
-                                                    ${statusTexto}
-
-                                                </div>
-
-
-                                                ${
-
-
-                                                    campanha.status ===
-                                                    "agendada"
-
-                                                    ?
-
-                                                    `
-
-                                                        <button
-                                                            type="button"
-                                                            class="btn-divulgacao-secondary cancelarAgendamento"
-                                                            data-campanha-id="${campanha.id}"
-                                                        >
-                                                            ❌ Cancelar
-                                                        </button>
-
-                                                    `
-
-                                                    :
-
-                                                    ""
-
-
-                                                }
-
+                                                <span>
+                                                    ⏱️
+                                                    ${Number(
+                                                        campanha.interval_minutes ||
+                                                        5
+                                                    )}
+                                                    min
+                                                </span>
 
                                             </div>
-
 
                                         </div>
 
 
+                                        <div style="
+                                            display:flex;
+                                            align-items:center;
+                                            gap:10px;
+                                            flex-wrap:wrap;
+                                        ">
+
+                                            <div style="
+                                                font-size:13px;
+                                                font-weight:700;
+                                                padding:8px 12px;
+                                                border-radius:999px;
+                                                background:#f8fafc;
+                                                border:1px solid #e2e8f0;
+                                                white-space:nowrap;
+                                            ">
+                                                ${statusTexto}
+                                            </div>
+
+
+                                            ${
+                                                campanha.status ===
+                                                "agendada"
+
+                                                ?
+
+                                                `
+
+                                                    <button
+                                                        type="button"
+                                                        class="btn-divulgacao-secondary cancelarAgendamento"
+                                                        data-campanha-id="${campanha.id}"
+                                                    >
+                                                        ❌ Cancelar
+                                                    </button>
+
+                                                `
+
+                                                :
+
+                                                ""
+                                            }
+
+                                        </div>
+
                                     </div>
 
+                                </div>
 
-                                `;
-
-
-                            }
-                        )
-                        .join("")
-
-
+                            `;
+                        }
+                    ).join("")
                 }
-
 
             </div>
 
-
         `;
 
-
     } catch (erro) {
-
 
         console.error(
             "Erro ao carregar agendamentos:",
@@ -3185,7 +2374,6 @@ async function carregarAgendamentos() {
 
 
         area.innerHTML = `
-
 
             <div style="
                 padding:30px;
@@ -3196,20 +2384,14 @@ async function carregarAgendamentos() {
                 ❌ Erro ao carregar agendamentos:
 
                 ${escaparHTML(
-
                     erro?.message ||
                     "erro desconhecido"
-
                 )}
 
             </div>
 
-
         `;
-
-
     }
-
 }
 
 
@@ -3222,27 +2404,20 @@ async function cancelarAgendamento(
 ) {
 
     if (!campanhaId) {
-
         return;
-
     }
 
 
-    const confirmar =
-        window.confirm(
+    if (
+        !window.confirm(
             "Deseja realmente cancelar este agendamento?"
-        );
-
-
-    if (!confirmar) {
-
+        )
+    ) {
         return;
-
     }
 
 
     try {
-
 
         const {
             cliente,
@@ -3255,9 +2430,7 @@ async function cancelarAgendamento(
             error
         } =
             await cliente
-                .from(
-                    "campaigns"
-                )
+                .from("campaigns")
                 .update({
 
                     status:
@@ -3275,9 +2448,7 @@ async function cancelarAgendamento(
 
 
         if (error) {
-
             throw error;
-
         }
 
 
@@ -3288,9 +2459,7 @@ async function cancelarAgendamento(
 
         await carregarAgendamentos();
 
-
     } catch (erro) {
-
 
         console.error(
             "Erro ao cancelar agendamento:",
@@ -3308,10 +2477,7 @@ async function cancelarAgendamento(
             )
 
         );
-
-
     }
-
 }
 
 
@@ -3324,9 +2490,7 @@ async function abrirControleCampanha(
 ) {
 
     if (!campanhaId) {
-
         return;
-
     }
 
 
@@ -3338,9 +2502,7 @@ async function abrirControleCampanha(
 
 
     if (!conteudoDinamico) {
-
         return;
-
     }
 
 
@@ -3350,14 +2512,11 @@ async function abrirControleCampanha(
 
     conteudoDinamico.innerHTML = `
 
-
         <section class="area">
-
 
             <div style="
                 margin-bottom:20px;
             ">
-
 
                 <h2 style="
                     margin:0 0 6px;
@@ -3365,14 +2524,12 @@ async function abrirControleCampanha(
                     🚀 Controle da divulgação
                 </h2>
 
-
                 <p style="
                     margin:0;
                     color:#64748b;
                 ">
                     Acompanhamento da fila da campanha.
                 </p>
-
 
             </div>
 
@@ -3382,7 +2539,6 @@ async function abrirControleCampanha(
                 class="publicacao-box"
             >
 
-
                 <div style="
                     padding:35px;
                     text-align:center;
@@ -3391,12 +2547,9 @@ async function abrirControleCampanha(
                     ⏳ Carregando campanha...
                 </div>
 
-
             </div>
 
-
         </section>
-
 
     `;
 
@@ -3404,12 +2557,11 @@ async function abrirControleCampanha(
     await carregarControleCampanha(
         campanhaId
     );
-
 }
 
 
 // ======================================
-// CARREGAR CONTROLE DA CAMPANHA
+// CARREGAR CONTROLE
 // ======================================
 
 async function carregarControleCampanha(
@@ -3417,21 +2569,17 @@ async function carregarControleCampanha(
 ) {
 
     const area =
-        document
-            .getElementById(
-                "controleCampanhaConteudo"
-            );
+        document.getElementById(
+            "controleCampanhaConteudo"
+        );
 
 
     if (!area) {
-
         return;
-
     }
 
 
     try {
-
 
         const {
             cliente,
@@ -3441,20 +2589,13 @@ async function carregarControleCampanha(
 
 
         const {
-            data:
-                campanha,
-
-            error:
-                erroCampanha
+            data: campanha,
+            error: erroCampanha
         } =
             await cliente
-                .from(
-                    "campaigns"
-                )
+                .from("campaigns")
                 .select(
-
                     "id, name, status, interval_minutes, started_at, paused_at, finished_at"
-
                 )
                 .eq(
                     "id",
@@ -3468,54 +2609,48 @@ async function carregarControleCampanha(
 
 
         if (erroCampanha) {
-
             throw erroCampanha;
-
         }
 
 
         const {
-            data:
-                vinculos,
-
-            error:
-                erroVinculos
+            data: vinculos,
+            error: erroVinculos
         } =
             await cliente
-                .from(
-                    "campaign_groups"
-                )
+                .from("campaign_groups")
                 .select(
-
-                    "group_id, status, posted_at, error_message, attempt_count"
-
+                    "group_id, status, posted_at, error_message, attempt_count, created_at"
                 )
                 .eq(
                     "campaign_id",
                     campanhaId
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending:
+                            true
+                    }
                 );
 
 
         if (erroVinculos) {
-
             throw erroVinculos;
-
         }
 
 
-        const listaVinculos =
+        const lista =
             vinculos ||
             [];
 
 
         const idsGrupos =
-            listaVinculos
-
+            lista
                 .map(
                     item =>
                         item.group_id
                 )
-
                 .filter(
                     Boolean
                 );
@@ -3525,22 +2660,14 @@ async function carregarControleCampanha(
             [];
 
 
-        if (
-            idsGrupos.length
-        ) {
-
+        if (idsGrupos.length) {
 
             const {
                 data,
-
-                error:
-                    erroGrupos
-
+                error
             } =
                 await cliente
-                    .from(
-                        "grupos"
-                    )
+                    .from("grupos")
                     .select(
                         "id, name, url"
                     )
@@ -3554,81 +2681,61 @@ async function carregarControleCampanha(
                     );
 
 
-            if (erroGrupos) {
-
-                throw erroGrupos;
-
+            if (error) {
+                throw error;
             }
 
 
             grupos =
                 data ||
                 [];
-
-
         }
 
 
         const gruposPorId =
             new Map(
 
-                grupos
-                    .map(
-                        grupo => [
+                grupos.map(
+                    grupo => [
 
-                            String(
-                                grupo.id
-                            ),
+                        String(
+                            grupo.id
+                        ),
 
-                            grupo
+                        grupo
 
-                        ]
-                    )
+                    ]
+                )
 
             );
 
 
         const total =
-            listaVinculos.length;
+            lista.length;
 
 
         const pendentes =
-            listaVinculos
-
-                .filter(
-                    item =>
-
-                        item.status ===
-                        "pendente"
-
-                )
-                .length;
+            lista.filter(
+                item =>
+                    item.status ===
+                    "pendente"
+            ).length;
 
 
         const publicados =
-            listaVinculos
-
-                .filter(
-                    item =>
-
-                        item.status ===
-                        "publicado"
-
-                )
-                .length;
+            lista.filter(
+                item =>
+                    item.status ===
+                    "publicado"
+            ).length;
 
 
         const erros =
-            listaVinculos
-
-                .filter(
-                    item =>
-
-                        item.status ===
-                        "erro"
-
-                )
-                .length;
+            lista.filter(
+                item =>
+                    item.status ===
+                    "erro"
+            ).length;
 
 
         const processados =
@@ -3642,13 +2749,11 @@ async function carregarControleCampanha(
                 ?
 
                 Math.round(
-
                     (
                         processados /
                         total
                     ) *
                     100
-
                 )
 
                 :
@@ -3685,47 +2790,46 @@ async function carregarControleCampanha(
             ||
 
             escaparHTML(
-
                 campanha.status ||
                 "Sem status"
-
             );
 
 
         const podePausar =
-
             campanha.status ===
             "em_andamento";
 
 
         const podeContinuar =
-
             campanha.status ===
             "pausada";
 
 
         const podeParar =
-
             [
                 "em_andamento",
                 "pausada"
-            ]
-                .includes(
-                    campanha.status
-                );
+            ].includes(
+                campanha.status
+            );
+
+
+        const podePreparar =
+            campanha.status ===
+            "em_andamento"
+
+            &&
+
+            pendentes > 0;
 
 
         const proximos =
-            listaVinculos
-
+            lista
                 .filter(
                     item =>
-
                         item.status ===
                         "pendente"
-
                 )
-
                 .slice(
                     0,
                     10
@@ -3734,41 +2838,22 @@ async function carregarControleCampanha(
 
         area.innerHTML = `
 
-
             <div style="
-
                 display:flex;
-
-                justify-content:
-                space-between;
-
+                justify-content:space-between;
                 gap:15px;
-
-                align-items:
-                flex-start;
-
-                flex-wrap:
-                wrap;
-
-                margin-bottom:
-                18px;
-
+                align-items:flex-start;
+                flex-wrap:wrap;
+                margin-bottom:18px;
             ">
 
-
                 <div>
-
 
                     <h3 style="
                         margin:0 0 7px;
                     ">
-
-                        ${escaparHTML(
-                            campanha.name
-                        )}
-
+                        ${escaparHTML(campanha.name)}
                     </h3>
-
 
                     <div style="
                         color:#64748b;
@@ -3778,48 +2863,27 @@ async function carregarControleCampanha(
                         ⏱️ Intervalo:
 
                         ${Number(
-
-                            campanha
-                                .interval_minutes ||
-
+                            campanha.interval_minutes ||
                             5
-
                         )}
 
                         minuto(s)
 
                     </div>
 
-
                 </div>
 
 
                 <div style="
-
-                    padding:
-                    8px 12px;
-
-                    border:
-                    1px solid #e2e8f0;
-
-                    border-radius:
-                    999px;
-
-                    background:
-                    #f8fafc;
-
-                    font-weight:
-                    700;
-
-                    font-size:
-                    13px;
-
+                    padding:8px 12px;
+                    border:1px solid #e2e8f0;
+                    border-radius:999px;
+                    background:#f8fafc;
+                    font-weight:700;
+                    font-size:13px;
                 ">
-
                     ${statusTexto}
-
                 </div>
-
 
             </div>
 
@@ -3828,93 +2892,50 @@ async function carregarControleCampanha(
                 margin-bottom:18px;
             ">
 
-
                 <div style="
-
                     display:flex;
-
-                    justify-content:
-                    space-between;
-
+                    justify-content:space-between;
                     gap:10px;
-
-                    font-size:
-                    13px;
-
-                    margin-bottom:
-                    7px;
-
+                    font-size:13px;
+                    margin-bottom:7px;
                 ">
-
 
                     <strong>
                         Progresso
                     </strong>
 
-
                     <span>
-
                         ${processados}/${total}
-
                         (${progresso}%)
-
                     </span>
-
 
                 </div>
 
 
                 <div style="
-
                     height:10px;
-
-                    background:
-                    #e2e8f0;
-
-                    border-radius:
-                    999px;
-
+                    background:#e2e8f0;
+                    border-radius:999px;
                     overflow:hidden;
-
                 ">
 
-
                     <div style="
-
-                        width:
-                        ${progresso}%;
-
+                        width:${progresso}%;
                         height:100%;
-
-                        background:
-                        #111827;
-
+                        background:#111827;
                     "></div>
 
-
                 </div>
-
 
             </div>
 
 
             <div style="
-
                 display:grid;
-
-                grid-template-columns:
-                repeat(
-                    auto-fit,
-                    minmax(130px,1fr)
-                );
-
+                grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
                 gap:10px;
-
-                margin-bottom:
-                18px;
-
+                margin-bottom:18px;
             ">
-
 
                 <div style="
                     padding:14px;
@@ -4003,27 +3024,40 @@ async function carregarControleCampanha(
 
                 </div>
 
-
             </div>
 
 
             <div style="
-
                 display:flex;
-
                 gap:10px;
-
                 flex-wrap:wrap;
-
-                margin-bottom:
-                20px;
-
+                margin-bottom:20px;
             ">
+
+                ${
+                    podePreparar
+
+                    ?
+
+                    `
+
+                        <button
+                            type="button"
+                            class="btn-divulgacao-primary prepararProximoGrupo"
+                            data-campanha-id="${campanha.id}"
+                        >
+                            👥 Preparar próximo grupo
+                        </button>
+
+                    `
+
+                    :
+
+                    ""
+                }
 
 
                 ${
-
-
                     podePausar
 
                     ?
@@ -4044,14 +3078,10 @@ async function carregarControleCampanha(
                     :
 
                     ""
-
-
                 }
 
 
                 ${
-
-
                     podeContinuar
 
                     ?
@@ -4072,14 +3102,10 @@ async function carregarControleCampanha(
                     :
 
                     ""
-
-
                 }
 
 
                 ${
-
-
                     podeParar
 
                     ?
@@ -4100,8 +3126,6 @@ async function carregarControleCampanha(
                     :
 
                     ""
-
-
                 }
 
 
@@ -4114,45 +3138,30 @@ async function carregarControleCampanha(
                     🔄 Atualizar
                 </button>
 
-
             </div>
 
 
             <div style="
-
                 padding:14px;
-
-                background:
-                #f8fafc;
-
-                border:
-                1px solid #e2e8f0;
-
-                border-radius:
-                10px;
-
-                margin-bottom:
-                18px;
-
-                color:
-                #475569;
-
-                font-size:
-                13px;
-
+                background:#f8fafc;
+                border:1px solid #e2e8f0;
+                border-radius:10px;
+                margin-bottom:18px;
+                color:#475569;
+                font-size:13px;
             ">
 
                 ✅ A fila está salva no Supabase.
 
                 <br>
 
-                Se o navegador ou o computador fechar,
-                os grupos pendentes continuam registrados.
+                O botão
+                <strong>
+                    👥 Preparar próximo grupo
+                </strong>
 
-                <br>
-
-                A etapa que envia cada grupo para a extensão
-                será conectada no próximo passo.
+                envia apenas o próximo grupo pendente
+                para a extensão do Facebook.
 
             </div>
 
@@ -4166,93 +3175,56 @@ async function carregarControleCampanha(
 
             <div>
 
-
                 ${
-
-
                     proximos.length
 
                     ?
 
-                    proximos
-                        .map(
-                            item => {
+                    proximos.map(
+                        item => {
+
+                            const grupo =
+                                gruposPorId.get(
+                                    String(
+                                        item.group_id
+                                    )
+                                );
 
 
-                                const grupo =
-                                    gruposPorId
-                                        .get(
-                                            String(
-                                                item.group_id
-                                            )
-                                        );
+                            return `
 
+                                <div style="
+                                    padding:11px;
+                                    border:1px solid #e2e8f0;
+                                    border-radius:8px;
+                                    margin-bottom:7px;
+                                ">
 
-                                return `
-
+                                    <strong>
+                                        👥
+                                        ${escaparHTML(
+                                            grupo?.name ||
+                                            "Grupo"
+                                        )}
+                                    </strong>
 
                                     <div style="
-
-                                        padding:11px;
-
-                                        border:
-                                        1px solid #e2e8f0;
-
-                                        border-radius:
-                                        8px;
-
-                                        margin-bottom:
-                                        7px;
-
+                                        margin-top:4px;
+                                        font-size:11px;
+                                        color:#64748b;
+                                        word-break:break-all;
                                     ">
-
-
-                                        <strong>
-
-                                            👥
-
-                                            ${escaparHTML(
-
-                                                grupo?.name ||
-                                                "Grupo"
-
-                                            )}
-
-                                        </strong>
-
-
-                                        <div style="
-
-                                            margin-top:4px;
-
-                                            font-size:11px;
-
-                                            color:#64748b;
-
-                                            word-break:
-                                            break-all;
-
-                                        ">
-
-                                            ${escaparHTML(
-
-                                                grupo?.url ||
-                                                ""
-
-                                            )}
-
-                                        </div>
-
-
+                                        ${escaparHTML(
+                                            grupo?.url ||
+                                            ""
+                                        )}
                                     </div>
 
+                                </div>
 
-                                `;
-
-
-                            }
-                        )
-                        .join("")
+                            `;
+                        }
+                    ).join("")
 
                     :
 
@@ -4269,19 +3241,13 @@ async function carregarControleCampanha(
                         </div>
 
                     `
-
-
                 }
-
 
             </div>
 
-
         `;
 
-
     } catch (erro) {
-
 
         console.error(
             "Erro ao carregar controle da campanha:",
@@ -4290,7 +3256,6 @@ async function carregarControleCampanha(
 
 
         area.innerHTML = `
-
 
             <div style="
                 padding:30px;
@@ -4301,25 +3266,19 @@ async function carregarControleCampanha(
                 ❌ Erro ao carregar campanha:
 
                 ${escaparHTML(
-
                     erro?.message ||
                     "erro desconhecido"
-
                 )}
 
             </div>
 
-
         `;
-
-
     }
-
 }
 
 
 // ======================================
-// ALTERAR STATUS DA CAMPANHA
+// PAUSAR / CONTINUAR / PARAR
 // ======================================
 
 async function alterarStatusCampanha(
@@ -4331,14 +3290,11 @@ async function alterarStatusCampanha(
         !campanhaId ||
         !acao
     ) {
-
         return;
-
     }
 
 
     try {
-
 
         const {
             cliente,
@@ -4356,9 +3312,7 @@ async function alterarStatusCampanha(
                 campanhaId
             );
 
-
             return;
-
         }
 
 
@@ -4381,7 +3335,6 @@ async function alterarStatusCampanha(
                         .toISOString()
 
             };
-
         }
 
 
@@ -4402,7 +3355,6 @@ async function alterarStatusCampanha(
                     null
 
             };
-
         }
 
 
@@ -4411,17 +3363,12 @@ async function alterarStatusCampanha(
             "parar"
         ) {
 
-
-            const confirmar =
-                window.confirm(
+            if (
+                !window.confirm(
                     "Deseja realmente parar esta campanha?"
-                );
-
-
-            if (!confirmar) {
-
+                )
+            ) {
                 return;
-
             }
 
 
@@ -4435,7 +3382,6 @@ async function alterarStatusCampanha(
                         .toISOString()
 
             };
-
         }
 
 
@@ -4444,9 +3390,7 @@ async function alterarStatusCampanha(
                 alteracoes
             ).length
         ) {
-
             return;
-
         }
 
 
@@ -4454,9 +3398,7 @@ async function alterarStatusCampanha(
             error
         } =
             await cliente
-                .from(
-                    "campaigns"
-                )
+                .from("campaigns")
                 .update(
                     alteracoes
                 )
@@ -4471,9 +3413,7 @@ async function alterarStatusCampanha(
 
 
         if (error) {
-
             throw error;
-
         }
 
 
@@ -4497,7 +3437,6 @@ async function alterarStatusCampanha(
             ]
         ) {
 
-
             window.postMessage(
                 {
 
@@ -4515,8 +3454,6 @@ async function alterarStatusCampanha(
                 },
                 "*"
             );
-
-
         }
 
 
@@ -4524,9 +3461,7 @@ async function alterarStatusCampanha(
             campanhaId
         );
 
-
     } catch (erro) {
-
 
         console.error(
             "Erro ao alterar campanha:",
@@ -4544,15 +3479,625 @@ async function alterarStatusCampanha(
             )
 
         );
-
-
     }
-
 }
 
 
 // ======================================
-// ÁREAS EM CONSTRUÇÃO
+// RETOMAR CAMPANHA
+// ======================================
+
+async function retomarCampanhaAtiva() {
+
+    try {
+
+        const {
+            cliente,
+            usuario
+        } =
+            await obterContextoUsuario();
+
+
+        const {
+            data: campanhas,
+            error
+        } =
+            await cliente
+                .from("campaigns")
+                .select(
+                    "id, name, status, started_at, created_at"
+                )
+                .eq(
+                    "user_id",
+                    usuario.id
+                )
+                .in(
+                    "status",
+                    [
+                        "em_andamento",
+                        "pausada"
+                    ]
+                )
+                .order(
+                    "started_at",
+                    {
+                        ascending:
+                            false,
+
+                        nullsFirst:
+                            false
+                    }
+                )
+                .limit(1);
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        const campanha =
+            campanhas?.[0];
+
+
+        if (!campanha) {
+
+            alert(
+                "ℹ️ Nenhuma campanha em andamento ou pausada foi encontrada."
+            );
+
+            return;
+        }
+
+
+        campanhaAtivaId =
+            campanha.id;
+
+
+        await abrirControleCampanha(
+            campanha.id
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao retomar campanha:",
+            erro
+        );
+
+
+        alert(
+
+            "Erro ao retomar campanha: " +
+
+            (
+                erro?.message ||
+                "erro desconhecido"
+            )
+
+        );
+    }
+}
+
+
+// ======================================
+// PREPARAR PRÓXIMO GRUPO
+// ======================================
+
+async function prepararProximoGrupo(
+    campanhaId
+) {
+
+    if (!campanhaId) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            cliente,
+            usuario
+        } =
+            await obterContextoUsuario();
+
+
+        const {
+            data: campanha,
+            error: erroCampanha
+        } =
+            await cliente
+                .from("campaigns")
+                .select(
+                    "id, name, content, status, interval_minutes"
+                )
+                .eq(
+                    "id",
+                    campanhaId
+                )
+                .eq(
+                    "user_id",
+                    usuario.id
+                )
+                .single();
+
+
+        if (erroCampanha) {
+            throw erroCampanha;
+        }
+
+
+        if (
+            campanha.status ===
+            "pausada"
+        ) {
+
+            alert(
+                "⏸️ A campanha está pausada. Clique em Continuar antes de preparar o próximo grupo."
+            );
+
+            return;
+        }
+
+
+        if (
+            campanha.status !==
+            "em_andamento"
+        ) {
+
+            alert(
+                "Esta campanha não está em andamento."
+            );
+
+            return;
+        }
+
+
+        const {
+            data: pendentes,
+            error: erroPendentes
+        } =
+            await cliente
+                .from(
+                    "campaign_groups"
+                )
+                .select(
+                    "campaign_id, group_id, status, attempt_count, created_at"
+                )
+                .eq(
+                    "campaign_id",
+                    campanhaId
+                )
+                .eq(
+                    "status",
+                    "pendente"
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending:
+                            true
+                    }
+                )
+                .limit(1);
+
+
+        if (erroPendentes) {
+            throw erroPendentes;
+        }
+
+
+        const vinculo =
+            pendentes?.[0];
+
+
+        if (!vinculo) {
+
+            const {
+                error: erroFinalizar
+            } =
+                await cliente
+                    .from("campaigns")
+                    .update({
+
+                        status:
+                            "concluida",
+
+                        finished_at:
+                            new Date()
+                                .toISOString()
+
+                    })
+                    .eq(
+                        "id",
+                        campanhaId
+                    )
+                    .eq(
+                        "user_id",
+                        usuario.id
+                    );
+
+
+            if (erroFinalizar) {
+                throw erroFinalizar;
+            }
+
+
+            alert(
+                "✅ Não existem mais grupos pendentes. Campanha concluída!"
+            );
+
+
+            await carregarControleCampanha(
+                campanhaId
+            );
+
+            return;
+        }
+
+
+        const {
+            data: grupo,
+            error: erroGrupo
+        } =
+            await cliente
+                .from("grupos")
+                .select(
+                    "id, name, url"
+                )
+                .eq(
+                    "id",
+                    vinculo.group_id
+                )
+                .eq(
+                    "user_id",
+                    usuario.id
+                )
+                .single();
+
+
+        if (erroGrupo) {
+            throw erroGrupo;
+        }
+
+
+        if (!grupo?.url) {
+
+            throw new Error(
+                "O próximo grupo não possui URL válida."
+            );
+        }
+
+
+        if (!campanha.content) {
+
+            throw new Error(
+                "A campanha não possui texto para publicação."
+            );
+        }
+
+
+        window.postMessage(
+            {
+
+                source:
+                    "PROJETOX_APP",
+
+                type:
+                    "PREPARAR_PUBLICACAO_FACEBOOK",
+
+                campanhaId:
+                    campanha.id,
+
+                groupId:
+                    grupo.id,
+
+                grupoNome:
+                    grupo.name,
+
+                grupoUrl:
+                    grupo.url,
+
+                texto:
+                    campanha.content
+
+            },
+            "*"
+        );
+
+
+        alert(
+
+            `✅ Próximo grupo enviado para a extensão!\n\n` +
+
+            `👥 ${grupo.name}\n\n` +
+
+            `Agora abra a aba do Facebook.`
+
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao preparar próximo grupo:",
+            erro
+        );
+
+
+        alert(
+
+            "Erro ao preparar próximo grupo: " +
+
+            (
+                erro?.message ||
+                "erro desconhecido"
+            )
+
+        );
+    }
+}
+
+
+// ======================================
+// RESULTADO DO FACEBOOK
+// ======================================
+
+async function registrarResultadoPublicacao(
+    resultado
+) {
+
+    const campanhaId =
+        String(
+            resultado?.campanhaId ||
+            ""
+        ).trim();
+
+
+    const groupId =
+        String(
+            resultado?.groupId ||
+            ""
+        ).trim();
+
+
+    const status =
+        String(
+            resultado?.status ||
+            ""
+        ).trim();
+
+
+    if (
+        !campanhaId ||
+        !groupId ||
+        !status
+    ) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            cliente,
+            usuario
+        } =
+            await obterContextoUsuario();
+
+
+        const {
+            data: campanha,
+            error: erroCampanha
+        } =
+            await cliente
+                .from("campaigns")
+                .select(
+                    "id, user_id, status"
+                )
+                .eq(
+                    "id",
+                    campanhaId
+                )
+                .eq(
+                    "user_id",
+                    usuario.id
+                )
+                .single();
+
+
+        if (erroCampanha) {
+            throw erroCampanha;
+        }
+
+
+        if (
+            status ===
+            "publicado"
+        ) {
+
+            const {
+                error: erroAtualizar
+            } =
+                await cliente
+                    .from(
+                        "campaign_groups"
+                    )
+                    .update({
+
+                        status:
+                            "publicado",
+
+                        posted_at:
+                            resultado?.postedAt ||
+                            new Date()
+                                .toISOString(),
+
+                        error_message:
+                            null,
+
+                        attempt_count:
+                            1
+
+                    })
+                    .eq(
+                        "campaign_id",
+                        campanhaId
+                    )
+                    .eq(
+                        "group_id",
+                        groupId
+                    );
+
+
+            if (erroAtualizar) {
+                throw erroAtualizar;
+            }
+        }
+
+
+        if (
+            status ===
+            "erro"
+        ) {
+
+            const {
+                error: erroAtualizar
+            } =
+                await cliente
+                    .from(
+                        "campaign_groups"
+                    )
+                    .update({
+
+                        status:
+                            "erro",
+
+                        error_message:
+                            String(
+                                resultado?.mensagem ||
+                                "Erro informado pela extensão"
+                            ),
+
+                        attempt_count:
+                            1
+
+                    })
+                    .eq(
+                        "campaign_id",
+                        campanhaId
+                    )
+                    .eq(
+                        "group_id",
+                        groupId
+                    );
+
+
+            if (erroAtualizar) {
+                throw erroAtualizar;
+            }
+        }
+
+
+        const {
+            data: restantes,
+            error: erroRestantes
+        } =
+            await cliente
+                .from(
+                    "campaign_groups"
+                )
+                .select(
+                    "group_id"
+                )
+                .eq(
+                    "campaign_id",
+                    campanhaId
+                )
+                .eq(
+                    "status",
+                    "pendente"
+                );
+
+
+        if (erroRestantes) {
+            throw erroRestantes;
+        }
+
+
+        if (
+            !restantes?.length
+
+            &&
+
+            campanha.status !==
+            "parada"
+        ) {
+
+            const {
+                error: erroConcluir
+            } =
+                await cliente
+                    .from("campaigns")
+                    .update({
+
+                        status:
+                            "concluida",
+
+                        finished_at:
+                            new Date()
+                                .toISOString()
+
+                    })
+                    .eq(
+                        "id",
+                        campanhaId
+                    )
+                    .eq(
+                        "user_id",
+                        usuario.id
+                    );
+
+
+            if (erroConcluir) {
+                throw erroConcluir;
+            }
+        }
+
+
+        if (
+            campanhaAtivaId ===
+            campanhaId
+        ) {
+
+            await carregarControleCampanha(
+                campanhaId
+            );
+        }
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao registrar resultado da publicação:",
+            erro
+        );
+
+
+        alert(
+
+            "Erro ao registrar resultado: " +
+
+            (
+                erro?.message ||
+                "erro desconhecido"
+            )
+
+        );
+    }
+}
+
+
+// ======================================
+// OUTRAS ÁREAS
 // ======================================
 
 function abrirAreaEmBreve(
@@ -4561,35 +4106,36 @@ function abrirAreaEmBreve(
 
     esconderVisaoGeral();
 
-
     if (!conteudoDinamico) {
-
         return;
-
     }
 
 
     const areas = {
 
-        marketplace: [
-            "🛒",
-            "Marketplace"
-        ],
+        marketplace:
+            [
+                "🛒",
+                "Marketplace"
+            ],
 
-        metricas: [
-            "📈",
-            "Métricas"
-        ],
+        metricas:
+            [
+                "📈",
+                "Métricas"
+            ],
 
-        contas: [
-            "👤",
-            "Contas"
-        ],
+        contas:
+            [
+                "👤",
+                "Contas"
+            ],
 
-        logs: [
-            "📋",
-            "Logs"
-        ]
+        logs:
+            [
+                "📋",
+                "Logs"
+            ]
 
     };
 
@@ -4598,7 +4144,6 @@ function abrirAreaEmBreve(
         icone,
         titulo
     ] =
-
         areas[
             view
         ]
@@ -4617,76 +4162,128 @@ function abrirAreaEmBreve(
 
     conteudoDinamico.innerHTML = `
 
-
         <section class="area">
-
 
             <div style="
                 padding:25px;
             ">
 
-
                 <h2 style="
                     margin:0 0 8px;
                 ">
-
                     ${icone}
                     ${titulo}
-
                 </h2>
-
 
                 <p style="
                     margin:0;
                     color:#64748b;
                 ">
-
                     Esta área será configurada nas próximas etapas.
-
                 </p>
-
 
             </div>
 
-
         </section>
 
-
     `;
-
 }
 
 
 // ======================================
-// ALTERAR PUBLICAR AGORA / AGENDAR
+// RECEBER MENSAGENS DA EXTENSÃO
+// ======================================
+
+window.addEventListener(
+    "message",
+    async event => {
+
+        if (
+            event.source !==
+            window
+        ) {
+            return;
+        }
+
+
+        if (
+            event.data?.source !==
+            "PROJETOX_EXTENSION"
+        ) {
+            return;
+        }
+
+
+        if (
+            event.data?.type ===
+            "GRUPOS_CAPTURADOS"
+        ) {
+
+            const grupos =
+                Array.isArray(
+                    event.data.grupos
+                )
+
+                    ? event.data.grupos
+
+                    : [];
+
+
+            const termo =
+                event.data.termo ||
+                "";
+
+
+            gruposEncontradosAtuais =
+                grupos;
+
+
+            renderizarGruposEncontrados(
+                grupos,
+                termo
+            );
+
+            return;
+        }
+
+
+        if (
+            event.data?.type ===
+            "RESULTADO_PUBLICACAO_FACEBOOK"
+        ) {
+
+            await registrarResultadoPublicacao(
+                event.data
+            );
+        }
+    }
+);
+
+
+// ======================================
+// PUBLICAR AGORA / AGENDAR
 // ======================================
 
 document.addEventListener(
     "change",
     event => {
 
-
         if (
             event.target?.id !==
             "tipoPublicacao"
         ) {
-
             return;
-
         }
 
 
         const area =
-            document
-                .getElementById(
-                    "areaAgendamento"
-                );
+            document.getElementById(
+                "areaAgendamento"
+            );
 
 
         if (!area) {
-
             return;
-
         }
 
 
@@ -4698,8 +4295,6 @@ document.addEventListener(
                 ? "block"
 
                 : "none";
-
-
     }
 );
 
@@ -4712,39 +4307,32 @@ document.addEventListener(
     "click",
     async event => {
 
-
         const elemento =
             event.target;
 
 
         if (
-
             !(
                 elemento
                 instanceof
                 Element
             )
-
         ) {
-
             return;
-
         }
 
 
 // ======================================
-// MENU DA DIVULGAÇÃO
+// MENU
 // ======================================
 
         const botaoMenu =
-            elemento
-                .closest(
-                    ".divulgacao-menu button"
-                );
+            elemento.closest(
+                ".divulgacao-menu button"
+            );
 
 
         if (botaoMenu) {
-
 
             event.preventDefault();
 
@@ -4756,27 +4344,20 @@ document.addEventListener(
                 .forEach(
                     item => {
 
-
-                        item.classList
-                            .remove(
-                                "active"
-                            );
-
-
+                        item.classList.remove(
+                            "active"
+                        );
                     }
                 );
 
 
-            botaoMenu.classList
-                .add(
-                    "active"
-                );
+            botaoMenu.classList.add(
+                "active"
+            );
 
 
             const view =
-                botaoMenu
-                    .dataset
-                    .view;
+                botaoMenu.dataset.view;
 
 
             if (
@@ -4787,7 +4368,6 @@ document.addEventListener(
                 mostrarVisaoGeral();
 
                 return;
-
             }
 
 
@@ -4799,7 +4379,6 @@ document.addEventListener(
                 abrirPostarGrupos();
 
                 return;
-
             }
 
 
@@ -4811,7 +4390,6 @@ document.addEventListener(
                 abrirEncontrarGrupos();
 
                 return;
-
             }
 
 
@@ -4823,34 +4401,26 @@ document.addEventListener(
                 await abrirAgendamentos();
 
                 return;
-
             }
 
 
             if (
-
                 [
                     "marketplace",
                     "metricas",
                     "contas",
                     "logs"
-                ]
-                    .includes(
-                        view
-                    )
-
+                ].includes(
+                    view
+                )
             ) {
 
                 abrirAreaEmBreve(
                     view
                 );
 
-
                 return;
-
             }
-
-
         }
 
 
@@ -4859,16 +4429,57 @@ document.addEventListener(
 // ======================================
 
         const botao =
-            elemento
-                .closest(
-                    "button"
-                );
+            elemento.closest(
+                "button"
+            );
 
 
         if (!botao) {
+            return;
+        }
+
+
+// ======================================
+// RETOMAR CAMPANHA
+// ======================================
+
+        if (
+            botao.id ===
+            "retomarCampanha"
+        ) {
+
+            event.preventDefault();
+
+            await retomarCampanhaAtiva();
 
             return;
+        }
 
+
+// ======================================
+// PREPARAR PRÓXIMO GRUPO
+// ======================================
+
+        const prepararProximo =
+            botao.closest(
+                ".prepararProximoGrupo"
+            );
+
+
+        if (prepararProximo) {
+
+            event.preventDefault();
+
+
+            await prepararProximoGrupo(
+
+                prepararProximo
+                    .dataset
+                    .campanhaId
+
+            );
+
+            return;
         }
 
 
@@ -4883,12 +4494,9 @@ document.addEventListener(
 
             event.preventDefault();
 
-
             await abrirSeletorGrupos();
 
-
             return;
-
         }
 
 
@@ -4903,12 +4511,9 @@ document.addEventListener(
 
             event.preventDefault();
 
-
             await salvarCampanha();
 
-
             return;
-
         }
 
 
@@ -4923,12 +4528,9 @@ document.addEventListener(
 
             event.preventDefault();
 
-
             await iniciarDivulgacao();
 
-
             return;
-
         }
 
 
@@ -4943,12 +4545,9 @@ document.addEventListener(
 
             event.preventDefault();
 
-
             buscarGruposFacebook();
 
-
             return;
-
         }
 
 
@@ -4963,12 +4562,9 @@ document.addEventListener(
 
             event.preventDefault();
 
-
             carregarResultadosGrupos();
 
-
             return;
-
         }
 
 
@@ -4983,14 +4579,11 @@ document.addEventListener(
 
             event.preventDefault();
 
-
             selecionarTodosEncontrados(
                 true
             );
 
-
             return;
-
         }
 
 
@@ -5005,14 +4598,11 @@ document.addEventListener(
 
             event.preventDefault();
 
-
             selecionarTodosEncontrados(
                 false
             );
 
-
             return;
-
         }
 
 
@@ -5027,12 +4617,9 @@ document.addEventListener(
 
             event.preventDefault();
 
-
             await salvarGruposEncontrados();
 
-
             return;
-
         }
 
 
@@ -5047,12 +4634,9 @@ document.addEventListener(
 
             event.preventDefault();
 
-
             await carregarAgendamentos();
 
-
             return;
-
         }
 
 
@@ -5061,10 +4645,9 @@ document.addEventListener(
 // ======================================
 
         const cancelar =
-            botao
-                .closest(
-                    ".cancelarAgendamento"
-                );
+            botao.closest(
+                ".cancelarAgendamento"
+            );
 
 
         if (cancelar) {
@@ -5080,9 +4663,7 @@ document.addEventListener(
 
             );
 
-
             return;
-
         }
 
 
@@ -5091,10 +4672,9 @@ document.addEventListener(
 // ======================================
 
         const acaoCampanha =
-            botao
-                .closest(
-                    ".acaoCampanhaExecucao"
-                );
+            botao.closest(
+                ".acaoCampanhaExecucao"
+            );
 
 
         if (acaoCampanha) {
@@ -5113,17 +4693,11 @@ document.addEventListener(
                     .acao
 
             );
-
-
         }
-
-
     }
 );
 
 
 console.log(
-
-    "✅ Divulgação pronta: grupos, campanhas, agendamentos e controle de fila."
-
+    "✅ Divulgação pronta: grupos, campanhas, agendamentos, fila e ponte com o Facebook."
 );
