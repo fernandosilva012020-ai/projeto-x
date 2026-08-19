@@ -370,7 +370,332 @@ function abrirPostarGrupos() {
             abrirSeletorGrupos
         );
 
+// ======================================
+// SALVAR CAMPANHA
+// ======================================
 
+document
+    .getElementById("salvarCampanha")
+    ?.addEventListener(
+        "click",
+        async () => {
+
+            const cliente =
+                window.supabaseClient;
+
+            if (!cliente) {
+
+                alert(
+                    "Conexão com o banco não encontrada."
+                );
+
+                return;
+            }
+
+
+            // USUÁRIO LOGADO
+
+            const {
+                data: sessao,
+                error: erroSessao
+            } =
+                await cliente.auth.getSession();
+
+
+            if (erroSessao) {
+
+                console.error(
+                    erroSessao
+                );
+
+                alert(
+                    "Erro ao verificar usuário."
+                );
+
+                return;
+            }
+
+
+            const usuario =
+                sessao?.session?.user;
+
+
+            if (!usuario) {
+
+                alert(
+                    "Usuário não conectado."
+                );
+
+                return;
+            }
+
+
+            // DADOS DA CAMPANHA
+
+            const nome =
+                document
+                    .getElementById(
+                        "nomeCampanha"
+                    )
+                    ?.value
+                    .trim();
+
+
+            const conteudo =
+                document
+                    .getElementById(
+                        "textoPublicacao"
+                    )
+                    ?.value
+                    .trim();
+
+
+            const intervalo =
+                Number(
+                    document
+                        .getElementById(
+                            "intervaloPublicacao"
+                        )
+                        ?.value || 15
+                );
+
+
+            const modo =
+                document
+                    .getElementById(
+                        "tipoPublicacao"
+                    )
+                    ?.value || "agora";
+
+
+            if (!nome) {
+
+                alert(
+                    "Digite o nome da campanha."
+                );
+
+                return;
+            }
+
+
+            if (!conteudo) {
+
+                alert(
+                    "Digite o texto da publicação."
+                );
+
+                return;
+            }
+
+
+            if (
+                !gruposSelecionados.length
+            ) {
+
+                alert(
+                    "Selecione pelo menos um grupo."
+                );
+
+                return;
+            }
+
+
+            // AGENDAMENTO
+
+            let agendadoPara =
+                null;
+
+
+            if (modo === "agendar") {
+
+                const data =
+                    document
+                        .getElementById(
+                            "dataAgendamento"
+                        )
+                        ?.value;
+
+
+                const hora =
+                    document
+                        .getElementById(
+                            "horaAgendamento"
+                        )
+                        ?.value;
+
+
+                if (!data || !hora) {
+
+                    alert(
+                        "Escolha a data e o horário."
+                    );
+
+                    return;
+                }
+
+
+                agendadoPara =
+                    new Date(
+                        `${data}T${hora}:00`
+                    )
+                    .toISOString();
+
+            }
+
+
+            const botao =
+                document.getElementById(
+                    "salvarCampanha"
+                );
+
+
+            const textoOriginal =
+                botao.textContent;
+
+
+            botao.disabled =
+                true;
+
+
+            botao.textContent =
+                "⏳ Salvando...";
+
+
+            try {
+
+                // CRIAR CAMPANHA
+
+                const {
+                    data: campanha,
+                    error: erroCampanha
+                } =
+                    await cliente
+                        .from("campaigns")
+                        .insert({
+
+                            user_id:
+                                usuario.id,
+
+                            name:
+                                nome,
+
+                            content:
+                                conteudo,
+
+                            media_url:
+                                null,
+
+                            interval_minutes:
+                                intervalo,
+
+                            publish_mode:
+                                modo,
+
+                            scheduled_at:
+                                agendadoPara,
+
+                            status:
+                                modo === "agendar"
+                                    ? "agendada"
+                                    : "rascunho"
+
+                        })
+                        .select("id")
+                        .single();
+
+
+                if (erroCampanha) {
+
+                    console.error(
+                        "Erro campanha:",
+                        erroCampanha
+                    );
+
+                    alert(
+                        "Erro ao salvar campanha: " +
+                        erroCampanha.message
+                    );
+
+                    return;
+                }
+
+
+                // VINCULAR GRUPOS
+
+                const vinculos =
+                    gruposSelecionados.map(
+                        grupo => ({
+
+                            campaign_id:
+                                campanha.id,
+
+                            group_id:
+                                grupo.id,
+
+                            status:
+                                "pendente"
+
+                        })
+                    );
+
+
+                const {
+                    error: erroGrupos
+                } =
+                    await cliente
+                        .from(
+                            "campaign_groups"
+                        )
+                        .insert(
+                            vinculos
+                        );
+
+
+                if (erroGrupos) {
+
+                    console.error(
+                        "Erro grupos:",
+                        erroGrupos
+                    );
+
+                    alert(
+                        "Campanha criada, mas houve erro ao vincular os grupos: " +
+                        erroGrupos.message
+                    );
+
+                    return;
+                }
+
+
+                alert(
+                    `✅ Campanha "${nome}" salva com sucesso!\n\n👥 ${gruposSelecionados.length} grupo(s) vinculados.`
+                );
+
+
+            } catch (erro) {
+
+                console.error(
+                    erro
+                );
+
+                alert(
+                    "Erro inesperado ao salvar campanha."
+                );
+
+
+            } finally {
+
+                botao.disabled =
+                    false;
+
+                botao.textContent =
+                    textoOriginal;
+
+            }
+
+        }
+    );
+    
     renderizarGruposSelecionados();
 }
 
