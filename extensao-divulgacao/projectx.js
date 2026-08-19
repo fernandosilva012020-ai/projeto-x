@@ -2,7 +2,21 @@ console.log("✅ Extensão Divulgação conectada ao Projeto X");
 
 
 // ======================================
-// VERIFICAR CONTEXTO DA EXTENSÃO
+// CHAVES
+// ======================================
+
+const CHAVE_CAMPANHA =
+    "campanhaDivulgacao";
+
+const CHAVE_PUBLICACAO_ATUAL =
+    "publicacaoProjetoXAtual";
+
+const CHAVE_RESULTADO_PUBLICACAO =
+    "resultadoPublicacaoProjetoX";
+
+
+// ======================================
+// VERIFICAR EXTENSÃO
 // ======================================
 
 function extensaoEstaAtiva() {
@@ -26,7 +40,7 @@ function extensaoEstaAtiva() {
 
 
 // ======================================
-// SALVAR NO STORAGE COM SEGURANÇA
+// SALVAR STORAGE
 // ======================================
 
 function salvarStorage(
@@ -58,7 +72,9 @@ function salvarStorage(
 
                         console.warn(
                             "Projeto X:",
-                            chrome.runtime.lastError.message
+                            chrome.runtime
+                                .lastError
+                                .message
                         );
 
                         return;
@@ -89,7 +105,7 @@ function salvarStorage(
     } catch (erro) {
 
         console.warn(
-            "⚠️ Erro ao salvar dados da extensão:",
+            "⚠️ Erro ao salvar no storage:",
             erro
         );
 
@@ -98,7 +114,7 @@ function salvarStorage(
 
 
 // ======================================
-// LER STORAGE COM SEGURANÇA
+// LER STORAGE
 // ======================================
 
 function lerStorage(
@@ -130,7 +146,9 @@ function lerStorage(
 
                         console.warn(
                             "Projeto X:",
-                            chrome.runtime.lastError.message
+                            chrome.runtime
+                                .lastError
+                                .message
                         );
 
                         return;
@@ -163,7 +181,7 @@ function lerStorage(
     } catch (erro) {
 
         console.warn(
-            "⚠️ Erro ao ler dados da extensão:",
+            "⚠️ Erro ao ler storage:",
             erro
         );
 
@@ -193,12 +211,239 @@ function enviarParaProjetoX(
         },
         "*"
     );
-
 }
 
 
 // ======================================
-// EVENTOS DO PROJETO X
+// PREPARAR PUBLICAÇÃO DO FACEBOOK
+// ======================================
+
+function prepararPublicacaoFacebook(
+    dados
+) {
+
+    const campanhaId =
+        String(
+            dados?.campanhaId ||
+            ""
+        ).trim();
+
+
+    const groupId =
+        String(
+            dados?.groupId ||
+            ""
+        ).trim();
+
+
+    const grupoUrl =
+        String(
+            dados?.grupoUrl ||
+            ""
+        ).trim();
+
+
+    const grupoNome =
+        String(
+            dados?.grupoNome ||
+            "Grupo selecionado"
+        ).trim();
+
+
+    const texto =
+        String(
+            dados?.texto ||
+            ""
+        ).trim();
+
+
+    if (
+        !campanhaId ||
+        !groupId ||
+        !grupoUrl ||
+        !texto
+    ) {
+
+        console.warn(
+            "⚠️ Publicação incompleta recebida:",
+            dados
+        );
+
+        enviarParaProjetoX(
+            "ERRO_PREPARAR_PUBLICACAO",
+            {
+
+                mensagem:
+                    "Dados da publicação incompletos."
+
+            }
+        );
+
+        return;
+    }
+
+
+    const agora =
+        new Date()
+            .toISOString();
+
+
+    const tarefa =
+        {
+
+            campanhaId,
+
+            groupId,
+
+            grupoNome,
+
+            grupoUrl,
+
+            texto,
+
+            status:
+                "aguardando_usuario",
+
+            criadoEm:
+                agora,
+
+            atualizadoEm:
+                agora
+
+        };
+
+
+    salvarStorage(
+        {
+
+            [CHAVE_PUBLICACAO_ATUAL]:
+                tarefa,
+
+            [CHAVE_RESULTADO_PUBLICACAO]:
+                null
+
+        },
+        () => {
+
+            console.log(
+                "👥 Primeira publicação preparada:",
+                tarefa
+            );
+
+
+            enviarParaProjetoX(
+                "PUBLICACAO_FACEBOOK_PREPARADA",
+                {
+
+                    campanhaId,
+
+                    groupId,
+
+                    grupoNome,
+
+                    grupoUrl
+
+                }
+            );
+
+        }
+    );
+}
+
+
+// ======================================
+// ATUALIZAR ESTADO DA CAMPANHA
+// ======================================
+
+function atualizarEstadoCampanha(
+    campanhaId,
+    novoStatus
+) {
+
+    const id =
+        String(
+            campanhaId ||
+            ""
+        ).trim();
+
+
+    if (!id) {
+
+        return;
+    }
+
+
+    lerStorage(
+        [
+            CHAVE_CAMPANHA
+        ],
+        resultado => {
+
+            const atual =
+                resultado[
+                    CHAVE_CAMPANHA
+                ];
+
+
+            if (
+                !atual ||
+                atual.campanhaId !== id
+            ) {
+
+                console.warn(
+                    "⚠️ Campanha não encontrada na extensão:",
+                    id
+                );
+
+                return;
+            }
+
+
+            const atualizado =
+                {
+
+                    ...atual,
+
+                    status:
+                        novoStatus,
+
+                    atualizadoEm:
+                        new Date()
+                            .toISOString()
+
+                };
+
+
+            salvarStorage(
+                {
+
+                    [CHAVE_CAMPANHA]:
+                        atualizado
+
+                },
+                () => {
+
+                    console.log(
+                        "🔄 Estado da campanha atualizado:",
+                        atualizado
+                    );
+
+
+                    enviarParaProjetoX(
+                        "ESTADO_CAMPANHA_DIVULGACAO",
+                        atualizado
+                    );
+
+                }
+            );
+
+        }
+    );
+}
+
+
+// ======================================
+// RECEBER MENSAGENS DO PROJETO X
 // ======================================
 
 window.addEventListener(
@@ -228,7 +473,7 @@ window.addEventListener(
 
 
 // ======================================
-// ABRIR BUSCA NO FACEBOOK
+// BUSCAR GRUPOS
 // ======================================
 
         if (
@@ -240,14 +485,12 @@ window.addEventListener(
                 String(
                     event.data?.termo ||
                     ""
-                )
-                    .trim();
+                ).trim();
 
 
             if (!termo) {
 
                 return;
-
             }
 
 
@@ -284,7 +527,7 @@ window.addEventListener(
 
 
 // ======================================
-// DEVOLVER RESULTADOS AO PROJETO X
+// CARREGAR GRUPOS CAPTURADOS
 // ======================================
 
         if (
@@ -352,8 +595,7 @@ window.addEventListener(
                     event.data
                         ?.campanhaId ||
                     ""
-                )
-                    .trim();
+                ).trim();
 
 
             const intervaloMinutos =
@@ -401,7 +643,7 @@ window.addEventListener(
             salvarStorage(
                 {
 
-                    campanhaDivulgacao:
+                    [CHAVE_CAMPANHA]:
                         campanha
 
                 },
@@ -422,12 +664,55 @@ window.addEventListener(
             );
 
 
+            /*
+                Se futuramente o Projeto X
+                já mandar a publicação junto,
+                o arquivo também aceita.
+            */
+
+            if (
+                event.data
+                    ?.publicacao
+            ) {
+
+                prepararPublicacaoFacebook(
+                    {
+
+                        campanhaId,
+
+                        ...event.data
+                            .publicacao
+
+                    }
+                );
+
+            }
+
+
             return;
         }
 
 
 // ======================================
-// PAUSAR CAMPANHA
+// RECEBER PRIMEIRA PUBLICAÇÃO
+// ======================================
+
+        if (
+            tipo ===
+            "PREPARAR_PUBLICACAO_FACEBOOK"
+        ) {
+
+            prepararPublicacaoFacebook(
+                event.data
+            );
+
+
+            return;
+        }
+
+
+// ======================================
+// PAUSAR
 // ======================================
 
         if (
@@ -436,7 +721,9 @@ window.addEventListener(
         ) {
 
             atualizarEstadoCampanha(
-                event.data?.campanhaId,
+                event.data
+                    ?.campanhaId,
+
                 "pausada"
             );
 
@@ -446,7 +733,7 @@ window.addEventListener(
 
 
 // ======================================
-// CONTINUAR CAMPANHA
+// CONTINUAR
 // ======================================
 
         if (
@@ -455,7 +742,9 @@ window.addEventListener(
         ) {
 
             atualizarEstadoCampanha(
-                event.data?.campanhaId,
+                event.data
+                    ?.campanhaId,
+
                 "em_andamento"
             );
 
@@ -465,7 +754,7 @@ window.addEventListener(
 
 
 // ======================================
-// PARAR CAMPANHA
+// PARAR
 // ======================================
 
         if (
@@ -474,8 +763,20 @@ window.addEventListener(
         ) {
 
             atualizarEstadoCampanha(
-                event.data?.campanhaId,
+                event.data
+                    ?.campanhaId,
+
                 "parada"
+            );
+
+
+            salvarStorage(
+                {
+
+                    [CHAVE_PUBLICACAO_ATUAL]:
+                        null
+
+                }
             );
 
 
@@ -487,96 +788,69 @@ window.addEventListener(
 
 
 // ======================================
-// ATUALIZAR ESTADO DA CAMPANHA
+// RECEBER RESULTADO DO FACEBOOK
 // ======================================
 
-function atualizarEstadoCampanha(
-    campanhaId,
-    novoStatus
-) {
+try {
 
-    const id =
-        String(
-            campanhaId ||
-            ""
-        )
-            .trim();
+    chrome.storage.onChanged
+        .addListener(
+            (
+                changes,
+                areaName
+            ) => {
 
+                if (
+                    areaName !==
+                    "local"
+                ) {
 
-    if (!id) {
-
-        return;
-    }
-
-
-    lerStorage(
-        [
-            "campanhaDivulgacao"
-        ],
-        resultado => {
-
-            const atual =
-                resultado
-                    .campanhaDivulgacao;
+                    return;
+                }
 
 
-            if (
-                !atual ||
-                atual.campanhaId !== id
-            ) {
+                const mudanca =
+                    changes[
+                        CHAVE_RESULTADO_PUBLICACAO
+                    ];
 
-                console.warn(
-                    "⚠️ Campanha não encontrada na extensão:",
-                    id
+
+                if (
+                    !mudanca ||
+                    !mudanca.newValue
+                ) {
+
+                    return;
+                }
+
+
+                const resultado =
+                    mudanca.newValue;
+
+
+                console.log(
+                    "✅ Resultado recebido do Facebook:",
+                    resultado
                 );
 
-                return;
+
+                enviarParaProjetoX(
+                    "RESULTADO_PUBLICACAO_FACEBOOK",
+                    resultado
+                );
+
             }
+        );
 
+} catch (erro) {
 
-            const atualizado =
-                {
-
-                    ...atual,
-
-                    status:
-                        novoStatus,
-
-                    atualizadoEm:
-                        new Date()
-                            .toISOString()
-
-                };
-
-
-            salvarStorage(
-                {
-
-                    campanhaDivulgacao:
-                        atualizado
-
-                },
-                () => {
-
-                    console.log(
-                        "🔄 Estado da campanha atualizado:",
-                        atualizado
-                    );
-
-
-                    enviarParaProjetoX(
-                        "ESTADO_CAMPANHA_DIVULGACAO",
-                        atualizado
-                    );
-
-                }
-            );
-
-        }
+    console.warn(
+        "⚠️ Não foi possível acompanhar resultados:",
+        erro
     );
 }
 
 
 console.log(
-    "✅ projectx.js pronto para busca e controle de campanha."
+    "✅ projectx.js pronto para campanha e publicação."
 );
