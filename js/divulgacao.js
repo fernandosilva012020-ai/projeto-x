@@ -1741,7 +1741,7 @@ document.addEventListener(
 
 
 // ======================================
-// SALVAR GRUPOS ENCONTRADOS
+// SALVAR GRUPOS
 // ======================================
 
         if (
@@ -2145,7 +2145,7 @@ async function abrirAgendamentos() {
 
 
 // ======================================
-// CARREGAR AGENDAMENTOS DO SUPABASE
+// CARREGAR AGENDAMENTOS
 // ======================================
 
 async function carregarAgendamentos() {
@@ -2204,9 +2204,7 @@ async function carregarAgendamentos() {
 
 
         if (erroSessao) {
-
             throw erroSessao;
-
         }
 
 
@@ -2258,9 +2256,7 @@ async function carregarAgendamentos() {
 
 
         if (erroCampanhas) {
-
             throw erroCampanhas;
-
         }
 
 
@@ -2313,15 +2309,12 @@ async function carregarAgendamentos() {
 
 
             if (erroVinculos) {
-
                 throw erroVinculos;
-
             }
 
 
             vinculos =
                 data || [];
-
         }
 
 
@@ -2382,18 +2375,32 @@ async function carregarAgendamentos() {
                             agora;
 
 
-                        const statusTexto =
+                        let statusTexto =
+                            "⚪ Sem status";
+
+
+                        if (
                             campanha.status ===
                             "agendada"
+                        ) {
 
-                                ? passou
+                            statusTexto =
+                                passou
                                     ? "⏰ Horário atingido"
-                                    : "🟢 Agendada"
+                                    : "🟢 Agendada";
 
-                                : escaparHTML(
-                                    campanha.status ||
-                                    "Sem status"
-                                );
+                        }
+
+
+                        if (
+                            campanha.status ===
+                            "cancelada"
+                        ) {
+
+                            statusTexto =
+                                "🔴 Cancelada";
+
+                        }
 
 
                         return `
@@ -2436,35 +2443,29 @@ async function carregarAgendamentos() {
                                         ">
 
                                             <span>
-
                                                 📅
                                                 ${escaparHTML(
                                                     formatarDataHora(
                                                         campanha.scheduled_at
                                                     )
                                                 )}
-
                                             </span>
 
 
                                             <span>
-
                                                 👥
                                                 ${quantidadeGrupos}
                                                 grupo(s)
-
                                             </span>
 
 
                                             <span>
-
                                                 ⏱️
                                                 ${Number(
                                                     campanha.interval_minutes ||
                                                     15
                                                 )}
                                                 min
-
                                             </span>
 
                                         </div>
@@ -2473,16 +2474,48 @@ async function carregarAgendamentos() {
 
 
                                     <div style="
-                                        font-size:13px;
-                                        font-weight:700;
-                                        padding:8px 12px;
-                                        border-radius:999px;
-                                        background:#f8fafc;
-                                        border:1px solid #e2e8f0;
-                                        white-space:nowrap;
+                                        display:flex;
+                                        align-items:center;
+                                        gap:10px;
+                                        flex-wrap:wrap;
                                     ">
 
-                                        ${statusTexto}
+                                        <div style="
+                                            font-size:13px;
+                                            font-weight:700;
+                                            padding:8px 12px;
+                                            border-radius:999px;
+                                            background:#f8fafc;
+                                            border:1px solid #e2e8f0;
+                                            white-space:nowrap;
+                                        ">
+
+                                            ${statusTexto}
+
+                                        </div>
+
+
+                                        ${
+                                            campanha.status ===
+                                            "agendada"
+
+                                            ? `
+
+                                                <button
+                                                    type="button"
+                                                    class="btn-divulgacao-secondary cancelarAgendamento"
+                                                    data-campanha-id="${campanha.id}"
+                                                    style="
+                                                        cursor:pointer;
+                                                    "
+                                                >
+                                                    ❌ Cancelar
+                                                </button>
+
+                                            `
+
+                                            : ""
+                                        }
 
                                     </div>
 
@@ -2533,7 +2566,189 @@ async function carregarAgendamentos() {
 
 
 // ======================================
-// OUTRAS ÁREAS DO MENU
+// CANCELAR AGENDAMENTO
+// ======================================
+
+async function cancelarAgendamento(
+    campanhaId
+) {
+
+    if (!campanhaId) {
+        return;
+    }
+
+
+    const confirmar =
+        window.confirm(
+            "Deseja realmente cancelar este agendamento?"
+        );
+
+
+    if (!confirmar) {
+        return;
+    }
+
+
+    const cliente =
+        window.supabaseClient;
+
+
+    if (!cliente) {
+
+        alert(
+            "Conexão com o banco não encontrada."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const {
+            data: sessao,
+            error: erroSessao
+        } =
+            await cliente.auth.getSession();
+
+
+        if (erroSessao) {
+            throw erroSessao;
+        }
+
+
+        const usuario =
+            sessao?.session?.user;
+
+
+        if (!usuario) {
+
+            alert(
+                "Usuário não conectado."
+            );
+
+            return;
+        }
+
+
+        const {
+            error
+        } =
+            await cliente
+                .from("campaigns")
+                .update({
+
+                    status:
+                        "cancelada"
+
+                })
+                .eq(
+                    "id",
+                    campanhaId
+                )
+                .eq(
+                    "user_id",
+                    usuario.id
+                );
+
+
+        if (error) {
+
+            console.error(
+                "Erro ao cancelar:",
+                error
+            );
+
+
+            alert(
+                "Erro ao cancelar agendamento: " +
+                (
+                    error.message ||
+                    "erro desconhecido"
+                )
+            );
+
+
+            return;
+        }
+
+
+        alert(
+            "✅ Agendamento cancelado com sucesso!"
+        );
+
+
+        await carregarAgendamentos();
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro inesperado ao cancelar:",
+            erro
+        );
+
+
+        alert(
+            "Erro inesperado ao cancelar agendamento."
+        );
+
+    }
+}
+
+
+// ======================================
+// CLIQUE CANCELAR AGENDAMENTO
+// ======================================
+
+document.addEventListener(
+    "click",
+    event => {
+
+        const elemento =
+            event.target;
+
+
+        if (
+            !(
+                elemento
+                instanceof
+                Element
+            )
+        ) {
+
+            return;
+        }
+
+
+        const botao =
+            elemento.closest(
+                ".cancelarAgendamento"
+            );
+
+
+        if (!botao) {
+            return;
+        }
+
+
+        event.preventDefault();
+
+
+        const campanhaId =
+            botao.dataset.campanhaId;
+
+
+        cancelarAgendamento(
+            campanhaId
+        );
+
+    }
+);
+
+
+// ======================================
+// OUTRAS ÁREAS
 // ======================================
 
 function abrirAreaEmBreve(view) {
@@ -2674,12 +2889,6 @@ document.addEventListener(
             botao.dataset.view;
 
 
-        console.log(
-            "📌 Menu Divulgação:",
-            view
-        );
-
-
 // ======================================
 // VISÃO GERAL
 // ======================================
@@ -2692,7 +2901,6 @@ document.addEventListener(
             mostrarVisaoGeral();
 
             return;
-
         }
 
 
@@ -2708,7 +2916,6 @@ document.addEventListener(
             abrirPostarGrupos();
 
             return;
-
         }
 
 
@@ -2724,7 +2931,6 @@ document.addEventListener(
             abrirEncontrarGrupos();
 
             return;
-
         }
 
 
@@ -2740,7 +2946,6 @@ document.addEventListener(
             abrirAgendamentos();
 
             return;
-
         }
 
 
